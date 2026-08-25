@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BROMAA - Brucelee Raj Online Martial Arts Academy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #990000;
+            --primary-dark: #660000;
+            --navy: #0B1120;
+            --navy-light: #1E293B;
+            --gold: #D97706;
+            --gold-light: #F59E0B;
+            --bg-light: #F8FAFC;
+            --text-dark: #0F172A;
+            --text-slate: #64748B;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Top Bar */
+        .topbar {
+            background: linear-gradient(135deg, #7F1D1D 0%, #990000 50%, #450A0A 100%);
+            color: white;
+            padding: 12px 24px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            border-bottom: 1px solid #E2E8F0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--navy);
+        }
+
+        .logo-crest {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #DC2626 0%, #7F1D1D 100%);
+            border: 2px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            color: white;
+            font-size: 18px;
+            box-shadow: 0 2px 6px rgba(153, 0, 0, 0.3);
+        }
+
+        .brand-title {
+            font-family: 'Cinzel', serif;
+            font-weight: 800;
+            font-size: 18px;
+            color: var(--navy);
+            letter-spacing: 0.5px;
+        }
+
+        .brand-subtitle {
+            font-size: 11px;
+            color: var(--text-slate);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .btn-header {
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+
+        .btn-header:hover {
+            background: var(--primary-dark);
+            box-shadow: 0 4px 12px rgba(153, 0, 0, 0.25);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(180deg, #0B1120 0%, #1E293B 100%);
+            color: white;
+            padding: 80px 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(220, 38, 38, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--gold-light);
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 42px;
+            font-weight: 900;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 17px;
+            color: #94A3B8;
+            max-width: 700px;
+            margin: 0 auto 36px;
+            line-height: 1.6;
+        }
+
+        .hero-actions {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #DC2626 0%, #990000 100%);
+            color: white;
+            text-decoration: none;
+            padding: 14px 32px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 16px rgba(220, 38, 38, 0.4);
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.6);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Features Section */
+        .section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 70px 24px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 30px;
+            font-weight: 800;
+            color: var(--navy);
+            margin-bottom: 10px;
+        }
+
+        .section-subtitle {
+            font-size: 15px;
+            color: var(--text-slate);
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            border: 1px solid #E2E8F0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            transition: all 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+            border-color: #CBD5E1;
+        }
+
+        .card-badge {
+            display: inline-block;
+            background: #FEF3C7;
+            color: #92400E;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .card h3 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+
+        .card-price {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 14px;
+        }
+
+        .card-price span {
+            font-size: 14px;
+            color: var(--text-slate);
+            font-weight: 600;
+        }
+
+        .card p {
+            color: var(--text-slate);
+            font-size: 14px;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .schedule-box {
+            background: #F1F5F9;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--navy);
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Portals Section */
+        .portals {
+            background: #F1F5F9;
+            padding: 70px 24px;
+            border-top: 1px solid #E2E8F0;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .portal-card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            border: 1px solid #E2E8F0;
+        }
+
+        .portal-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .portal-icon.admin { background: #FEE2E2; color: #990000; }
+        .portal-icon.coach { background: #FEF3C7; color: #D97706; }
+        .portal-icon.student { background: #DBEAFE; color: #1D4ED8; }
+
+        /* Footer */
+        footer {
+            background: var(--navy);
+            color: white;
+            text-align: center;
+            padding: 40px 24px;
+            font-size: 14px;
+            color: #94A3B8;
+        }
+
+        footer strong {
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 30px; }
+            .hero p { font-size: 15px; }
+            .grid-3 { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Announcement Bar -->
+    <div class="topbar">
+        🥋 BROMA ACADEMY • AFFILIATED WITH SHITO-RYU KARATE-DO FEDERATION & WORLD KARATE BODIES
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="#" class="brand-logo">
+                <div class="logo-crest">B</div>
+                <div>
+                    <div class="brand-title">BROMAA</div>
+                    <div class="brand-subtitle">BRUCELEE RAJ ONLINE MARTIAL ARTS</div>
+                </div>
+            </a>
+            <a href="https://ais-pre-jtw7wm653n34bcypawe6sm-880028634429.asia-east1.run.app" class="btn-header" target="_blank">
+                Launch App
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-badge">OFFICIAL ACADEMY DIGITAL PLATFORM</div>
+            <h1>Martial Arts Mastery, Attendance & Fee Portal</h1>
+            <p>Welcome to BROMA Academy — complete management for Karate, Physical Fitness, Practical Self Defence, and Weapon Training under Grandmaster Shihan Brucelee Raj.</p>
+            <div class="hero-actions">
+                <a href="https://ais-pre-jtw7wm653n34bcypawe6sm-880028634429.asia-east1.run.app" class="btn-primary" target="_blank">
+                    🚀 Open Live Interactive App
+                </a>
+                <a href="#camps" class="btn-secondary">
+                    View Fee Structure & Camps
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Special Camps Section -->
+    <section class="section" id="camps">
+        <div class="section-header">
+            <h2 class="section-title">Special Training Camps & Programs</h2>
+            <p class="section-subtitle">Intensive courses split into structured daily slots for maximum technique mastery</p>
+        </div>
+
+        <div class="grid-3">
+            <!-- 1 Day Camp -->
+            <div class="card">
+                <span class="card-badge">Intensive 1-Day</span>
+                <h3>1-Day Special Karate Camp</h3>
+                <div class="card-price">₹4,999 <span>/ Course</span></div>
+                <p>6 Hours intensive martial arts camp covering Kihon fundamentals, Kata Bunkai, and Sparring drills.</p>
+                <div class="schedule-box">
+                    <strong>3 Daily Sessions:</strong><br>
+                    • Morning: 6:00 AM – 8:00 AM<br>
+                    • Afternoon: 11:00 AM – 1:00 PM<br>
+                    • Evening: 6:00 PM – 8:00 PM
+                </div>
+            </div>
+
+            <!-- 3 Days Camp -->
+            <div class="card">
+                <span class="card-badge">3-Days Bootcamp</span>
+                <h3>3-Days Special Karate Camp</h3>
+                <div class="card-price">₹9,999 <span>/ Course</span></div>
+                <p>4 Hours per day (12 Hours total) intensive training focusing on tactical Kumite and conditioning.</p>
+                <div class="schedule-box">
+                    <strong>2 Daily Sessions (4 Hrs/Day):</strong><br>
+                    • Morning: 6:00 AM – 8:00 AM<br>
+                    • Evening: 6:00 PM – 8:00 PM
+                </div>
+            </div>
+
+            <!-- 1 Week Camp -->
+            <div class="card">
+                <span class="card-badge">1-Week Masterclass</span>
+                <h3>1-Week Special Karate Camp</h3>
+                <div class="card-price">₹14,999 <span>/ Course</span></div>
+                <p>4 Hours per day (28 Hours total) comprehensive mastery covering advanced Katas, Kobudo weapons, and Dan prep.</p>
+                <div class="schedule-box">
+                    <strong>2 Daily Sessions (4 Hrs/Day):</strong><br>
+                    • Morning: 6:00 AM – 8:00 AM<br>
+                    • Evening: 6:00 PM – 8:00 PM
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Regular Training & Admission -->
+    <section class="section" style="padding-top: 0;">
+        <div class="grid-3">
+            <div class="card" style="border-top: 4px solid #16A34A;">
+                <span class="card-badge" style="background:#DCFCE7; color:#15803D;">Standard Training</span>
+                <h3>Regular Training Program</h3>
+                <div class="card-price">₹2,000 <span>/ Month</span></div>
+                <p>Covers all four disciplines: <strong>Karate-Do</strong>, <strong>Physical Fitness</strong>, <strong>Self Defence</strong>, and <strong>Weapons (Bo & Nunchaku)</strong>.</p>
+                <div class="schedule-box">
+                    <strong>Daily Sessions (Mon – Sat):</strong><br>
+                    • Morning 6:00 AM – 8:00 AM & Evening 6:00 PM – 8:00 PM
+                </div>
+            </div>
+
+            <div class="card" style="border-top: 4px solid #D97706;">
+                <span class="card-badge">One-Time Registration</span>
+                <h3>Admission & Registration</h3>
+                <div class="card-price">₹1,000 <span>/ One-Time</span></div>
+                <p>Official lifetime academy enrollment, digital ID generation, syllabus handbook, and membership registration.</p>
+            </div>
+
+            <div class="card" style="border-top: 4px solid #2563EB;">
+                <span class="card-badge" style="background:#DBEAFE; color:#1E40AF;">Official Kit</span>
+                <h3>Karate Gi & Uniform Dress</h3>
+                <div class="card-price">₹1,500 <span>/ One-Time</span></div>
+                <p>Heavyweight official BROMAA Shito-Ryu Karate Gi with embroidered crest, white belt, and academy badges.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Multi-Portal System -->
+    <section class="portals">
+        <div class="section-header">
+            <h2 class="section-title">Integrated Multi-Portal System</h2>
+            <p class="section-subtitle">Tailored interfaces for Administrators, Coaches, and Students</p>
+        </div>
+
+        <div class="grid-3" style="max-width: 1200px; margin: 0 auto;">
+            <div class="portal-card">
+                <div class="portal-icon admin">🛡️</div>
+                <h3>Admin Portal</h3>
+                <p>Full financial ledger, monthly fee registers, batch configurations, coach permissions, and real-time analytics.</p>
+            </div>
+            <div class="portal-card">
+                <div class="portal-icon coach">🥋</div>
+                <h3>Coach Portal</h3>
+                <p>Attendance register for 6 regular batches, special camp permissions, student performance notes, and grading clears.</p>
+            </div>
+            <div class="portal-card">
+                <div class="portal-icon student">🏅</div>
+                <h3>Student Portal</h3>
+                <p>Belt promotion history, fee receipts, syllabus access, digital ID card, event calendar, and special camp registrations.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 <strong>BROMAA - Brucelee Raj Online Martial Arts Academy</strong>. All rights reserved.</p>
+        <p style="margin-top: 8px; font-size: 12px;">Grandmaster: Shihan Brucelee Raj • Head Coach: Renshi V. Surya</p>
+    </footer>
+
+</body>
+</html>
