@@ -6,13 +6,15 @@
     <title>BROMAA - Brucelee Raj Online Martial Arts Academy</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cinzel:wght@700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Cinzel:wght@700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --deep-navy: #0F172A;
             --slate-blue: #334155;
             --royal-blue: #2563EB;
             --royal-blue-hover: #1D4ED8;
+            --crimson-primary: #990000;
+            --crimson-dark: #7F1D1D;
             --bg-light: #F8FAFC;
             --card-white: #FFFFFF;
             --secondary-bg: #F1F5F9;
@@ -20,19 +22,16 @@
             --text-slate: #64748B;
             --text-muted: #94A3B8;
             --border-light: #E2E8F0;
+            --active-nav-bg: #EFF6FF;
             --status-success: #16A34A;
             --status-success-bg: #DCFCE7;
+            --status-success-border: #86EFAC;
             --status-warning: #D97706;
             --status-warning-bg: #FEF3C7;
+            --status-warning-border: #FCD34D;
             --status-error: #DC2626;
             --status-error-bg: #FEE2E2;
-            --belt-yellow: #EAB308;
-            --belt-orange: #F97316;
-            --belt-green: #16A34A;
-            --belt-blue: #2563EB;
-            --belt-purple: #9333EA;
-            --belt-brown: #78350F;
-            --belt-black: #0F172A;
+            --status-error-border: #FCA5A5;
         }
 
         * {
@@ -40,6 +39,7 @@
             margin: 0;
             padding: 0;
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -50,28 +50,36 @@
             overflow: hidden;
         }
 
-        /* Sidebar Navigation matching Android Jetpack Compose Drawer */
+        /* ---------------- APP SHELL & NAVIGATION DRAWER ---------------- */
         .sidebar {
-            width: 280px;
+            width: 290px;
             background: var(--card-white);
             border-right: 1px solid var(--border-light);
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
             overflow-y: auto;
-            z-index: 20;
+            z-index: 50;
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .sidebar-header {
-            padding: 20px 16px;
-            border-bottom: 1px solid var(--border-light);
+            padding: 18px 16px;
             background: var(--secondary-bg);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .academy-profile-badge {
             display: flex;
             align-items: center;
             gap: 12px;
+            padding: 10px;
+            background: var(--card-white);
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
         }
 
-        .logo-circle {
+        .broma-crest {
             width: 44px;
             height: 44px;
             border-radius: 50%;
@@ -85,32 +93,50 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+            flex-shrink: 0;
         }
 
-        .sidebar-brand-title {
+        .header-title-box h3 {
             font-family: 'Cinzel', serif;
-            font-size: 15px;
-            font-weight: 800;
+            font-size: 13px;
+            font-weight: 900;
             color: var(--text-navy);
             letter-spacing: 0.5px;
+            line-height: 1.2;
         }
 
-        .sidebar-brand-sub {
-            font-size: 11px;
+        .header-title-box p {
+            font-size: 10.5px;
             color: var(--text-slate);
             font-weight: 600;
         }
 
-        /* Role Switcher Pill */
-        .role-selector-bar {
-            padding: 12px 16px;
+        /* Role Switcher Matrix */
+        .role-switch-container {
+            padding: 12px 14px;
             background: var(--card-white);
             border-bottom: 1px solid var(--border-light);
-            display: flex;
-            gap: 6px;
         }
 
-        .role-pill {
+        .role-switch-label {
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--text-muted);
+            letter-spacing: 0.8px;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .role-buttons-row {
+            display: flex;
+            gap: 6px;
+            background: var(--secondary-bg);
+            padding: 4px;
+            border-radius: 10px;
+            border: 1px solid var(--border-light);
+        }
+
+        .role-btn {
             flex: 1;
             padding: 7px 4px;
             text-align: center;
@@ -118,25 +144,29 @@
             font-weight: 700;
             border-radius: 8px;
             cursor: pointer;
-            border: 1px solid var(--border-light);
-            background: var(--secondary-bg);
+            border: none;
+            background: transparent;
             color: var(--text-slate);
-            transition: all 0.15s ease;
+            transition: all 0.2s ease;
         }
 
-        .role-pill.active {
+        .role-btn.active {
             background: var(--deep-navy);
             color: white;
-            border-color: var(--deep-navy);
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.25);
         }
 
-        /* Sidebar Navigation Menu */
-        .nav-section-title {
-            padding: 14px 16px 6px;
+        /* Drawer Nav Sections */
+        .drawer-nav-group {
+            padding: 10px 0;
+        }
+
+        .drawer-section-title {
+            padding: 10px 20px 4px;
             font-size: 10px;
             font-weight: 800;
             color: var(--text-muted);
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
             text-transform: uppercase;
         }
 
@@ -144,7 +174,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 10px 16px;
+            padding: 9px 16px;
             margin: 2px 10px;
             border-radius: 10px;
             color: var(--text-slate);
@@ -161,146 +191,248 @@
         }
 
         .nav-item.active {
-            background: #EFF6FF;
+            background: var(--active-nav-bg);
             color: var(--royal-blue);
             font-weight: 700;
+            box-shadow: inset 3px 0 0 var(--royal-blue);
         }
 
         .nav-icon {
             font-size: 16px;
-            width: 20px;
+            width: 22px;
             text-align: center;
         }
 
-        /* Main Workspace Content Area */
-        .main-container {
+        /* ---------------- MAIN VIEW CONTAINER ---------------- */
+        .main-workspace {
             flex: 1;
             display: flex;
             flex-direction: column;
             overflow: hidden;
             background: var(--bg-light);
+            position: relative;
         }
 
-        /* Android OptIn Top Bar */
-        .app-topbar {
+        /* Top App Bar */
+        .top-app-bar {
             background: var(--card-white);
             border-bottom: 1px solid var(--border-light);
             padding: 12px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            z-index: 10;
+            z-index: 20;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
         }
 
-        .topbar-left {
+        .app-bar-left {
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        .topbar-title {
-            font-size: 18px;
+        .menu-toggle-btn {
+            display: none;
+            background: transparent;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .app-bar-title {
+            font-size: 17px;
             font-weight: 800;
             color: var(--text-navy);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
-        .topbar-badge {
-            background: #DCFCE7;
-            color: #15803D;
-            font-size: 11px;
+        .portal-indicator-badge {
+            background: #EFF6FF;
+            color: var(--royal-blue);
+            border: 1px solid #BFDBFE;
+            font-size: 10.5px;
             font-weight: 800;
             padding: 3px 8px;
             border-radius: 6px;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
+            letter-spacing: 0.5px;
         }
 
-        .topbar-right {
+        .app-bar-right {
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        .user-profile-chip {
+        .user-chip {
             display: flex;
             align-items: center;
             gap: 10px;
             background: var(--secondary-bg);
-            padding: 6px 14px 6px 6px;
+            padding: 5px 12px 5px 6px;
             border-radius: 30px;
             border: 1px solid var(--border-light);
         }
 
-        .avatar-circle {
-            width: 30px;
-            height: 30px;
+        .user-avatar-round {
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             background: var(--royal-blue);
             color: white;
+            font-weight: 800;
+            font-size: 13px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 800;
-            font-size: 13px;
         }
 
-        .user-name-role {
+        .user-meta-col {
             display: flex;
             flex-direction: column;
             text-align: left;
         }
 
-        .user-name {
+        .user-name-txt {
             font-size: 12px;
-            font-weight: 700;
+            font-weight: 800;
             color: var(--text-navy);
             line-height: 1.2;
         }
 
-        .user-role-label {
+        .user-role-txt {
             font-size: 10px;
             color: var(--text-slate);
             font-weight: 600;
         }
 
-        /* Scrollable Content Container */
-        .content-scrollable {
+        /* Content Area */
+        .workspace-scroll {
             flex: 1;
             overflow-y: auto;
             padding: 24px;
         }
 
-        .view-content {
+        .tab-view-container {
             display: none;
             flex-direction: column;
             gap: 20px;
             max-width: 1300px;
             margin: 0 auto;
+            animation: fadeIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .view-content.active {
+        .tab-view-container.active {
             display: flex;
         }
 
-        /* Banner Card */
-        .banner-card {
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ---------------- UI COMPONENTS & CARDS ---------------- */
+        .m3-surface {
+            background: var(--card-white);
+            border-radius: 16px;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+            padding: 20px;
+        }
+
+        .surface-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .surface-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--text-navy);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: 0.2px;
+        }
+
+        /* KPI Metric Cards Strip */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .kpi-card {
+            background: var(--card-white);
+            border-radius: 14px;
+            padding: 16px 18px;
+            border: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .kpi-card.success {
+            background: #F0FDF4;
+            border-color: var(--status-success-border);
+        }
+        .kpi-card.success .kpi-val { color: var(--status-success); }
+
+        .kpi-card.warning {
+            background: #FFFBEB;
+            border-color: var(--status-warning-border);
+        }
+        .kpi-card.warning .kpi-val { color: var(--status-warning); }
+
+        .kpi-card.error {
+            background: #FEF2F2;
+            border-color: var(--status-error-border);
+        }
+        .kpi-card.error .kpi-val { color: var(--status-error); }
+
+        .kpi-lbl {
+            font-size: 10.5px;
+            font-weight: 800;
+            color: var(--text-slate);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        .kpi-val {
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--text-navy);
+            line-height: 1.1;
+        }
+
+        .kpi-sub {
+            font-size: 11px;
+            color: var(--text-slate);
+            font-weight: 600;
+        }
+
+        /* Info Banners */
+        .guidance-banner {
             background: #EFF6FF;
             border: 1px solid #BFDBFE;
             border-radius: 14px;
-            padding: 16px 20px;
+            padding: 16px 18px;
             display: flex;
             align-items: center;
             gap: 14px;
         }
 
-        .banner-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
+        .guidance-icon-box {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
             background: var(--royal-blue);
             color: white;
             display: flex;
@@ -310,108 +442,31 @@
             flex-shrink: 0;
         }
 
-        .banner-text h4 {
-            font-size: 15px;
+        .guidance-text h4 {
+            font-size: 14px;
             font-weight: 800;
             color: var(--text-navy);
         }
 
-        .banner-text p {
-            font-size: 12.5px;
-            color: var(--slate-blue);
+        .guidance-text p {
+            font-size: 12px;
+            color: #1E3A8A;
             margin-top: 2px;
+            line-height: 1.4;
         }
 
-        /* KPI Cards Grid */
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 16px;
-        }
-
-        .kpi-card {
-            background: var(--card-white);
-            border-radius: 14px;
-            padding: 18px 20px;
-            border: 1px solid var(--border-light);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .kpi-label {
-            font-size: 11px;
-            font-weight: 800;
-            color: var(--text-slate);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .kpi-value {
-            font-size: 26px;
-            font-weight: 800;
-            color: var(--text-navy);
-            line-height: 1.1;
-        }
-
-        .kpi-subtext {
-            font-size: 11.5px;
-            color: var(--text-slate);
-            font-weight: 500;
-        }
-
-        .kpi-card.success {
-            border-color: #86EFAC;
-            background: #F0FDF4;
-        }
-        .kpi-card.success .kpi-value { color: var(--status-success); }
-
-        .kpi-card.warning {
-            border-color: #FCD34D;
-            background: #FFFBEB;
-        }
-        .kpi-card.warning .kpi-value { color: var(--status-warning); }
-
-        /* M3 Style Card */
-        .m3-card {
-            background: var(--card-white);
-            border-radius: 16px;
-            border: 1px solid var(--border-light);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-            padding: 20px;
-        }
-
-        .card-header-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .card-header-title {
-            font-size: 15px;
-            font-weight: 800;
-            color: var(--text-navy);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Month Selector Ribbon */
-        .month-ribbon {
+        /* Month Scroller Ribbon */
+        .month-scroller {
             display: flex;
             gap: 8px;
             overflow-x: auto;
-            padding-bottom: 6px;
+            padding-bottom: 4px;
         }
 
-        .month-pill {
+        .month-tab-pill {
             padding: 6px 14px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 11.5px;
             font-weight: 700;
             border: 1px solid var(--border-light);
             background: var(--secondary-bg);
@@ -421,12 +476,12 @@
             transition: all 0.15s ease;
         }
 
-        .month-pill:hover {
+        .month-tab-pill:hover {
             border-color: #CBD5E1;
             color: var(--text-navy);
         }
 
-        .month-pill.active {
+        .month-tab-pill.active {
             background: var(--royal-blue);
             color: white;
             border-color: var(--royal-blue);
@@ -434,7 +489,7 @@
         }
 
         /* Data Tables */
-        .data-table-container {
+        .table-responsive {
             width: 100%;
             overflow-x: auto;
             border-radius: 12px;
@@ -452,13 +507,15 @@
             background: var(--secondary-bg);
             color: var(--text-navy);
             font-weight: 700;
-            padding: 12px 16px;
+            padding: 12px 14px;
             border-bottom: 1px solid var(--border-light);
             white-space: nowrap;
+            font-size: 11.5px;
+            letter-spacing: 0.3px;
         }
 
         td {
-            padding: 14px 16px;
+            padding: 12px 14px;
             border-bottom: 1px solid var(--border-light);
             color: var(--text-navy);
             vertical-align: middle;
@@ -472,24 +529,36 @@
             background: #F8FAFC;
         }
 
-        /* Badges */
-        .badge {
+        /* Badges & Tags */
+        .status-chip {
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            padding: 4px 10px;
-            border-radius: 20px;
+            padding: 3px 8px;
+            border-radius: 6px;
             font-size: 11px;
             font-weight: 700;
-            letter-spacing: 0.3px;
         }
 
-        .badge-success { background: var(--status-success-bg); color: #14532D; border: 1px solid #86EFAC; }
-        .badge-warning { background: var(--status-warning-bg); color: #78350F; border: 1px solid #FCD34D; }
-        .badge-info { background: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; }
-        .badge-navy { background: var(--deep-navy); color: white; }
+        .status-chip.success {
+            background: var(--status-success-bg);
+            color: #14532D;
+            border: 1px solid var(--status-success-border);
+        }
 
-        .belt-tag {
+        .status-chip.warning {
+            background: var(--status-warning-bg);
+            color: #78350F;
+            border: 1px solid var(--status-warning-border);
+        }
+
+        .status-chip.error {
+            background: var(--status-error-bg);
+            color: #7F1D1D;
+            border: 1px solid var(--status-error-border);
+        }
+
+        .belt-chip {
             display: inline-flex;
             align-items: center;
             gap: 6px;
@@ -498,18 +567,18 @@
             font-size: 11px;
             font-weight: 700;
             border: 1px solid #CBD5E1;
-            background: #F8FAFC;
+            background: #FFFFFF;
         }
 
-        .belt-dot {
+        .belt-dot-icon {
             width: 8px;
             height: 8px;
             border-radius: 50%;
             display: inline-block;
         }
 
-        /* Action Buttons */
-        .btn-action {
+        /* Buttons */
+        .btn-fill-primary {
             background: var(--royal-blue);
             color: white;
             border: none;
@@ -524,11 +593,11 @@
             gap: 6px;
         }
 
-        .btn-action:hover {
+        .btn-fill-primary:hover {
             background: var(--royal-blue-hover);
         }
 
-        .btn-outline {
+        .btn-outline-neutral {
             background: white;
             color: var(--text-navy);
             border: 1px solid var(--border-light);
@@ -538,62 +607,39 @@
             font-weight: 700;
             cursor: pointer;
             transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .btn-outline:hover {
+        .btn-outline-neutral:hover {
             background: var(--secondary-bg);
             border-color: #CBD5E1;
         }
 
-        /* 3 Camps Grid Cards */
-        .camps-grid {
+        /* Card Grid Layouts */
+        .card-grid-3 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 16px;
         }
 
-        .camp-item-card {
+        .sub-card-box {
             background: var(--card-white);
             border: 1px solid var(--border-light);
             border-radius: 14px;
-            padding: 18px;
+            padding: 16px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-            transition: transform 0.15s ease;
+            gap: 10px;
         }
 
-        .camp-item-card:hover {
-            transform: translateY(-2px);
+        .sub-card-box:hover {
             border-color: #CBD5E1;
         }
 
-        .camp-title {
-            font-size: 16px;
-            font-weight: 800;
-            color: var(--text-navy);
-        }
-
-        .camp-fee {
-            font-size: 22px;
-            font-weight: 900;
-            color: var(--royal-blue);
-        }
-
-        .session-split-box {
-            background: var(--secondary-bg);
-            border-radius: 8px;
-            padding: 10px 12px;
-            font-size: 11.5px;
-            color: var(--text-navy);
-            font-weight: 600;
-            border-left: 3px solid var(--royal-blue);
-            line-height: 1.5;
-        }
-
-        /* Toast Modal */
-        .toast-notification {
+        /* Toast SnackBar */
+        .toast-snack {
             position: fixed;
             bottom: 24px;
             right: 24px;
@@ -603,182 +649,253 @@
             border-radius: 10px;
             font-size: 13px;
             font-weight: 600;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
             display: none;
             align-items: center;
             gap: 10px;
             z-index: 1000;
-            animation: fadeIn 0.2s ease;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 900px) {
+        @media (max-width: 960px) {
             body { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; max-height: 240px; }
-            .role-selector-bar { overflow-x: auto; }
+            .sidebar {
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                width: 280px;
+                transform: translateX(-100%);
+            }
+            .sidebar.open { transform: translateX(0); }
+            .menu-toggle-btn { display: block; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Sidebar Navigation (Synchronized with Jetpack Compose AdminPortalLayout) -->
-    <aside class="sidebar">
+    <!-- ---------------- NAVIGATION DRAWER (SYNCED WITH COMPOSE) ---------------- -->
+    <aside class="sidebar" id="app-sidebar">
         <div class="sidebar-header">
-            <div class="logo-circle">B</div>
-            <div>
-                <div class="sidebar-brand-title">BROMAA</div>
-                <div class="sidebar-brand-sub">BRUCELEE RAJ ONLINE ACADEMY</div>
+            <div class="academy-profile-badge">
+                <div class="broma-crest">B</div>
+                <div class="header-title-box">
+                    <h3 id="sidebar-header-title">ADMIN CONTROL</h3>
+                    <p id="sidebar-user-name">Shihan Brucelee Raj</p>
+                </div>
             </div>
         </div>
 
-        <!-- Role Switching Tabs -->
-        <div class="role-selector-bar">
-            <div class="role-pill active" onclick="switchRole('admin')">🛡️ ADMIN</div>
-            <div class="role-pill" onclick="switchRole('coach')">🥋 COACH</div>
-            <div class="role-pill" onclick="switchRole('student')">🏅 STUDENT</div>
-        </div>
-
-        <!-- ADMIN MENU ITEMS -->
-        <div id="admin-menu">
-            <div class="nav-section-title">ADMIN MANAGEMENT</div>
-            <a class="nav-item active" onclick="switchTab('admin-fees')">
-                <span class="nav-icon">💰</span> Fees & Register
-            </a>
-            <a class="nav-item" onclick="switchTab('admin-camps')">
-                <span class="nav-icon">🥋</span> Special Training Camps
-            </a>
-            <a class="nav-item" onclick="switchTab('admin-students')">
-                <span class="nav-icon">👥</span> Student Directory (12)
-            </a>
-            <a class="nav-item" onclick="switchTab('admin-batches')">
-                <span class="nav-icon">📋</span> Batch Management (6)
-            </a>
-            <a class="nav-item" onclick="switchTab('admin-analytics')">
-                <span class="nav-icon">📊</span> Attendance Charts
-            </a>
-        </div>
-
-        <!-- COACH MENU ITEMS -->
-        <div id="coach-menu" style="display: none;">
-            <div class="nav-section-title">COACH PORTAL</div>
-            <a class="nav-item" onclick="switchTab('coach-attendance')">
-                <span class="nav-icon">✅</span> Daily Batch Attendance
-            </a>
-            <a class="nav-item" onclick="switchTab('coach-permissions')">
-                <span class="nav-icon">⏱️</span> Special Training Perms
-            </a>
-        </div>
-
-        <!-- STUDENT MENU ITEMS -->
-        <div id="student-menu" style="display: none;">
-            <div class="nav-section-title">STUDENT PORTAL</div>
-            <a class="nav-item" onclick="switchTab('student-profile')">
-                <span class="nav-icon">🏅</span> Belt Grading & Profile
-            </a>
-            <a class="nav-item" onclick="switchTab('student-fees')">
-                <span class="nav-icon">💳</span> My Fees & Receipts
-            </a>
-        </div>
-
-        <div style="margin-top: auto; padding: 16px; border-top: 1px solid var(--border-light);">
-            <div style="font-size: 11px; color: var(--text-muted); text-align: center;">
-                Synchronized with Google AI Studio • Ver 2.6
+        <!-- Role Selector Switcher -->
+        <div class="role-switch-container">
+            <div class="role-switch-label">SELECT PORTAL (3-IN-1)</div>
+            <div class="role-buttons-row">
+                <button class="role-btn active" onclick="setRole('admin', this)">🛡️ Admin</button>
+                <button class="role-btn" onclick="setRole('coach', this)">🥋 Coach</button>
+                <button class="role-btn" onclick="setRole('student', this)">🏅 Student</button>
             </div>
+        </div>
+
+        <!-- 1. ADMIN MENU SECTION -->
+        <div id="menu-admin" class="drawer-nav-group">
+            <div class="drawer-section-title">ADMINISTRATION</div>
+            <a class="nav-item active" onclick="showTab('admin-dashboard', this)"><span class="nav-icon">🏠</span> Dashboard</a>
+            <a class="nav-item" onclick="showTab('admin-fees-programs', this)"><span class="nav-icon">💰</span> Fees & Programs</a>
+            <a class="nav-item" onclick="showTab('admin-students', this)"><span class="nav-icon">👨🎓</span> Student Centre</a>
+            <a class="nav-item" onclick="showTab('admin-coaches', this)"><span class="nav-icon">👨🏫</span> Coach Centre</a>
+            <a class="nav-item" onclick="showTab('admin-batches', this)"><span class="nav-icon">👥</span> Batch Centre</a>
+            <a class="nav-item" onclick="showTab('admin-tournaments', this)"><span class="nav-icon">🏆</span> Tournament Details</a>
+            <a class="nav-item" onclick="showTab('admin-leadership', this)"><span class="nav-icon">🏛️</span> Officials & Hierarchy</a>
+            <a class="nav-item" onclick="showTab('admin-chat', this)"><span class="nav-icon">💬</span> Message & Chat Centre</a>
+            <a class="nav-item" onclick="showTab('admin-payments', this)"><span class="nav-icon">💳</span> Payment Verification</a>
+            <a class="nav-item" onclick="showTab('admin-certificates', this)"><span class="nav-icon">📜</span> Certificate Centre</a>
+            <a class="nav-item" onclick="showTab('admin-achievements', this)"><span class="nav-icon">🌟</span> Student Achievements</a>
+            <a class="nav-item" onclick="showTab('admin-calendar', this)"><span class="nav-icon">📅</span> Calendar Centre</a>
+            <a class="nav-item" onclick="showTab('admin-announcements', this)"><span class="nav-icon">📢</span> Announcement Centre</a>
+            <a class="nav-item" onclick="showTab('admin-time-perms', this)"><span class="nav-icon">⏰</span> Special Time Perms</a>
+            <a class="nav-item" onclick="showTab('admin-analytics', this)"><span class="nav-icon">📊</span> Attendance Analytics</a>
+            <a class="nav-item" onclick="showTab('admin-contact', this)"><span class="nav-icon">📍</span> Contact Settings</a>
+            <a class="nav-item" onclick="showTab('admin-settings', this)"><span class="nav-icon">⚙️</span> Payment & UPI Settings</a>
+            <a class="nav-item" onclick="showTab('admin-rules', this)"><span class="nav-icon">📜</span> Dojo Rules & Standards</a>
+        </div>
+
+        <!-- 2. COACH MENU SECTION -->
+        <div id="menu-coach" class="drawer-nav-group" style="display: none;">
+            <div class="drawer-section-title">COACH PORTAL</div>
+            <a class="nav-item" onclick="showTab('coach-dashboard', this)"><span class="nav-icon">🏠</span> Dashboard</a>
+            <a class="nav-item" onclick="showTab('coach-profile', this)"><span class="nav-icon">👤</span> Coach Profile</a>
+            <a class="nav-item" onclick="showTab('coach-batches', this)"><span class="nav-icon">👥</span> My Batches</a>
+            <a class="nav-item" onclick="showTab('coach-attendance', this)"><span class="nav-icon">✅</span> Take Attendance</a>
+            <a class="nav-item" onclick="showTab('coach-availability', this)"><span class="nav-icon">🗓️</span> My Availability & Schedule</a>
+            <a class="nav-item" onclick="showTab('coach-tournaments', this)"><span class="nav-icon">🏆</span> Tournaments</a>
+            <a class="nav-item" onclick="showTab('coach-chat', this)"><span class="nav-icon">💬</span> Chat with Admin</a>
+            <a class="nav-item" onclick="showTab('coach-requests', this)"><span class="nav-icon">📩</span> Student Requests</a>
+        </div>
+
+        <!-- 3. STUDENT MENU SECTION -->
+        <div id="menu-student" class="drawer-nav-group" style="display: none;">
+            <div class="drawer-section-title">OVERVIEW</div>
+            <a class="nav-item" onclick="showTab('student-dashboard', this)"><span class="nav-icon">🏠</span> Dashboard</a>
+            <a class="nav-item" onclick="showTab('student-profile', this)"><span class="nav-icon">👤</span> My Profile</a>
+            <a class="nav-item" onclick="showTab('student-karate', this)"><span class="nav-icon">🥋</span> My Karate</a>
+            <a class="nav-item" onclick="showTab('student-class', this)"><span class="nav-icon">📅</span> My Batch & Schedule</a>
+            <a class="nav-item" onclick="showTab('student-instructors', this)"><span class="nav-icon">🥋</span> Instructors & Standards</a>
+            
+            <div class="drawer-section-title">ACADEMICS & FEES</div>
+            <a class="nav-item" onclick="showTab('student-attendance', this)"><span class="nav-icon">✅</span> Attendance</a>
+            <a class="nav-item" onclick="showTab('student-fees', this)"><span class="nav-icon">💰</span> Fees & Payments</a>
+            
+            <div class="drawer-section-title">EVENTS & HONORS</div>
+            <a class="nav-item" onclick="showTab('student-tournaments', this)"><span class="nav-icon">🏆</span> Tournaments</a>
+            <a class="nav-item" onclick="showTab('student-certificates', this)"><span class="nav-icon">📜</span> Certificates</a>
+            <a class="nav-item" onclick="showTab('student-achievements', this)"><span class="nav-icon">🌟</span> Achievements</a>
+            <a class="nav-item" onclick="showTab('student-calendar', this)"><span class="nav-icon">📅</span> Calendar</a>
+            <a class="nav-item" onclick="showTab('student-announcements', this)"><span class="nav-icon">📢</span> Announcements</a>
+            <a class="nav-item" onclick="showTab('student-chat', this)"><span class="nav-icon">💬</span> Chat with Admin</a>
+            
+            <div class="drawer-section-title">SYSTEM</div>
+            <a class="nav-item" onclick="showTab('student-settings', this)"><span class="nav-icon">⚙️</span> Settings & Privacy</a>
+            <a class="nav-item" onclick="showTab('student-contact', this)"><span class="nav-icon">📞</span> Contact Academy</a>
+        </div>
+
+        <div style="margin-top: auto; padding: 14px 16px; border-top: 1px solid var(--border-light); font-size: 11px; color: var(--text-muted); text-align: center;">
+            Google AI Studio • Live Cloud Synchronized
         </div>
     </aside>
 
-    <!-- Main Workspace Area -->
-    <main class="main-container">
+    <!-- ---------------- MAIN WORKSPACE ---------------- -->
+    <main class="main-workspace">
         <!-- Top App Bar -->
-        <header class="app-topbar">
-            <div class="topbar-left">
-                <h1 class="topbar-title" id="page-title">
-                    <span>Regular Training Monthly Fees Register</span>
+        <header class="top-app-bar">
+            <div class="app-bar-left">
+                <button class="menu-toggle-btn" onclick="toggleSidebar()">☰</button>
+                <h1 class="app-bar-title">
+                    <span id="page-header-text">Admin Dashboard</span>
                 </h1>
-                <span class="topbar-badge" id="role-badge">
-                    ● ADMIN PORTAL
-                </span>
+                <span class="portal-indicator-badge" id="portal-badge-text">ADMIN PORTAL</span>
             </div>
 
-            <div class="topbar-right">
-                <button class="btn-outline" onclick="showToast('✓ Data synchronized across all portals!')">
-                    🔄 Refresh Data
-                </button>
-                <div class="user-profile-chip">
-                    <div class="avatar-circle" id="user-avatar">A</div>
-                    <div class="user-name-role">
-                        <span class="user-name" id="user-name-display">Grandmaster Shihan Brucelee Raj</span>
-                        <span class="user-role-label" id="user-role-display">Head Administrator</span>
+            <div class="app-bar-right">
+                <button class="btn-outline-neutral" onclick="triggerSync()">🔄 Synchronize</button>
+                <div class="user-chip">
+                    <div class="user-avatar-round" id="user-avatar-letter">A</div>
+                    <div class="user-meta-col">
+                        <span class="user-name-txt" id="top-user-name">Grandmaster Shihan Brucelee Raj</span>
+                        <span class="user-role-txt" id="top-user-role">Head Administrator & 8th Dan</span>
                     </div>
                 </div>
             </div>
         </header>
 
         <!-- Dynamic Content Body -->
-        <div class="content-scrollable">
+        <div class="workspace-scroll">
 
-            <!-- 1. ADMIN: FEES & MONTHLY REGISTER TAB -->
-            <div id="admin-fees" class="view-content active">
-                <div class="banner-card">
-                    <div class="banner-icon">📋</div>
-                    <div class="banner-text">
-                        <h4>REGULAR TRAINING MONTHLY FEES REGISTER (₹2,000 / Month)</h4>
-                        <p>Complete training curriculum encompassing Karate-Do, Physical Fitness & Conditioning, Practical Self Defence, and Traditional Weapons (Nunchaku & Bo). All student balances and receipts synchronized.</p>
+            <!-- ============================== ADMIN VIEWS ============================== -->
+
+            <!-- 1. ADMIN DASHBOARD -->
+            <div id="admin-dashboard" class="tab-view-container active">
+                <div class="guidance-banner">
+                    <div class="guidance-icon-box">🛡️</div>
+                    <div class="guidance-text">
+                        <h4>BROMA ACADEMY ADMINISTRATION COMMAND CENTER</h4>
+                        <p>Real-time dojo operations, 12 active regular trainees, 6 training batches, and fee collection summaries.</p>
                     </div>
                 </div>
 
-                <!-- KPI Metric Strip -->
-                <div class="kpi-grid">
+                <div class="kpi-row">
                     <div class="kpi-card">
-                        <span class="kpi-label">TOTAL REGULAR STUDENTS</span>
-                        <span class="kpi-value" id="kpi-total-students">12</span>
-                        <span class="kpi-subtext">Academy Enrolled</span>
+                        <span class="kpi-lbl">TOTAL TRAINEES</span>
+                        <span class="kpi-val">12</span>
+                        <span class="kpi-sub">Across 6 Batches</span>
                     </div>
                     <div class="kpi-card success">
-                        <span class="kpi-label" id="kpi-paid-label">AUG 2026 COLLECTED</span>
-                        <span class="kpi-value" id="kpi-paid-val">₹20,000</span>
-                        <span class="kpi-subtext">10 of 12 Students Paid</span>
+                        <span class="kpi-lbl">MONTHLY REVENUE (AUG)</span>
+                        <span class="kpi-val">₹20,000</span>
+                        <span class="kpi-sub">83.3% Collected</span>
                     </div>
                     <div class="kpi-card warning">
-                        <span class="kpi-label" id="kpi-due-label">AUG 2026 PENDING</span>
-                        <span class="kpi-value" id="kpi-due-val">₹4,000</span>
-                        <span class="kpi-subtext">2 Students Pending</span>
+                        <span class="kpi-lbl">PENDING FEES</span>
+                        <span class="kpi-val">₹4,000</span>
+                        <span class="kpi-sub">2 Students Pending</span>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-lbl">AVERAGE ATTENDANCE</span>
+                        <span class="kpi-val">94.2%</span>
+                        <span class="kpi-sub">Biometric & Coach Verified</span>
                     </div>
                 </div>
 
-                <!-- Month Selector Ribbon -->
-                <div class="m3-card">
-                    <div class="card-header-bar">
-                        <span class="card-header-title">📅 ACADEMIC YEAR 2026 MONTH SELECTOR</span>
+                <!-- Quick Action Bar -->
+                <div class="m3-surface">
+                    <div class="surface-header-row">
+                        <span class="surface-title">⚡ QUICK ACTIONS</span>
+                    </div>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button class="btn-fill-primary" onclick="showTab('admin-fees-programs')">💰 Open Monthly Fees Register</button>
+                        <button class="btn-outline-neutral" onclick="showTab('admin-students')">👥 Add New Student</button>
+                        <button class="btn-outline-neutral" onclick="showTab('admin-announcements')">📢 Broadcast Urgent Notice</button>
+                        <button class="btn-outline-neutral" onclick="showTab('admin-payments')">💳 Verify UPI Payments (2)</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. ADMIN FEES & PROGRAMS -->
+            <div id="admin-fees-programs" class="tab-view-container">
+                <div class="guidance-banner">
+                    <div class="guidance-icon-box">📋</div>
+                    <div class="guidance-text">
+                        <h4>REGULAR TRAINING MONTHLY FEES REGISTER (₹2,000 / Month)</h4>
+                        <p>Covers all 4 core disciplines: Karate-Do, Physical Fitness & Conditioning, Practical Self Defence, and Traditional Weapons (Bo & Nunchaku).</p>
+                    </div>
+                </div>
+
+                <!-- KPI Strip -->
+                <div class="kpi-row">
+                    <div class="kpi-card">
+                        <span class="kpi-lbl">TOTAL REGULAR TRAINEES</span>
+                        <span class="kpi-val">12</span>
+                        <span class="kpi-sub">Academy Enrolled</span>
+                    </div>
+                    <div class="kpi-card success">
+                        <span class="kpi-lbl" id="admin-paid-lbl">AUG 2026 COLLECTED</span>
+                        <span class="kpi-val" id="admin-paid-val">₹20,000</span>
+                        <span class="kpi-sub">10 Paid</span>
+                    </div>
+                    <div class="kpi-card error">
+                        <span class="kpi-lbl" id="admin-due-lbl">AUG 2026 PENDING</span>
+                        <span class="kpi-val" id="admin-due-val">₹4,000</span>
+                        <span class="kpi-sub">2 Due</span>
+                    </div>
+                </div>
+
+                <!-- 12-Month Selector Ribbon -->
+                <div class="m3-surface">
+                    <div class="surface-header-row">
+                        <span class="surface-title">📅 ACADEMIC YEAR 2026 MONTH SELECTOR</span>
                         <span style="font-size: 12px; font-weight: 700; color: var(--royal-blue);" id="active-month-text">Selected: August 2026</span>
                     </div>
-                    <div class="month-ribbon">
-                        <div class="month-pill" onclick="selectMonth('Jan')">Jan 2026</div>
-                        <div class="month-pill" onclick="selectMonth('Feb')">Feb 2026</div>
-                        <div class="month-pill" onclick="selectMonth('Mar')">Mar 2026</div>
-                        <div class="month-pill" onclick="selectMonth('Apr')">Apr 2026</div>
-                        <div class="month-pill" onclick="selectMonth('May')">May 2026</div>
-                        <div class="month-pill" onclick="selectMonth('Jun')">Jun 2026</div>
-                        <div class="month-pill" onclick="selectMonth('Jul')">Jul 2026</div>
-                        <div class="month-pill active" onclick="selectMonth('Aug')">Aug 2026 (Active)</div>
-                        <div class="month-pill" onclick="selectMonth('Sep')">Sep 2026</div>
-                        <div class="month-pill" onclick="selectMonth('Oct')">Oct 2026</div>
-                        <div class="month-pill" onclick="selectMonth('Nov')">Nov 2026</div>
-                        <div class="month-pill" onclick="selectMonth('Dec')">Dec 2026</div>
+                    <div class="month-scroller">
+                        <div class="month-tab-pill" onclick="changeMonth('Jan', this)">Jan 2026</div>
+                        <div class="month-tab-pill" onclick="changeMonth('Feb', this)">Feb 2026</div>
+                        <div class="month-tab-pill" onclick="changeMonth('Mar', this)">Mar 2026</div>
+                        <div class="month-tab-pill" onclick="changeMonth('Apr', this)">Apr 2026</div>
+                        <div class="month-tab-pill" onclick="changeMonth('May', this)">May 2026</div>
+                        <div class="month-tab-pill" onclick="changeMonth('Jun', this)">Jun 2026</div>
+                        <div class="month-tab-pill" onclick="changeMonth('Jul', this)">Jul 2026</div>
+                        <div class="month-tab-pill active" onclick="changeMonth('Aug', this)">Aug 2026 (Active)</div>
+                        <div class="month-tab-pill" onclick="changeMonth('Sep', this)">Sep 2026</div>
+                        <div class="month-tab-pill" onclick="changeMonth('Oct', this)">Oct 2026</div>
+                        <div class="month-tab-pill" onclick="changeMonth('Nov', this)">Nov 2026</div>
+                        <div class="month-tab-pill" onclick="changeMonth('Dec', this)">Dec 2026</div>
                     </div>
                 </div>
 
-                <!-- Students Monthly Register Table -->
-                <div class="m3-card">
-                    <div class="card-header-bar">
-                        <span class="card-header-title">👥 STUDENT 12-MONTH FEE LEDGER & REGISTRATION STATUS</span>
-                        <button class="btn-action" onclick="showToast('✓ Receipt PDF Generated!')">📥 Export Ledger</button>
+                <!-- Student Matrix Table -->
+                <div class="m3-surface">
+                    <div class="surface-header-row">
+                        <span class="surface-title">👥 STUDENT 12-MONTH FEE LEDGER & REGISTRATION STATUS</span>
+                        <button class="btn-fill-primary" onclick="triggerToast('✓ Receipt PDF Exported!')">📥 Export Ledger PDF</button>
                     </div>
-                    <div class="data-table-container">
+                    <div class="table-responsive">
                         <table>
                             <thead>
                                 <tr>
@@ -786,350 +903,618 @@
                                     <th>CURRENT BELT</th>
                                     <th>ADMISSION (₹1,000)</th>
                                     <th>GI UNIFORM (₹1,500)</th>
-                                    <th>SELECTED MONTH STATUS</th>
+                                    <th>MONTH STATUS</th>
                                     <th>ACTION</th>
                                 </tr>
                             </thead>
-                            <tbody id="student-ledger-body">
+                            <tbody>
                                 <tr>
                                     <td><strong>Arun Kumar</strong><br><span style="font-size:11px; color:var(--text-slate)">ST-2026-001</span></td>
-                                    <td><span class="belt-tag"><span class="belt-dot" style="background:#78350F"></span> Brown Belt 3rd Kyu</span></td>
-                                    <td><span class="badge badge-success">✓ PAID</span></td>
-                                    <td><span class="badge badge-success">✓ PAID</span></td>
-                                    <td><span class="badge badge-success">✓ PAID (₹2,000)</span></td>
-                                    <td><button class="btn-outline" onclick="togglePay(this)">View Receipt</button></td>
+                                    <td><span class="belt-chip"><span class="belt-dot-icon" style="background:#78350F"></span> Brown Belt 3rd Kyu</span></td>
+                                    <td><span class="status-chip success">✓ PAID</span></td>
+                                    <td><span class="status-chip success">✓ PAID</span></td>
+                                    <td><span class="status-chip success">✓ PAID (₹2,000)</span></td>
+                                    <td><button class="btn-outline-neutral" onclick="triggerToast('Receipt BR-2026-0801 Generated')">View Receipt</button></td>
                                 </tr>
                                 <tr>
                                     <td><strong>Priya Sharma</strong><br><span style="font-size:11px; color:var(--text-slate)">ST-2026-002</span></td>
-                                    <td><span class="belt-tag"><span class="belt-dot" style="background:#2563EB"></span> Blue Belt 5th Kyu</span></td>
-                                    <td><span class="badge badge-success">✓ PAID</span></td>
-                                    <td><span class="badge badge-success">✓ PAID</span></td>
-                                    <td><span class="badge badge-success">✓ PAID (₹2,000)</span></td>
-                                    <td><button class="btn-outline" onclick="togglePay(this)">View Receipt</button></td>
+                                    <td><span class="belt-chip"><span class="belt-dot-icon" style="background:#2563EB"></span> Blue Belt 5th Kyu</span></td>
+                                    <td><span class="status-chip success">✓ PAID</span></td>
+                                    <td><span class="status-chip success">✓ PAID</span></td>
+                                    <td><span class="status-chip success">✓ PAID (₹2,000)</span></td>
+                                    <td><button class="btn-outline-neutral" onclick="triggerToast('Receipt BR-2026-0802 Generated')">View Receipt</button></td>
                                 </tr>
                                 <tr>
                                     <td><strong>Rohan Verma</strong><br><span style="font-size:11px; color:var(--text-slate)">ST-2026-003</span></td>
-                                    <td><span class="belt-tag"><span class="belt-dot" style="background:#16A34A"></span> Green Belt 6th Kyu</span></td>
-                                    <td><span class="badge badge-success">✓ PAID</span></td>
-                                    <td><span class="badge badge-success">✓ PAID</span></td>
-                                    <td><span class="badge badge-warning">⏳ DUE (₹2,000)</span></td>
-                                    <td><button class="btn-action" onclick="recordPay(this)">Mark Paid</button></td>
+                                    <td><span class="belt-chip"><span class="belt-dot-icon" style="background:#16A34A"></span> Green Belt 6th Kyu</span></td>
+                                    <td><span class="status-chip success">✓ PAID</span></td>
+                                    <td><span class="status-chip success">✓ PAID</span></td>
+                                    <td><span class="status-chip warning" id="row-status-rohan">⏳ DUE (₹2,000)</span></td>
+                                    <td><button class="btn-fill-primary" onclick="markPay(this, 'row-status-rohan')">Mark Paid</button></td>
                                 </tr>
                                 <tr>
                                     <td><strong>Ananya Patel</strong><br><span style="font-size:11px; color:var(--text-slate)">ST-2026-004</span></td>
-                                    <td><span class="belt-tag"><span class="belt-dot" style="background:#EAB308"></span> Yellow Belt 8th Kyu</span></td>
-                                    <td><span class="badge badge-success">✓ PAID</span></td>
-                                    <td><span class="badge badge-success">✓ PAID</span></td>
-                                    <td><span class="badge badge-success">✓ PAID (₹2,000)</span></td>
-                                    <td><button class="btn-outline" onclick="togglePay(this)">View Receipt</button></td>
+                                    <td><span class="belt-chip"><span class="belt-dot-icon" style="background:#EAB308"></span> Yellow Belt 8th Kyu</span></td>
+                                    <td><span class="status-chip success">✓ PAID</span></td>
+                                    <td><span class="status-chip success">✓ PAID</span></td>
+                                    <td><span class="status-chip success">✓ PAID (₹2,000)</span></td>
+                                    <td><button class="btn-outline-neutral" onclick="triggerToast('Receipt BR-2026-0804 Generated')">View Receipt</button></td>
                                 </tr>
                                 <tr>
                                     <td><strong>Vikram Singh</strong><br><span style="font-size:11px; color:var(--text-slate)">ST-2026-005</span></td>
-                                    <td><span class="belt-tag"><span class="belt-dot" style="background:#F97316"></span> Orange Belt 7th Kyu</span></td>
-                                    <td><span class="badge badge-success">✓ PAID</span></td>
-                                    <td><span class="badge badge-success">✓ PAID</span></td>
-                                    <td><span class="badge badge-warning">⏳ DUE (₹2,000)</span></td>
-                                    <td><button class="btn-action" onclick="recordPay(this)">Mark Paid</button></td>
+                                    <td><span class="belt-chip"><span class="belt-dot-icon" style="background:#F97316"></span> Orange Belt 7th Kyu</span></td>
+                                    <td><span class="status-chip success">✓ PAID</span></td>
+                                    <td><span class="status-chip success">✓ PAID</span></td>
+                                    <td><span class="status-chip warning" id="row-status-vikram">⏳ DUE (₹2,000)</span></td>
+                                    <td><button class="btn-fill-primary" onclick="markPay(this, 'row-status-vikram')">Mark Paid</button></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-            </div>
 
-            <!-- 2. ADMIN: SPECIAL TRAINING CAMPS TAB -->
-            <div id="admin-camps" class="view-content">
-                <div class="banner-card">
-                    <div class="banner-icon">🥋</div>
-                    <div class="banner-text">
-                        <h4>SPECIAL TRAINING CAMPS & INTENSIVE WORKSHOPS</h4>
-                        <p>Configure special courses, custom timings, fees, and session splits. Synchronized with Student Enrollment and Coach Permissions.</p>
+                <!-- 3 Special Camps Section -->
+                <div class="m3-surface">
+                    <div class="surface-header-row">
+                        <span class="surface-title">🥋 SPECIAL TRAINING CAMPS & INTENSIVE COURSES</span>
                     </div>
-                </div>
-
-                <div class="camps-grid">
-                    <!-- 1-Day Camp -->
-                    <div class="camp-item-card">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                            <div>
-                                <span class="badge badge-info">1-DAY INTENSIVE</span>
-                                <h3 class="camp-title" style="margin-top: 6px;">1-Day Special Karate Camp</h3>
+                    <div class="card-grid-3">
+                        <div class="sub-card-box">
+                            <span class="status-chip warning">1-DAY INTENSIVE</span>
+                            <h3 style="font-size: 16px; font-weight: 800;">1-Day Special Karate Camp</h3>
+                            <div style="font-size: 22px; font-weight: 900; color: var(--royal-blue);">₹4,999</div>
+                            <p style="font-size: 12.5px; color: var(--text-slate);">6 Hours intensive camp with 3 split sessions:</p>
+                            <div style="background: var(--secondary-bg); padding: 8px 10px; border-radius: 8px; font-size: 11.5px; font-weight: 600;">
+                                • Morning: 6:00 – 8:00 AM<br>
+                                • Afternoon: 11:00 AM – 1:00 PM<br>
+                                • Evening: 6:00 – 8:00 PM
                             </div>
-                            <span class="camp-fee">₹4,999</span>
                         </div>
-                        <p style="font-size: 13px; color: var(--text-slate);">6 Hours intensive martial arts camp covering Kihon, Bunkai Kata & Sparring fundamentals.</p>
-                        <div class="session-split-box">
-                            <strong>3 Split Sessions (6 Hours Total):</strong><br>
-                            • Morning: 6:00 AM – 8:00 AM (Kihon & Conditioning)<br>
-                            • Afternoon: 11:00 AM – 1:00 PM (Kata & Self Defence)<br>
-                            • Evening: 6:00 PM – 8:00 PM (Kumite & Weapon Drills)
-                        </div>
-                        <button class="btn-outline" onclick="showToast('✓ Camp schedule updated!')">Edit Parameters</button>
-                    </div>
 
-                    <!-- 3-Days Camp -->
-                    <div class="camp-item-card">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                            <div>
-                                <span class="badge badge-warning">3-DAYS BOOTCAMP</span>
-                                <h3 class="camp-title" style="margin-top: 6px;">3-Days Special Karate Camp</h3>
+                        <div class="sub-card-box">
+                            <span class="status-chip warning">3-DAYS BOOTCAMP</span>
+                            <h3 style="font-size: 16px; font-weight: 800;">3-Days Special Karate Camp</h3>
+                            <div style="font-size: 22px; font-weight: 900; color: var(--royal-blue);">₹9,999</div>
+                            <p style="font-size: 12.5px; color: var(--text-slate);">4 Hours/Day (12 Hours Total) in 2 split sessions:</p>
+                            <div style="background: var(--secondary-bg); padding: 8px 10px; border-radius: 8px; font-size: 11.5px; font-weight: 600;">
+                                • Morning: 6:00 – 8:00 AM<br>
+                                • Evening: 6:00 – 8:00 PM
                             </div>
-                            <span class="camp-fee">₹9,999</span>
                         </div>
-                        <p style="font-size: 13px; color: var(--text-slate);">4 Hours/Day (12 Hours total) intensive training focusing on tactical Kumite and stamina.</p>
-                        <div class="session-split-box">
-                            <strong>2 Split Sessions (4 Hours/Day):</strong><br>
-                            • Morning: 6:00 AM – 8:00 AM (Agility & Stances)<br>
-                            • Evening: 6:00 PM – 8:00 PM (Counter-Attack & Sparring)
-                        </div>
-                        <button class="btn-outline" onclick="showToast('✓ Camp schedule updated!')">Edit Parameters</button>
-                    </div>
 
-                    <!-- 1-Week Camp -->
-                    <div class="camp-item-card">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                            <div>
-                                <span class="badge badge-navy">1-WEEK MASTERCLASS</span>
-                                <h3 class="camp-title" style="margin-top: 6px;">1-Week Special Karate Camp</h3>
+                        <div class="sub-card-box">
+                            <span class="status-chip success">1-WEEK MASTERCLASS</span>
+                            <h3 style="font-size: 16px; font-weight: 800;">1-Week Special Karate Camp</h3>
+                            <div style="font-size: 22px; font-weight: 900; color: var(--royal-blue);">₹14,999</div>
+                            <p style="font-size: 12.5px; color: var(--text-slate);">4 Hours/Day (28 Hours Total) in 2 split sessions:</p>
+                            <div style="background: var(--secondary-bg); padding: 8px 10px; border-radius: 8px; font-size: 11.5px; font-weight: 600;">
+                                • Morning: 6:00 – 8:00 AM<br>
+                                • Evening: 6:00 – 8:00 PM
                             </div>
-                            <span class="camp-fee">₹14,999</span>
                         </div>
-                        <p style="font-size: 13px; color: var(--text-slate);">4 Hours/Day (28 Hours total) comprehensive mastery covering advanced Katas and weapons.</p>
-                        <div class="session-split-box">
-                            <strong>2 Split Sessions (4 Hours/Day):</strong><br>
-                            • Morning: 6:00 AM – 8:00 AM (Kobudo Weapons & Conditioning)<br>
-                            • Evening: 6:00 PM – 8:00 PM (Master Katas & Dan Prep)
-                        </div>
-                        <button class="btn-outline" onclick="showToast('✓ Camp schedule updated!')">Edit Parameters</button>
                     </div>
                 </div>
             </div>
 
-            <!-- 3. ADMIN: STUDENTS DIRECTORY -->
-            <div id="admin-students" class="view-content">
-                <div class="m3-card">
-                    <div class="card-header-bar">
-                        <span class="card-header-title">👥 ACADEMY STUDENT ROSTER (12 ENROLLED)</span>
-                        <button class="btn-action" onclick="showToast('✓ New Student Registered!')">+ Add Student</button>
+            <!-- 3. ADMIN STUDENT CENTRE -->
+            <div id="admin-students" class="tab-view-container">
+                <div class="m3-surface">
+                    <div class="surface-header-row">
+                        <span class="surface-title">👨🎓 STUDENT DIRECTORY & PROFILE MANAGEMENT</span>
+                        <button class="btn-fill-primary" onclick="triggerToast('✓ New Student Form Opened')">+ Register New Student</button>
                     </div>
-                    <div class="data-table-container">
+                    <div class="table-responsive">
                         <table>
                             <thead>
-                                <tr>
-                                    <th>NAME</th>
-                                    <th>STUDENT ID</th>
-                                    <th>CURRENT BELT</th>
-                                    <th>ACTIVE BATCH</th>
-                                    <th>ATTENDANCE</th>
-                                </tr>
+                                <tr><th>ID</th><th>STUDENT NAME</th><th>BELT RANK</th><th>ASSIGNED BATCH</th><th>PHONE</th><th>STATUS</th></tr>
                             </thead>
                             <tbody>
-                                <tr><td>Arun Kumar</td><td>ST-2026-001</td><td>Brown Belt 3rd Kyu</td><td>Evening Senior Batch (6-8 PM)</td><td><span class="badge badge-success">96% Present</span></td></tr>
-                                <tr><td>Priya Sharma</td><td>ST-2026-002</td><td>Blue Belt 5th Kyu</td><td>Morning General Batch (6-8 AM)</td><td><span class="badge badge-success">92% Present</span></td></tr>
-                                <tr><td>Rohan Verma</td><td>ST-2026-003</td><td>Green Belt 6th Kyu</td><td>Evening Kids Batch (5-6 PM)</td><td><span class="badge badge-warning">84% Present</span></td></tr>
-                                <tr><td>Ananya Patel</td><td>ST-2026-004</td><td>Yellow Belt 8th Kyu</td><td>Morning General Batch (6-8 AM)</td><td><span class="badge badge-success">95% Present</span></td></tr>
+                                <tr><td>ST-001</td><td><strong>Arun Kumar</strong></td><td>Brown Belt 3rd Kyu</td><td>Batch 3 (Evening 6-8 PM)</td><td>+91 98765 43210</td><td><span class="status-chip success">Active</span></td></tr>
+                                <tr><td>ST-002</td><td><strong>Priya Sharma</strong></td><td>Blue Belt 5th Kyu</td><td>Batch 1 (Morning 6-8 AM)</td><td>+91 98765 43211</td><td><span class="status-chip success">Active</span></td></tr>
+                                <tr><td>ST-003</td><td><strong>Rohan Verma</strong></td><td>Green Belt 6th Kyu</td><td>Batch 2 (Junior 5-6 PM)</td><td>+91 98765 43212</td><td><span class="status-chip success">Active</span></td></tr>
+                                <tr><td>ST-004</td><td><strong>Ananya Patel</strong></td><td>Yellow Belt 8th Kyu</td><td>Batch 1 (Morning 6-8 AM)</td><td>+91 98765 43213</td><td><span class="status-chip success">Active</span></td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- 4. ADMIN: BATCHES -->
-            <div id="admin-batches" class="view-content">
-                <div class="m3-card">
-                    <span class="card-header-title" style="margin-bottom: 16px;">📋 6 REGULAR DOJO TRAINING BATCHES</span>
-                    <div class="camps-grid">
-                        <div class="camp-item-card">
+            <!-- 4. ADMIN COACH CENTRE -->
+            <div id="admin-coaches" class="tab-view-container">
+                <div class="m3-surface">
+                    <div class="surface-header-row">
+                        <span class="surface-title">👨🏫 INSTRUCTORS & COACH ROSTER</span>
+                    </div>
+                    <div class="card-grid-3">
+                        <div class="sub-card-box">
+                            <h4>Grandmaster Shihan Brucelee Raj</h4>
+                            <p style="font-size:12px; color:var(--royal-blue); font-weight:700;">Head of Academy & 8th Dan Black Belt</p>
+                            <p style="font-size:12px; color:var(--text-slate);">Specialist in Master Katas & Weapon Kobudo</p>
+                        </div>
+                        <div class="sub-card-box">
+                            <h4>Renshi V. Surya</h4>
+                            <p style="font-size:12px; color:var(--royal-blue); font-weight:700;">Chief Technical Director & 5th Dan</p>
+                            <p style="font-size:12px; color:var(--text-slate);">Assigned: Morning General Karate (6-8 AM)</p>
+                        </div>
+                        <div class="sub-card-box">
+                            <h4>Sensei Rajesh</h4>
+                            <p style="font-size:12px; color:var(--royal-blue); font-weight:700;">Senior Instructor & 3rd Dan</p>
+                            <p style="font-size:12px; color:var(--text-slate);">Assigned: Junior Cadets (5-6 PM)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. ADMIN BATCH CENTRE -->
+            <div id="admin-batches" class="tab-view-container">
+                <div class="m3-surface">
+                    <div class="surface-header-row">
+                        <span class="surface-title">👥 6 REGULAR TRAINING BATCHES</span>
+                    </div>
+                    <div class="card-grid-3">
+                        <div class="sub-card-box">
                             <h4>Batch 1: Morning General Karate</h4>
-                            <p style="font-size: 13px; color: var(--text-slate);">06:00 AM – 08:00 AM • Mon to Sat • Main Dojo Arena</p>
-                            <span class="badge badge-info">Coach: Renshi V. Surya</span>
+                            <p style="font-size:12.5px; color:var(--text-slate);">06:00 AM – 08:00 AM • Mon to Sat</p>
+                            <span class="status-chip success">Coach: Renshi V. Surya</span>
                         </div>
-                        <div class="camp-item-card">
+                        <div class="sub-card-box">
                             <h4>Batch 2: Evening Junior Cadets</h4>
-                            <p style="font-size: 13px; color: var(--text-slate);">05:00 PM – 06:00 PM • Mon to Sat • Dojo Floor 1</p>
-                            <span class="badge badge-info">Coach: Sensei Rajesh</span>
+                            <p style="font-size:12.5px; color:var(--text-slate);">05:00 PM – 06:00 PM • Mon to Sat</p>
+                            <span class="status-chip success">Coach: Sensei Rajesh</span>
                         </div>
-                        <div class="camp-item-card">
+                        <div class="sub-card-box">
                             <h4>Batch 3: Evening Advanced & Dan</h4>
-                            <p style="font-size: 13px; color: var(--text-slate);">06:00 PM – 08:00 PM • Mon to Sat • Main Dojo Arena</p>
-                            <span class="badge badge-navy">Grandmaster Brucelee Raj</span>
+                            <p style="font-size:12.5px; color:var(--text-slate);">06:00 PM – 08:00 PM • Mon to Sat</p>
+                            <span class="status-chip success">Grandmaster Brucelee Raj</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 5. ADMIN: ATTENDANCE ANALYTICS -->
-            <div id="admin-analytics" class="view-content">
-                <div class="m3-card">
-                    <span class="card-header-title">📊 DOJO ATTENDANCE METRICS & PARTICIPATION</span>
-                    <div style="padding: 30px; text-align: center; color: var(--text-slate); background: var(--secondary-bg); border-radius: 12px; margin-top: 14px;">
-                        <h3 style="color: var(--text-navy);">94.2% Average Academy Attendance</h3>
-                        <p style="margin-top: 6px;">Daily biometric and coach register entries synchronized across all 6 batches.</p>
+            <!-- 6. ADMIN TOURNAMENTS -->
+            <div id="admin-tournaments" class="tab-view-container">
+                <div class="m3-surface">
+                    <div class="surface-header-row">
+                        <span class="surface-title">🏆 TOURNAMENTS & CHAMPIONSHIPS</span>
+                    </div>
+                    <div class="sub-card-box">
+                        <h3>National Shito-Ryu Karate Championship 2026</h3>
+                        <p style="font-size:13px; color:var(--text-slate);">Date: October 15-18, 2026 • New Delhi Indoor Stadium</p>
+                        <p style="font-size:12.5px; color:var(--royal-blue); font-weight:700;">Categories: Individual Kata, Team Kata, Kumite</p>
                     </div>
                 </div>
             </div>
 
-            <!-- 6. COACH: ATTENDANCE TAB -->
-            <div id="coach-attendance" class="view-content">
-                <div class="m3-card">
-                    <div class="card-header-bar">
-                        <span class="card-header-title">✅ DAILY BATCH ATTENDANCE REGISTER</span>
-                        <button class="btn-action" onclick="showToast('✓ Attendance Submitted for Today!')">💾 Save Attendance</button>
+            <!-- 7. ADMIN LEADERSHIP -->
+            <div id="admin-leadership" class="tab-view-container">
+                <div class="m3-surface">
+                    <span class="surface-title" style="margin-bottom:14px;">🏛️ ACADEMY OFFICIALS & HIERARCHY</span>
+                    <p style="font-size:13px; color:var(--text-slate);">Affiliated with National & International Karate-Do Governing Bodies.</p>
+                </div>
+            </div>
+
+            <!-- 8. ADMIN CHAT -->
+            <div id="admin-chat" class="tab-view-container">
+                <div class="m3-surface">
+                    <span class="surface-title" style="margin-bottom:14px;">💬 ACADEMY MESSAGE & CHAT CENTRE</span>
+                    <div style="background:var(--secondary-bg); padding:16px; border-radius:10px; margin-bottom:12px;">
+                        <p><strong>Arun Kumar (ST-001):</strong> Sensei, I have registered for the 1-Day Camp on Sunday.</p>
                     </div>
-                    <div class="data-table-container">
+                    <input type="text" placeholder="Type reply as Administrator..." style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border-light);">
+                </div>
+            </div>
+
+            <!-- 9. ADMIN PAYMENTS VERIFICATION -->
+            <div id="admin-payments" class="tab-view-container">
+                <div class="m3-surface">
+                    <span class="surface-title" style="margin-bottom:14px;">💳 UPI / BANK PAYMENT VERIFICATION QUEUE</span>
+                    <div class="table-responsive">
                         <table>
-                            <thead>
-                                <tr><th>STUDENT</th><th>BATCH</th><th>TODAY'S STATUS</th></tr>
-                            </thead>
+                            <thead><tr><th>STUDENT</th><th>TRANSACTION ID</th><th>AMOUNT</th><th>DATE</th><th>ACTION</th></tr></thead>
                             <tbody>
-                                <tr><td>Arun Kumar</td><td>Evening Advanced (6-8 PM)</td><td><span class="badge badge-success">✓ PRESENT</span></td></tr>
-                                <tr><td>Priya Sharma</td><td>Morning General (6-8 AM)</td><td><span class="badge badge-success">✓ PRESENT</span></td></tr>
-                                <tr><td>Rohan Verma</td><td>Evening Kids (5-6 PM)</td><td><span class="badge badge-warning">⏳ NOT MARKED</span></td></tr>
+                                <tr>
+                                    <td>Arun Kumar</td>
+                                    <td>UPI/20260824/89712</td>
+                                    <td>₹2,000</td>
+                                    <td>24 Aug 2026</td>
+                                    <td><button class="btn-fill-primary" onclick="triggerToast('Payment Approved & Receipt Issued!')">Verify & Approve</button></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- 7. COACH: SPECIAL PERMISSIONS TAB -->
-            <div id="coach-permissions" class="view-content">
-                <div class="m3-card">
-                    <span class="card-header-title" style="margin-bottom: 14px;">⏱️ GRANT SPECIAL TRAINING TIME PERMISSIONS</span>
-                    <p style="font-size: 13px; color: var(--text-slate); margin-bottom: 16px;">Directly assign special camp time slots (Morning 6-8 AM, Afternoon 11-1 PM, Evening 6-8 PM) to eligible students.</p>
-                    <button class="btn-action" onclick="showToast('✓ Special Training Permission Granted!')">Grant Time Permission</button>
+            <!-- 10. ADMIN CERTIFICATES -->
+            <div id="admin-certificates" class="tab-view-container">
+                <div class="m3-surface">
+                    <span class="surface-title" style="margin-bottom:14px;">📜 DIGITAL BELT GRADE CERTIFICATES</span>
+                    <button class="btn-fill-primary" onclick="triggerToast('Certificate PDF Generated!')">Generate Kyu Certificate</button>
                 </div>
             </div>
 
-            <!-- 8. STUDENT: PROFILE TAB -->
-            <div id="student-profile" class="view-content">
-                <div class="m3-card">
-                    <div class="card-header-bar">
-                        <span class="card-header-title">🏅 STUDENT BELT EXAMINATION & GRADING HISTORY</span>
+            <!-- 11. ADMIN ACHIEVEMENTS -->
+            <div id="admin-achievements" class="tab-view-container">
+                <div class="m3-surface">
+                    <span class="surface-title" style="margin-bottom:14px;">🌟 STUDENT ACHIEVEMENTS & HALL OF FAME</span>
+                    <p style="font-size:13px; color:var(--text-slate);">4 Gold Medals, 6 Silver Medals in State Championships 2026.</p>
+                </div>
+            </div>
+
+            <!-- 12. ADMIN CALENDAR -->
+            <div id="admin-calendar" class="tab-view-container">
+                <div class="m3-surface">
+                    <span class="surface-title" style="margin-bottom:14px;">📅 DOJO TRAINING & EXAM CALENDAR</span>
+                    <p style="font-size:13px; color:var(--text-slate);">Next Belt Grading Exam: September 20, 2026 (Sunday 8:00 AM).</p>
+                </div>
+            </div>
+
+            <!-- 13. ADMIN ANNOUNCEMENTS -->
+            <div id="admin-announcements" class="tab-view-container">
+                <div class="m3-surface">
+                    <div class="surface-header-row">
+                        <span class="surface-title">📢 ANNOUNCEMENT BROADCAST CENTRE</span>
+                        <button class="btn-fill-primary" onclick="triggerToast('Announcement Broadcasted to all Students!')">+ Publish Notice</button>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
-                        <div class="logo-circle" style="width: 56px; height: 56px; font-size: 24px;">A</div>
+                    <div class="sub-card-box">
+                        <span class="status-chip error">URGENT POPUP</span>
+                        <h4>Karate Gi & Uniform distribution starts this Saturday</h4>
+                        <p style="font-size:12.5px; color:var(--text-slate);">All regular trainees must collect their official BROMAA embroidered uniform.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 14. ADMIN TIME PERMISSIONS -->
+            <div id="admin-time-perms" class="tab-view-container">
+                <div class="m3-surface">
+                    <span class="surface-title" style="margin-bottom:14px;">⏰ SPECIAL TRAINING TIME PERMISSIONS</span>
+                    <p style="font-size:13px; color:var(--text-slate);">Assign extra session clearance for Morning 6-8 AM, Afternoon 11-1 PM, and Evening 6-8 PM.</p>
+                </div>
+            </div>
+
+            <!-- 15. ADMIN ANALYTICS -->
+            <div id="admin-analytics" class="tab-view-container">
+                <div class="m3-surface">
+                    <span class="surface-title" style="margin-bottom:14px;">📊 ATTENDANCE & PERFORMANCE ANALYTICS</span>
+                    <p style="font-size:13px; color:var(--text-slate);">Batch 1 has the highest punctuality score (98.4%).</p>
+                </div>
+            </div>
+
+            <!-- 16. ADMIN CONTACT -->
+            <div id="admin-contact" class="tab-view-container">
+                <div class="m3-surface">
+                    <span class="surface-title" style="margin-bottom:14px;">📍 ACADEMY CONTACT & BRANCH DETAILS</span>
+                    <p style="font-size:13px; color:var(--text-slate);">Main Dojo: BROMA Academy Arena, Shito-Ryu Martial Arts Complex.</p>
+                </div>
+            </div>
+
+            <!-- 17. ADMIN SETTINGS -->
+            <div id="admin-settings" class="tab-view-container">
+                <div class="m3-surface">
+                    <div class="surface-header-row">
+                        <span class="surface-title">⚙️ PAYMENT, UPI & SYSTEM SETTINGS</span>
+                        <button class="btn-fill-primary" onclick="triggerToast('Settings Saved!')">Save Settings</button>
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:12px; max-width:500px;">
                         <div>
-                            <h3>Arun Kumar</h3>
-                            <p style="color: var(--text-slate); font-size: 13px;">ST-2026-001 • Brown Belt 3rd Kyu • Target: 1st Dan Black Belt</p>
+                            <label style="font-size:12px; font-weight:700;">Academy UPI ID for Student Fees:</label>
+                            <input type="text" value="bromaacademy@upi" style="width:100%; padding:9px; border-radius:8px; border:1px solid var(--border-light); margin-top:4px;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; font-weight:700;">Regular Monthly Training Fee (₹):</label>
+                            <input type="number" value="2000" style="width:100%; padding:9px; border-radius:8px; border:1px solid var(--border-light); margin-top:4px;">
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 9. STUDENT: MY FEES TAB -->
-            <div id="student-fees" class="view-content">
-                <div class="m3-card">
-                    <div class="card-header-bar">
-                        <span class="card-header-title">💳 MY ACADEMY FEE RECEIPTS & DUE STATUS</span>
-                    </div>
-                    <div class="banner-card" style="margin-bottom: 16px;">
-                        <div class="banner-icon">✓</div>
-                        <div class="banner-text">
-                            <h4>All Active Fees Paid (August 2026)</h4>
-                            <p>Regular Training: ₹2,000 • Gi Uniform: ₹1,500 • Admission: ₹1,000 (All verified)</p>
-                        </div>
+            <!-- 18. ADMIN DOJO RULES -->
+            <div id="admin-rules" class="tab-view-container">
+                <div class="m3-surface">
+                    <span class="surface-title" style="margin-bottom:14px;">📜 DOJO KUN & 20 GUIDING PRINCIPLES</span>
+                    <p style="font-size:13px; color:var(--text-slate);">1. Seek perfection of character • 2. Be faithful • 3. Endeavor • 4. Respect others • 5. Refrain from violent behavior.</p>
+                </div>
+            </div>
+
+
+            <!-- ============================== COACH VIEWS ============================== -->
+
+            <!-- COACH DASHBOARD -->
+            <div id="coach-dashboard" class="tab-view-container">
+                <div class="guidance-banner">
+                    <div class="guidance-icon-box">🥋</div>
+                    <div class="guidance-text">
+                        <h4>COACH PORTAL: RENSHI V. SURYA</h4>
+                        <p>Manage daily attendance, view your assigned regular batches, and grant special training permissions.</p>
                     </div>
                 </div>
+                <div class="kpi-row">
+                    <div class="kpi-card">
+                        <span class="kpi-lbl">ASSIGNED BATCHES</span>
+                        <span class="kpi-val">2 Batches</span>
+                        <span class="kpi-sub">Morning 6-8 AM & Evening</span>
+                    </div>
+                    <div class="kpi-card success">
+                        <span class="kpi-lbl">TODAY'S ATTENDANCE</span>
+                        <span class="kpi-val">100%</span>
+                        <span class="kpi-sub">All Marked Present</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COACH ATTENDANCE -->
+            <div id="coach-attendance" class="tab-view-container">
+                <div class="m3-surface">
+                    <div class="surface-header-row">
+                        <span class="surface-title">✅ TAKE DAILY BATCH ATTENDANCE</span>
+                        <button class="btn-fill-primary" onclick="triggerToast('Attendance Submitted to Admin!')">💾 Submit Attendance</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>STUDENT</th><th>BATCH</th><th>ATTENDANCE TOGGLE</th></tr></thead>
+                            <tbody>
+                                <tr><td>Arun Kumar</td><td>Batch 3 (Evening 6-8 PM)</td><td><span class="status-chip success">✓ PRESENT</span></td></tr>
+                                <tr><td>Priya Sharma</td><td>Batch 1 (Morning 6-8 AM)</td><td><span class="status-chip success">✓ PRESENT</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="coach-profile" class="tab-view-container">
+                <div class="m3-surface"><span class="surface-title">👤 COACH PROFILE & BELT RANK</span><p>Renshi V. Surya • 5th Dan Black Belt • Chief Technical Director</p></div>
+            </div>
+            <div id="coach-batches" class="tab-view-container">
+                <div class="m3-surface"><span class="surface-title">👥 MY ASSIGNED BATCHES</span><p>Batch 1: Morning General Karate (6-8 AM)</p></div>
+            </div>
+            <div id="coach-availability" class="tab-view-container">
+                <div class="m3-surface"><span class="surface-title">🗓️ AVAILABILITY SCHEDULE</span><p>Available Mon to Sat (Morning & Evening sessions)</p></div>
+            </div>
+            <div id="coach-tournaments" class="tab-view-container">
+                <div class="m3-surface"><span class="surface-title">🏆 COACH TOURNAMENT SQUAD</span><p>12 Trainees Registered for National Championship</p></div>
+            </div>
+            <div id="coach-chat" class="tab-view-container">
+                <div class="m3-surface"><span class="surface-title">💬 CHAT WITH ADMIN</span><p>Direct communication channel with Grandmaster Shihan Brucelee Raj.</p></div>
+            </div>
+            <div id="coach-requests" class="tab-view-container">
+                <div class="m3-surface"><span class="surface-title">📩 STUDENT REQUESTS</span><p>No pending batch change requests today.</p></div>
+            </div>
+
+
+            <!-- ============================== STUDENT VIEWS ============================== -->
+
+            <!-- STUDENT DASHBOARD -->
+            <div id="student-dashboard" class="tab-view-container">
+                <div class="guidance-banner">
+                    <div class="guidance-icon-box">🏅</div>
+                    <div class="guidance-text">
+                        <h4>WELCOME BACK, ARUN KUMAR!</h4>
+                        <p>ID: ST-2026-001 • Brown Belt 3rd Kyu • Target: 1st Dan Black Belt</p>
+                    </div>
+                </div>
+                <div class="kpi-row">
+                    <div class="kpi-card success">
+                        <span class="kpi-lbl">ATTENDANCE RATE</span>
+                        <span class="kpi-val">96.5%</span>
+                        <span class="kpi-sub">Eligible for Belt Exam</span>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-lbl">AUGUST 2026 FEE</span>
+                        <span class="kpi-val" style="color:var(--status-success);">PAID ✓</span>
+                        <span class="kpi-sub">₹2,000 Verified</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STUDENT FEES -->
+            <div id="student-fees" class="tab-view-container">
+                <div class="m3-surface">
+                    <span class="surface-title" style="margin-bottom:14px;">💰 MY ACADEMY FEES & OFFICIAL RECEIPTS</span>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>FEE PARTICULARS</th><th>AMOUNT</th><th>STATUS</th><th>RECEIPT</th></tr></thead>
+                            <tbody>
+                                <tr><td>Regular Training Fee (August 2026)</td><td>₹2,000</td><td><span class="status-chip success">PAID</span></td><td><button class="btn-outline-neutral" onclick="triggerToast('Receipt Downloaded')">Download</button></td></tr>
+                                <tr><td>One-Time Lifetime Admission</td><td>₹1,000</td><td><span class="status-chip success">PAID</span></td><td><button class="btn-outline-neutral" onclick="triggerToast('Receipt Downloaded')">Download</button></td></tr>
+                                <tr><td>Official Karate Gi Uniform</td><td>₹1,500</td><td><span class="status-chip success">PAID</span></td><td><button class="btn-outline-neutral" onclick="triggerToast('Receipt Downloaded')">Download</button></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="student-profile" class="tab-view-container">
+                <div class="m3-surface"><span class="surface-title">👤 STUDENT PROFILE & DIGITAL ID</span><p>Arun Kumar • ST-2026-001 • Blood Group: B+ • Dojo Floor 1</p></div>
+            </div>
+            <div id="student-karate" class="tab-view-container">
+                <div class="m3-surface"><span class="surface-title">🥋 MY KARATE SYLLABUS</span><p>Brown Belt 3rd Kyu: Pinan Godan, Bassai Dai Kata, Advanced Bo Weapon drills.</p></div>
+            </div>
+            <div id="student-class" class="tab-view-container">
+                <div class="m3-surface"><span class="surface-title">📅 MY BATCH & SCHEDULE</span><p>Batch 3: Evening Advanced & Dan (6:00 PM – 8:00 PM • Mon to Sat)</p></div>
+            </div>
+            <div id="student-instructors" class="tab-view-container">
+                <div class="m3-surface"><span class="surface-title">🥋 INSTRUCTORS & STANDARDS</span><p>Grandmaster Shihan Brucelee Raj (8th Dan), Renshi V. Surya (5th Dan)</p></div>
+            </div>
+            <div id="student-attendance" class="tab-view-container">
+                <div class="m3-surface"><span class="surface-title">✅ ATTENDANCE LOG</span><p>August 2026: 22 / 23 Days Present (96%)</p></div>
+            </div>
+            <div id="student-tournaments" class="tab-view-container">
+                <div class="m3-surface"><span class="surface-title">🏆 TOURNAMENTS</span><p>National Karate Championship 2026 (Enrolled in Kata & Kumite)</p></div>
+            </div>
+            <div id="student-certificates" class="tab-view-container">
+                <div class="m3-surface"><span class="surface-title">📜 MY CERTIFICATES</span><p>Official 3rd Kyu Brown Belt Certificate (Verification ID: BR-CERT-39821)</p></div>
+            </div>
+            <div id="student-achievements" class="tab-view-container">
+                <div class="m3-surface"><span class="surface-title">🌟 ACHIEVEMENTS & MEDALS</span><p>Gold Medal in State Kumite Championship 2025</p></div>
+            </div>
+            <div id="student-calendar" class="tab-view-container">
+                <div class="m3-surface"><span class="surface-title">📅 ACADEMY CALENDAR</span><p>Next Belt Exam: September 20, 2026</p></div>
+            </div>
+            <div id="student-announcements" class="tab-view-container">
+                <div class="m3-surface"><span class="surface-title">📢 ANNOUNCEMENTS FEED</span><p>Uniform distribution on Saturday.</p></div>
+            </div>
+            <div id="student-chat" class="tab-view-container">
+                <div class="m3-surface"><span class="surface-title">💬 CHAT WITH SENSEI</span><p>Direct chat with Sensei Rajesh.</p></div>
+            </div>
+            <div id="student-settings" class="tab-view-container">
+                <div class="m3-surface"><span class="surface-title">⚙️ SETTINGS & PREFERENCES</span><p>SMS Notifications, Dark Mode Toggle, Password Security</p></div>
+            </div>
+            <div id="student-contact" class="tab-view-container">
+                <div class="m3-surface"><span class="surface-title">📞 CONTACT ACADEMY</span><p>Hotline: +91 98765 43210 • Email: info@bromaacademy.com</p></div>
             </div>
 
         </div>
     </main>
 
-    <!-- Toast Notification Element -->
-    <div id="toast" class="toast-notification">
-        <span id="toast-message">✓ Action completed!</span>
+    <!-- Toast Notification -->
+    <div id="toast-snack" class="toast-snack">
+        <span id="toast-msg-text">✓ Action Completed</span>
     </div>
 
-    <!-- JavaScript Controller Synchronized with Android Jetpack Compose Logic -->
+    <!-- ---------------- JAVASCRIPT CONTROLLER (COMPOSE LOGIC SYNC) ---------------- -->
     <script>
-        function switchRole(role) {
-            document.querySelectorAll('.role-pill').forEach(el => el.classList.remove('active'));
-            document.getElementById('admin-menu').style.display = 'none';
-            document.getElementById('coach-menu').style.display = 'none';
-            document.getElementById('student-menu').style.display = 'none';
+        let currentRole = 'admin';
+
+        function setRole(role, btnEl) {
+            currentRole = role;
+            document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+            if (btnEl) btnEl.classList.add('active');
+
+            document.getElementById('menu-admin').style.display = 'none';
+            document.getElementById('menu-coach').style.display = 'none';
+            document.getElementById('menu-student').style.display = 'none';
 
             if (role === 'admin') {
-                event.target.classList.add('active');
-                document.getElementById('admin-menu').style.display = 'block';
-                document.getElementById('role-badge').innerText = '● ADMIN PORTAL';
-                document.getElementById('user-name-display').innerText = 'Grandmaster Shihan Brucelee Raj';
-                document.getElementById('user-role-display').innerText = 'Head Administrator';
-                document.getElementById('user-avatar').innerText = 'A';
-                switchTab('admin-fees');
+                document.getElementById('menu-admin').style.display = 'block';
+                document.getElementById('sidebar-header-title').innerText = 'ADMIN CONTROL';
+                document.getElementById('sidebar-user-name').innerText = 'Shihan Brucelee Raj';
+                document.getElementById('portal-badge-text').innerText = 'ADMIN PORTAL';
+                document.getElementById('top-user-name').innerText = 'Grandmaster Shihan Brucelee Raj';
+                document.getElementById('top-user-role').innerText = 'Head Administrator & 8th Dan';
+                document.getElementById('user-avatar-letter').innerText = 'A';
+                showTab('admin-dashboard', document.querySelector('#menu-admin .nav-item'));
             } else if (role === 'coach') {
-                event.target.classList.add('active');
-                document.getElementById('coach-menu').style.display = 'block';
-                document.getElementById('role-badge').innerText = '● COACH PORTAL';
-                document.getElementById('user-name-display').innerText = 'Renshi V. Surya';
-                document.getElementById('user-role-display').innerText = 'Senior Instructor';
-                document.getElementById('user-avatar').innerText = 'C';
-                switchTab('coach-attendance');
+                document.getElementById('menu-coach').style.display = 'block';
+                document.getElementById('sidebar-header-title').innerText = 'COACH CONTROL';
+                document.getElementById('sidebar-user-name').innerText = 'Renshi V. Surya';
+                document.getElementById('portal-badge-text').innerText = 'COACH PORTAL';
+                document.getElementById('top-user-name').innerText = 'Renshi V. Surya';
+                document.getElementById('top-user-role').innerText = 'Chief Technical Director & 5th Dan';
+                document.getElementById('user-avatar-letter').innerText = 'C';
+                showTab('coach-dashboard', document.querySelector('#menu-coach .nav-item'));
             } else if (role === 'student') {
-                event.target.classList.add('active');
-                document.getElementById('student-menu').style.display = 'block';
-                document.getElementById('role-badge').innerText = '● STUDENT PORTAL';
-                document.getElementById('user-name-display').innerText = 'Arun Kumar';
-                document.getElementById('user-role-display').innerText = 'Brown Belt 3rd Kyu';
-                document.getElementById('user-avatar').innerText = 'S';
-                switchTab('student-profile');
+                document.getElementById('menu-student').style.display = 'block';
+                document.getElementById('sidebar-header-title').innerText = 'STUDENT PORTAL';
+                document.getElementById('sidebar-user-name').innerText = 'Arun Kumar';
+                document.getElementById('portal-badge-text').innerText = 'STUDENT PORTAL';
+                document.getElementById('top-user-name').innerText = 'Arun Kumar';
+                document.getElementById('top-user-role').innerText = 'Brown Belt 3rd Kyu (ST-001)';
+                document.getElementById('user-avatar-letter').innerText = 'S';
+                showTab('student-dashboard', document.querySelector('#menu-student .nav-item'));
+            }
+
+            if (window.innerWidth <= 960) {
+                document.getElementById('app-sidebar').classList.remove('open');
             }
         }
 
-        function switchTab(tabId) {
+        function showTab(tabId, navEl) {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            if (event && event.currentTarget && event.currentTarget.classList) {
-                event.currentTarget.classList.add('active');
-            }
+            if (navEl) navEl.classList.add('active');
 
-            document.querySelectorAll('.view-content').forEach(el => el.classList.remove('active'));
-            const target = document.getElementById(tabId);
-            if (target) target.classList.add('active');
+            document.querySelectorAll('.tab-view-container').forEach(c => c.classList.remove('active'));
+            const targetView = document.getElementById(tabId);
+            if (targetView) targetView.classList.add('active');
 
-            // Update Header Title
+            // Format Header Name
             const titles = {
-                'admin-fees': 'Regular Training Monthly Fees Register',
-                'admin-camps': 'Special Training Camps & Programs',
-                'admin-students': 'Student Directory & Roster',
+                'admin-dashboard': 'Admin Dashboard',
+                'admin-fees-programs': 'Regular Training Monthly Fees Register',
+                'admin-students': 'Student Directory & Centre',
+                'admin-coaches': 'Instructors & Coaches',
                 'admin-batches': '6 Regular Dojo Training Batches',
-                'admin-analytics': 'Attendance Charts & Analytics',
-                'coach-attendance': 'Daily Batch Attendance Register',
-                'coach-permissions': 'Special Training Time Permissions',
-                'student-profile': 'Student Belt Grading & Profile',
-                'student-fees': 'My Fees, Receipts & Due Status'
+                'admin-tournaments': 'Tournaments & Championships',
+                'admin-leadership': 'Officials & Hierarchy',
+                'admin-chat': 'Message & Chat Centre',
+                'admin-payments': 'Payment Verification Queue',
+                'admin-certificates': 'Certificate Centre',
+                'admin-achievements': 'Student Achievements',
+                'admin-calendar': 'Calendar & Exam Dates',
+                'admin-announcements': 'Announcement Centre',
+                'admin-time-perms': 'Special Training Time Permissions',
+                'admin-analytics': 'Attendance Analytics',
+                'admin-contact': 'Academy Contact Settings',
+                'admin-settings': 'Payment & UPI Settings',
+                'admin-rules': 'Dojo Rules & Standards',
+                'coach-dashboard': 'Coach Dashboard',
+                'coach-attendance': 'Batch Attendance Register',
+                'coach-profile': 'Coach Profile',
+                'coach-batches': 'Assigned Batches',
+                'coach-availability': 'Availability & Schedule',
+                'coach-tournaments': 'Tournament Squad',
+                'coach-chat': 'Chat with Admin',
+                'coach-requests': 'Student Requests',
+                'student-dashboard': 'Student Dashboard',
+                'student-fees': 'My Fees & Receipts',
+                'student-profile': 'Student Profile',
+                'student-karate': 'My Karate Syllabus',
+                'student-class': 'My Batch & Schedule',
+                'student-instructors': 'Instructors & Standards',
+                'student-attendance': 'My Attendance Log',
+                'student-tournaments': 'Tournaments',
+                'student-certificates': 'Certificates',
+                'student-achievements': 'Achievements',
+                'student-calendar': 'Academy Calendar',
+                'student-announcements': 'Announcements Feed',
+                'student-chat': 'Chat with Sensei',
+                'student-settings': 'Settings & Privacy',
+                'student-contact': 'Contact Academy'
             };
+
             if (titles[tabId]) {
-                document.getElementById('page-title').innerHTML = '<span>' + titles[tabId] + '</span>';
+                document.getElementById('page-header-text').innerText = titles[tabId];
+            }
+
+            if (window.innerWidth <= 960) {
+                document.getElementById('app-sidebar').classList.remove('open');
             }
         }
 
-        function selectMonth(month) {
-            document.querySelectorAll('.month-pill').forEach(el => el.classList.remove('active'));
-            event.target.classList.add('active');
+        function changeMonth(month, pillEl) {
+            document.querySelectorAll('.month-tab-pill').forEach(p => p.classList.remove('active'));
+            if (pillEl) pillEl.classList.add('active');
+
             document.getElementById('active-month-text').innerText = 'Selected: ' + month + ' 2026';
-            document.getElementById('kpi-paid-label').innerText = month.toUpperCase() + ' 2026 COLLECTED';
-            document.getElementById('kpi-due-label').innerText = month.toUpperCase() + ' 2026 PENDING';
-            showToast('✓ Loaded ' + month + ' 2026 fee register data!');
+            document.getElementById('admin-paid-lbl').innerText = month.toUpperCase() + ' 2026 COLLECTED';
+            document.getElementById('admin-due-lbl').innerText = month.toUpperCase() + ' 2026 PENDING';
+            triggerToast('✓ Switched to ' + month + ' 2026 Fees Register');
         }
 
-        function recordPay(btn) {
-            const row = btn.closest('tr');
-            const statusCell = row.cells[4];
-            statusCell.innerHTML = '<span class="badge badge-success">✓ PAID (₹2,000)</span>';
-            btn.className = 'btn-outline';
+        function markPay(btn, statusSpanId) {
+            const span = document.getElementById(statusSpanId);
+            if (span) {
+                span.className = 'status-chip success';
+                span.innerText = '✓ PAID (₹2,000)';
+            }
+            btn.className = 'btn-outline-neutral';
             btn.innerText = 'View Receipt';
-            btn.onclick = function() { togglePay(btn); };
-            showToast('✓ Fee payment recorded and verified!');
+            btn.onclick = function() { triggerToast('Receipt Verified'); };
+            triggerToast('✓ Payment Recorded & Synchronized!');
         }
 
-        function togglePay(btn) {
-            showToast('✓ Verified Receipt: BR-RCPT-' + Math.floor(100000 + Math.random() * 900000));
+        function toggleSidebar() {
+            document.getElementById('app-sidebar').classList.toggle('open');
         }
 
-        function showToast(msg) {
-            const t = document.getElementById('toast');
-            document.getElementById('toast-message').innerText = msg;
-            t.style.display = 'flex';
-            setTimeout(() => { t.style.display = 'none'; }, 2800);
+        function triggerSync() {
+            triggerToast('✓ Synchronized all portals with Google AI Studio database!');
+        }
+
+        function triggerToast(text) {
+            const toast = document.getElementById('toast-snack');
+            document.getElementById('toast-msg-text').innerText = text;
+            toast.style.display = 'flex';
+            setTimeout(() => { toast.style.display = 'none'; }, 2800);
         }
     </script>
 </body>
