@@ -64,7 +64,7 @@
         }
 
         .sidebar-header {
-            padding: 18px 16px;
+            padding: 16px;
             background: var(--secondary-bg);
             border-bottom: 1px solid var(--border-light);
         }
@@ -98,7 +98,7 @@
 
         .header-title-box h3 {
             font-family: 'Cinzel', serif;
-            font-size: 13px;
+            font-size: 12.5px;
             font-weight: 900;
             color: var(--text-navy);
             letter-spacing: 0.5px;
@@ -106,7 +106,7 @@
         }
 
         .header-title-box p {
-            font-size: 10.5px;
+            font-size: 11px;
             color: var(--text-slate);
             font-weight: 600;
         }
@@ -158,7 +158,7 @@
 
         /* Drawer Nav Sections */
         .drawer-nav-group {
-            padding: 10px 0;
+            padding: 8px 0;
         }
 
         .drawer-section-title {
@@ -242,7 +242,7 @@
         }
 
         .app-bar-title {
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 800;
             color: var(--text-navy);
             display: flex;
@@ -320,7 +320,7 @@
             display: none;
             flex-direction: column;
             gap: 20px;
-            max-width: 1300px;
+            max-width: 1350px;
             margin: 0 auto;
             animation: fadeIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -582,7 +582,7 @@
             background: var(--royal-blue);
             color: white;
             border: none;
-            padding: 7px 14px;
+            padding: 8px 16px;
             border-radius: 8px;
             font-size: 12px;
             font-weight: 700;
@@ -620,7 +620,7 @@
         /* Card Grid Layouts */
         .card-grid-3 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 16px;
         }
 
@@ -636,6 +636,59 @@
 
         .sub-card-box:hover {
             border-color: #CBD5E1;
+        }
+
+        /* Modal Dialog */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .modal-card {
+            background: white;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 100%;
+            padding: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--text-navy);
+        }
+
+        .form-input {
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+            font-size: 13px;
+            outline: none;
+            background: #F8FAFC;
+        }
+
+        .form-input:focus {
+            border-color: var(--royal-blue);
+            background: white;
         }
 
         /* Toast SnackBar */
@@ -706,7 +759,7 @@
             <a class="nav-item" onclick="showTab('admin-tournaments', this)"><span class="nav-icon">🏆</span> Tournament Details</a>
             <a class="nav-item" onclick="showTab('admin-leadership', this)"><span class="nav-icon">🏛️</span> Officials & Hierarchy</a>
             <a class="nav-item" onclick="showTab('admin-chat', this)"><span class="nav-icon">💬</span> Message & Chat Centre</a>
-            <a class="nav-item" onclick="showTab('admin-payments', this)"><span class="nav-icon">💳</span> Payment Verification</a>
+            <a class="nav-item" onclick="showTab('admin-payments', this)"><span class="nav-icon">💳</span> Payment Verification <span id="admin-badge-pending" class="status-chip warning" style="font-size:10px; margin-left:auto;">2</span></a>
             <a class="nav-item" onclick="showTab('admin-certificates', this)"><span class="nav-icon">📜</span> Certificate Centre</a>
             <a class="nav-item" onclick="showTab('admin-achievements', this)"><span class="nav-icon">🌟</span> Student Achievements</a>
             <a class="nav-item" onclick="showTab('admin-calendar', this)"><span class="nav-icon">📅</span> Calendar Centre</a>
@@ -758,7 +811,7 @@
         </div>
 
         <div style="margin-top: auto; padding: 14px 16px; border-top: 1px solid var(--border-light); font-size: 11px; color: var(--text-muted); text-align: center;">
-            Google AI Studio • Live Cloud Synchronized
+            Google AI Studio • Live Data Sync Active
         </div>
     </aside>
 
@@ -775,7 +828,7 @@
             </div>
 
             <div class="app-bar-right">
-                <button class="btn-outline-neutral" onclick="triggerSync()">🔄 Synchronize</button>
+                <button class="btn-outline-neutral" onclick="syncAllPortals()">🔄 Synchronize</button>
                 <div class="user-chip">
                     <div class="user-avatar-round" id="user-avatar-letter">A</div>
                     <div class="user-meta-col">
@@ -789,9 +842,9 @@
         <!-- Dynamic Content Body -->
         <div class="workspace-scroll">
 
-            <!-- ============================== ADMIN VIEWS ============================== -->
+            <!-- ============================== 1. ADMIN VIEWS ============================== -->
 
-            <!-- 1. ADMIN DASHBOARD -->
+            <!-- 1.1 ADMIN DASHBOARD -->
             <div id="admin-dashboard" class="tab-view-container active">
                 <div class="guidance-banner">
                     <div class="guidance-icon-box">🛡️</div>
@@ -804,18 +857,18 @@
                 <div class="kpi-row">
                     <div class="kpi-card">
                         <span class="kpi-lbl">TOTAL TRAINEES</span>
-                        <span class="kpi-val">12</span>
+                        <span class="kpi-val" id="dash-trainees-count">12</span>
                         <span class="kpi-sub">Across 6 Batches</span>
                     </div>
                     <div class="kpi-card success">
                         <span class="kpi-lbl">MONTHLY REVENUE (AUG)</span>
-                        <span class="kpi-val">₹20,000</span>
-                        <span class="kpi-sub">83.3% Collected</span>
+                        <span class="kpi-val" id="dash-revenue-val">₹20,000</span>
+                        <span class="kpi-sub" id="dash-rev-sub">83.3% Collected</span>
                     </div>
                     <div class="kpi-card warning">
-                        <span class="kpi-lbl">PENDING FEES</span>
-                        <span class="kpi-val">₹4,000</span>
-                        <span class="kpi-sub">2 Students Pending</span>
+                        <span class="kpi-lbl">PENDING VERIFICATION</span>
+                        <span class="kpi-val" id="dash-pending-val">2</span>
+                        <span class="kpi-sub">Awaiting Admin Approval</span>
                     </div>
                     <div class="kpi-card">
                         <span class="kpi-lbl">AVERAGE ATTENDANCE</span>
@@ -831,14 +884,14 @@
                     </div>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                         <button class="btn-fill-primary" onclick="showTab('admin-fees-programs')">💰 Open Monthly Fees Register</button>
-                        <button class="btn-outline-neutral" onclick="showTab('admin-students')">👥 Add New Student</button>
+                        <button class="btn-outline-neutral" onclick="showTab('admin-students')">👥 Student Centre</button>
+                        <button class="btn-outline-neutral" onclick="showTab('admin-payments')">💳 Payment Verification (<span id="btn-count-pay">2</span>)</button>
                         <button class="btn-outline-neutral" onclick="showTab('admin-announcements')">📢 Broadcast Urgent Notice</button>
-                        <button class="btn-outline-neutral" onclick="showTab('admin-payments')">💳 Verify UPI Payments (2)</button>
                     </div>
                 </div>
             </div>
 
-            <!-- 2. ADMIN FEES & PROGRAMS -->
+            <!-- 1.2 ADMIN FEES & PROGRAMS -->
             <div id="admin-fees-programs" class="tab-view-container">
                 <div class="guidance-banner">
                     <div class="guidance-icon-box">📋</div>
@@ -858,12 +911,12 @@
                     <div class="kpi-card success">
                         <span class="kpi-lbl" id="admin-paid-lbl">AUG 2026 COLLECTED</span>
                         <span class="kpi-val" id="admin-paid-val">₹20,000</span>
-                        <span class="kpi-sub">10 Paid</span>
+                        <span class="kpi-sub" id="admin-paid-sub">10 Paid</span>
                     </div>
                     <div class="kpi-card error">
                         <span class="kpi-lbl" id="admin-due-lbl">AUG 2026 PENDING</span>
                         <span class="kpi-val" id="admin-due-val">₹4,000</span>
-                        <span class="kpi-sub">2 Due</span>
+                        <span class="kpi-sub" id="admin-due-sub">2 Due</span>
                     </div>
                 </div>
 
@@ -893,10 +946,10 @@
                 <div class="m3-surface">
                     <div class="surface-header-row">
                         <span class="surface-title">👥 STUDENT 12-MONTH FEE LEDGER & REGISTRATION STATUS</span>
-                        <button class="btn-fill-primary" onclick="triggerToast('✓ Receipt PDF Exported!')">📥 Export Ledger PDF</button>
+                        <button class="btn-fill-primary" onclick="triggerToast('✓ Receipt PDF Ledger Exported')">📥 Export Ledger PDF</button>
                     </div>
                     <div class="table-responsive">
-                        <table>
+                        <table id="admin-fee-table">
                             <thead>
                                 <tr>
                                     <th>STUDENT / ID</th>
@@ -907,47 +960,8 @@
                                     <th>ACTION</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>Arun Kumar</strong><br><span style="font-size:11px; color:var(--text-slate)">ST-2026-001</span></td>
-                                    <td><span class="belt-chip"><span class="belt-dot-icon" style="background:#78350F"></span> Brown Belt 3rd Kyu</span></td>
-                                    <td><span class="status-chip success">✓ PAID</span></td>
-                                    <td><span class="status-chip success">✓ PAID</span></td>
-                                    <td><span class="status-chip success">✓ PAID (₹2,000)</span></td>
-                                    <td><button class="btn-outline-neutral" onclick="triggerToast('Receipt BR-2026-0801 Generated')">View Receipt</button></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Priya Sharma</strong><br><span style="font-size:11px; color:var(--text-slate)">ST-2026-002</span></td>
-                                    <td><span class="belt-chip"><span class="belt-dot-icon" style="background:#2563EB"></span> Blue Belt 5th Kyu</span></td>
-                                    <td><span class="status-chip success">✓ PAID</span></td>
-                                    <td><span class="status-chip success">✓ PAID</span></td>
-                                    <td><span class="status-chip success">✓ PAID (₹2,000)</span></td>
-                                    <td><button class="btn-outline-neutral" onclick="triggerToast('Receipt BR-2026-0802 Generated')">View Receipt</button></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Rohan Verma</strong><br><span style="font-size:11px; color:var(--text-slate)">ST-2026-003</span></td>
-                                    <td><span class="belt-chip"><span class="belt-dot-icon" style="background:#16A34A"></span> Green Belt 6th Kyu</span></td>
-                                    <td><span class="status-chip success">✓ PAID</span></td>
-                                    <td><span class="status-chip success">✓ PAID</span></td>
-                                    <td><span class="status-chip warning" id="row-status-rohan">⏳ DUE (₹2,000)</span></td>
-                                    <td><button class="btn-fill-primary" onclick="markPay(this, 'row-status-rohan')">Mark Paid</button></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Ananya Patel</strong><br><span style="font-size:11px; color:var(--text-slate)">ST-2026-004</span></td>
-                                    <td><span class="belt-chip"><span class="belt-dot-icon" style="background:#EAB308"></span> Yellow Belt 8th Kyu</span></td>
-                                    <td><span class="status-chip success">✓ PAID</span></td>
-                                    <td><span class="status-chip success">✓ PAID</span></td>
-                                    <td><span class="status-chip success">✓ PAID (₹2,000)</span></td>
-                                    <td><button class="btn-outline-neutral" onclick="triggerToast('Receipt BR-2026-0804 Generated')">View Receipt</button></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Vikram Singh</strong><br><span style="font-size:11px; color:var(--text-slate)">ST-2026-005</span></td>
-                                    <td><span class="belt-chip"><span class="belt-dot-icon" style="background:#F97316"></span> Orange Belt 7th Kyu</span></td>
-                                    <td><span class="status-chip success">✓ PAID</span></td>
-                                    <td><span class="status-chip success">✓ PAID</span></td>
-                                    <td><span class="status-chip warning" id="row-status-vikram">⏳ DUE (₹2,000)</span></td>
-                                    <td><button class="btn-fill-primary" onclick="markPay(this, 'row-status-vikram')">Mark Paid</button></td>
-                                </tr>
+                            <tbody id="admin-fee-tbody">
+                                <!-- Dynamic Rendered by JavaScript -->
                             </tbody>
                         </table>
                     </div>
@@ -996,30 +1010,27 @@
                 </div>
             </div>
 
-            <!-- 3. ADMIN STUDENT CENTRE -->
+            <!-- 1.3 ADMIN STUDENT CENTRE -->
             <div id="admin-students" class="tab-view-container">
                 <div class="m3-surface">
                     <div class="surface-header-row">
                         <span class="surface-title">👨🎓 STUDENT DIRECTORY & PROFILE MANAGEMENT</span>
-                        <button class="btn-fill-primary" onclick="triggerToast('✓ New Student Form Opened')">+ Register New Student</button>
+                        <button class="btn-fill-primary" onclick="openStudentModal()">+ Register New Student</button>
                     </div>
                     <div class="table-responsive">
                         <table>
                             <thead>
-                                <tr><th>ID</th><th>STUDENT NAME</th><th>BELT RANK</th><th>ASSIGNED BATCH</th><th>PHONE</th><th>STATUS</th></tr>
+                                <tr><th>ID</th><th>STUDENT NAME</th><th>BELT RANK</th><th>ASSIGNED BATCH</th><th>PHONE</th><th>STATUS</th><th>ACTIONS</th></tr>
                             </thead>
-                            <tbody>
-                                <tr><td>ST-001</td><td><strong>Arun Kumar</strong></td><td>Brown Belt 3rd Kyu</td><td>Batch 3 (Evening 6-8 PM)</td><td>+91 98765 43210</td><td><span class="status-chip success">Active</span></td></tr>
-                                <tr><td>ST-002</td><td><strong>Priya Sharma</strong></td><td>Blue Belt 5th Kyu</td><td>Batch 1 (Morning 6-8 AM)</td><td>+91 98765 43211</td><td><span class="status-chip success">Active</span></td></tr>
-                                <tr><td>ST-003</td><td><strong>Rohan Verma</strong></td><td>Green Belt 6th Kyu</td><td>Batch 2 (Junior 5-6 PM)</td><td>+91 98765 43212</td><td><span class="status-chip success">Active</span></td></tr>
-                                <tr><td>ST-004</td><td><strong>Ananya Patel</strong></td><td>Yellow Belt 8th Kyu</td><td>Batch 1 (Morning 6-8 AM)</td><td>+91 98765 43213</td><td><span class="status-chip success">Active</span></td></tr>
+                            <tbody id="admin-student-list-tbody">
+                                <!-- Dynamic Rendered -->
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- 4. ADMIN COACH CENTRE -->
+            <!-- 1.4 ADMIN COACH CENTRE -->
             <div id="admin-coaches" class="tab-view-container">
                 <div class="m3-surface">
                     <div class="surface-header-row">
@@ -1045,7 +1056,7 @@
                 </div>
             </div>
 
-            <!-- 5. ADMIN BATCH CENTRE -->
+            <!-- 1.5 ADMIN BATCH CENTRE -->
             <div id="admin-batches" class="tab-view-container">
                 <div class="m3-surface">
                     <div class="surface-header-row">
@@ -1071,11 +1082,12 @@
                 </div>
             </div>
 
-            <!-- 6. ADMIN TOURNAMENTS -->
+            <!-- 1.6 ADMIN TOURNAMENTS -->
             <div id="admin-tournaments" class="tab-view-container">
                 <div class="m3-surface">
                     <div class="surface-header-row">
                         <span class="surface-title">🏆 TOURNAMENTS & CHAMPIONSHIPS</span>
+                        <button class="btn-fill-primary" onclick="triggerToast('✓ Tournament created')">+ Add Tournament</button>
                     </div>
                     <div class="sub-card-box">
                         <h3>National Shito-Ryu Karate Championship 2026</h3>
@@ -1085,437 +1097,1029 @@
                 </div>
             </div>
 
-            <!-- 7. ADMIN LEADERSHIP -->
+            <!-- 1.7 ADMIN LEADERSHIP & HIERARCHY -->
             <div id="admin-leadership" class="tab-view-container">
                 <div class="m3-surface">
-                    <span class="surface-title" style="margin-bottom:14px;">🏛️ ACADEMY OFFICIALS & HIERARCHY</span>
-                    <p style="font-size:13px; color:var(--text-slate);">Affiliated with National & International Karate-Do Governing Bodies.</p>
+                    <div class="surface-header-row">
+                        <span class="surface-title">🏛️ ACADEMY OFFICIALS & HIERARCHY</span>
+                    </div>
+                    <div class="card-grid-3">
+                        <div class="sub-card-box">
+                            <h3>🥋 Grandmaster Shihan Brucelee Raj</h3>
+                            <p style="color:var(--royal-blue); font-weight:700;">Founder & 8th Dan Black Belt</p>
+                            <p style="font-size:12px; color:var(--text-slate);">President, International Martial Arts Council</p>
+                        </div>
+                        <div class="sub-card-box">
+                            <h3>🥋 Renshi V. Surya</h3>
+                            <p style="color:var(--royal-blue); font-weight:700;">Vice President & 5th Dan</p>
+                            <p style="font-size:12px; color:var(--text-slate);">Technical Director & National Referee</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- 8. ADMIN CHAT -->
+            <!-- 1.8 ADMIN CHAT -->
             <div id="admin-chat" class="tab-view-container">
                 <div class="m3-surface">
-                    <span class="surface-title" style="margin-bottom:14px;">💬 ACADEMY MESSAGE & CHAT CENTRE</span>
-                    <div style="background:var(--secondary-bg); padding:16px; border-radius:10px; margin-bottom:12px;">
-                        <p><strong>Arun Kumar (ST-001):</strong> Sensei, I have registered for the 1-Day Camp on Sunday.</p>
+                    <div class="surface-header-row">
+                        <span class="surface-title">💬 MESSAGE & CHAT CENTRE</span>
                     </div>
-                    <input type="text" placeholder="Type reply as Administrator..." style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border-light);">
+                    <div id="admin-chat-messages" style="display:flex; flex-direction:column; gap:10px; max-height:350px; overflow-y:auto; margin-bottom:12px;">
+                        <div style="background:var(--secondary-bg); padding:12px; border-radius:10px;">
+                            <strong>Arun Kumar (ST-001):</strong> Sensei, I have registered for the 1-Day Camp on Sunday.
+                        </div>
+                        <div style="background:#EFF6FF; border:1px solid #BFDBFE; padding:12px; border-radius:10px; align-self:flex-end;">
+                            <strong>Shihan Brucelee Raj:</strong> Excellent Arun. Ensure your protective gear is packed.
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <input id="admin-chat-input" type="text" placeholder="Type reply as Administrator..." class="form-input" style="flex:1;">
+                        <button class="btn-fill-primary" onclick="sendAdminChat()">Send Message</button>
+                    </div>
                 </div>
             </div>
 
-            <!-- 9. ADMIN PAYMENTS VERIFICATION -->
+            <!-- 1.9 ADMIN PAYMENT VERIFICATION QUEUE -->
             <div id="admin-payments" class="tab-view-container">
+                <div class="guidance-banner">
+                    <div class="guidance-icon-box">💳</div>
+                    <div class="guidance-text">
+                        <h4>UPI & BANK PAYMENT VERIFICATION QUEUE</h4>
+                        <p>Approve student submitted transaction reference IDs. Approved transactions automatically mark student fees as PAID.</p>
+                    </div>
+                </div>
+
                 <div class="m3-surface">
-                    <span class="surface-title" style="margin-bottom:14px;">💳 UPI / BANK PAYMENT VERIFICATION QUEUE</span>
+                    <div class="surface-header-row">
+                        <span class="surface-title">⏳ PENDING VERIFICATION TRANSACTIONS</span>
+                    </div>
                     <div class="table-responsive">
                         <table>
-                            <thead><tr><th>STUDENT</th><th>TRANSACTION ID</th><th>AMOUNT</th><th>DATE</th><th>ACTION</th></tr></thead>
-                            <tbody>
+                            <thead>
                                 <tr>
-                                    <td>Arun Kumar</td>
-                                    <td>UPI/20260824/89712</td>
-                                    <td>₹2,000</td>
-                                    <td>24 Aug 2026</td>
-                                    <td><button class="btn-fill-primary" onclick="triggerToast('Payment Approved & Receipt Issued!')">Verify & Approve</button></td>
+                                    <th>STUDENT</th>
+                                    <th>FEE CATEGORY</th>
+                                    <th>AMOUNT</th>
+                                    <th>TRANSACTION UTR / REF</th>
+                                    <th>PAY DATE</th>
+                                    <th>ACTION</th>
                                 </tr>
+                            </thead>
+                            <tbody id="payment-verification-tbody">
+                                <!-- Dynamic Rendered -->
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- 10. ADMIN CERTIFICATES -->
+            <!-- 1.10 ADMIN CERTIFICATES -->
             <div id="admin-certificates" class="tab-view-container">
                 <div class="m3-surface">
-                    <span class="surface-title" style="margin-bottom:14px;">📜 DIGITAL BELT GRADE CERTIFICATES</span>
-                    <button class="btn-fill-primary" onclick="triggerToast('Certificate PDF Generated!')">Generate Kyu Certificate</button>
+                    <div class="surface-header-row">
+                        <span class="surface-title">📜 CERTIFICATE ISSUANCE & VERIFICATION</span>
+                        <button class="btn-fill-primary" onclick="triggerToast('✓ Certificate Issued')">+ Issue Certificate</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>ID</th><th>STUDENT</th><th>CERTIFICATE TYPE</th><th>ISSUE DATE</th><th>STATUS</th></tr></thead>
+                            <tbody>
+                                <tr><td>CERT-2026-881</td><td>Arun Kumar</td><td>Brown Belt (3rd Kyu)</td><td>15 Jul 2026</td><td><span class="status-chip success">Verified</span></td></tr>
+                                <tr><td>CERT-2026-724</td><td>Priya Sharma</td><td>Blue Belt (5th Kyu)</td><td>10 Jun 2026</td><td><span class="status-chip success">Verified</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
-            <!-- 11. ADMIN ACHIEVEMENTS -->
+            <!-- 1.11 ADMIN ACHIEVEMENTS -->
             <div id="admin-achievements" class="tab-view-container">
                 <div class="m3-surface">
-                    <span class="surface-title" style="margin-bottom:14px;">🌟 STUDENT ACHIEVEMENTS & HALL OF FAME</span>
-                    <p style="font-size:13px; color:var(--text-slate);">4 Gold Medals, 6 Silver Medals in State Championships 2026.</p>
+                    <div class="surface-header-row">
+                        <span class="surface-title">🌟 STUDENT ACHIEVEMENTS & MEDAL TALLY</span>
+                    </div>
+                    <div class="card-grid-3">
+                        <div class="sub-card-box">
+                            <h4>🥇 Arun Kumar</h4>
+                            <p style="font-weight:700; color:var(--royal-blue);">Gold Medal - National Kata 2025</p>
+                            <p style="font-size:12px; color:var(--text-slate);">Awarded best technique in Junior Division</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- 12. ADMIN CALENDAR -->
+            <!-- 1.12 ADMIN CALENDAR -->
             <div id="admin-calendar" class="tab-view-container">
                 <div class="m3-surface">
-                    <span class="surface-title" style="margin-bottom:14px;">📅 DOJO TRAINING & EXAM CALENDAR</span>
-                    <p style="font-size:13px; color:var(--text-slate);">Next Belt Grading Exam: September 20, 2026 (Sunday 8:00 AM).</p>
+                    <div class="surface-header-row">
+                        <span class="surface-title">📅 ACADEMY CALENDAR & EVENT SCHEDULE</span>
+                    </div>
+                    <div class="sub-card-box">
+                        <h3>🗓️ August 2026 Events</h3>
+                        <p>• Aug 15: Independence Day Special Karate Display & Belt Grading</p>
+                        <p>• Aug 28: 1-Day Intensive Kumite Workshop with Shihan</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- 13. ADMIN ANNOUNCEMENTS -->
+            <!-- 1.13 ADMIN ANNOUNCEMENTS -->
             <div id="admin-announcements" class="tab-view-container">
                 <div class="m3-surface">
                     <div class="surface-header-row">
                         <span class="surface-title">📢 ANNOUNCEMENT BROADCAST CENTRE</span>
-                        <button class="btn-fill-primary" onclick="triggerToast('Announcement Broadcasted to all Students!')">+ Publish Notice</button>
+                        <button class="btn-fill-primary" onclick="triggerToast('✓ Announcement Broadcasted')">+ Broadcast Notice</button>
                     </div>
                     <div class="sub-card-box">
-                        <span class="status-chip error">URGENT POPUP</span>
-                        <h4>Karate Gi & Uniform distribution starts this Saturday</h4>
-                        <p style="font-size:12.5px; color:var(--text-slate);">All regular trainees must collect their official BROMAA embroidered uniform.</p>
+                        <span class="status-chip error">URGENT ANNOUNCEMENT</span>
+                        <h4>Annual Belt Grading Examination (Winter 2026)</h4>
+                        <p style="font-size:12.5px; color:var(--text-slate);">All trainees from Yellow to Brown belts must clear their monthly dues and submit examination forms before Sep 10.</p>
                     </div>
                 </div>
             </div>
 
-            <!-- 14. ADMIN TIME PERMISSIONS -->
+            <!-- 1.14 ADMIN TIME PERMISSIONS -->
             <div id="admin-time-perms" class="tab-view-container">
                 <div class="m3-surface">
-                    <span class="surface-title" style="margin-bottom:14px;">⏰ SPECIAL TRAINING TIME PERMISSIONS</span>
-                    <p style="font-size:13px; color:var(--text-slate);">Assign extra session clearance for Morning 6-8 AM, Afternoon 11-1 PM, and Evening 6-8 PM.</p>
+                    <div class="surface-header-row">
+                        <span class="surface-title">⏰ SPECIAL TIME PERMISSIONS</span>
+                    </div>
+                    <p style="font-size:13px; color:var(--text-slate);">Manage special requests from students requesting cross-batch attendance adjustments.</p>
                 </div>
             </div>
 
-            <!-- 15. ADMIN ANALYTICS -->
+            <!-- 1.15 ADMIN ATTENDANCE ANALYTICS -->
             <div id="admin-analytics" class="tab-view-container">
                 <div class="m3-surface">
-                    <span class="surface-title" style="margin-bottom:14px;">📊 ATTENDANCE & PERFORMANCE ANALYTICS</span>
-                    <p style="font-size:13px; color:var(--text-slate);">Batch 1 has the highest punctuality score (98.4%).</p>
+                    <div class="surface-header-row">
+                        <span class="surface-title">📊 DOJO ATTENDANCE ANALYTICS</span>
+                    </div>
+                    <div class="kpi-row">
+                        <div class="kpi-card success"><span class="kpi-lbl">OVERALL ATTENDANCE</span><span class="kpi-val">94.2%</span></div>
+                        <div class="kpi-card"><span class="kpi-lbl">TOTAL CLASSES HELD</span><span class="kpi-val">124</span></div>
+                        <div class="kpi-card warning"><span class="kpi-lbl">LEAVE REQUESTS</span><span class="kpi-val">4</span></div>
+                    </div>
                 </div>
             </div>
 
-            <!-- 16. ADMIN CONTACT -->
+            <!-- 1.16 ADMIN CONTACT SETTINGS -->
             <div id="admin-contact" class="tab-view-container">
                 <div class="m3-surface">
-                    <span class="surface-title" style="margin-bottom:14px;">📍 ACADEMY CONTACT & BRANCH DETAILS</span>
-                    <p style="font-size:13px; color:var(--text-slate);">Main Dojo: BROMA Academy Arena, Shito-Ryu Martial Arts Complex.</p>
+                    <div class="surface-header-row">
+                        <span class="surface-title">📍 ACADEMY CONTACT & LOCATION SETTINGS</span>
+                    </div>
+                    <div class="form-group"><label>Dojo Main Campus Address</label><input type="text" class="form-input" value="12/4, Main Ring Road, Bangalore, Karnataka - 560038"></div>
+                    <div class="form-group"><label>Support Phone / WhatsApp</label><input type="text" class="form-input" value="+91 98450 12345"></div>
+                    <div class="form-group"><label>Official Email</label><input type="text" class="form-input" value="info@bromaacademy.com"></div>
+                    <button class="btn-fill-primary" style="margin-top:10px;" onclick="triggerToast('✓ Settings Saved')">Save Contact Settings</button>
                 </div>
             </div>
 
-            <!-- 17. ADMIN SETTINGS -->
+            <!-- 1.17 ADMIN PAYMENT & UPI SETTINGS -->
             <div id="admin-settings" class="tab-view-container">
                 <div class="m3-surface">
                     <div class="surface-header-row">
-                        <span class="surface-title">⚙️ PAYMENT, UPI & SYSTEM SETTINGS</span>
-                        <button class="btn-fill-primary" onclick="triggerToast('Settings Saved!')">Save Settings</button>
+                        <span class="surface-title">⚙️ PAYMENT GATEWAY & UPI QR SETTINGS</span>
                     </div>
-                    <div style="display:flex; flex-direction:column; gap:12px; max-width:500px;">
-                        <div>
-                            <label style="font-size:12px; font-weight:700;">Academy UPI ID for Student Fees:</label>
-                            <input type="text" value="bromaacademy@upi" style="width:100%; padding:9px; border-radius:8px; border:1px solid var(--border-light); margin-top:4px;">
-                        </div>
-                        <div>
-                            <label style="font-size:12px; font-weight:700;">Regular Monthly Training Fee (₹):</label>
-                            <input type="number" value="2000" style="width:100%; padding:9px; border-radius:8px; border:1px solid var(--border-light); margin-top:4px;">
-                        </div>
-                    </div>
+                    <div class="form-group"><label>Academy UPI ID (VPA)</label><input type="text" id="setting-upi-id" class="form-input" value="bromaacademy@upi"></div>
+                    <div class="form-group"><label>Beneficiary Name</label><input type="text" id="setting-upi-name" class="form-input" value="Brucelee Raj Martial Arts Academy"></div>
+                    <div class="form-group"><label>Bank Account Number</label><input type="text" class="form-input" value="50200012345678 (HDFC Bank)"></div>
+                    <div class="form-group"><label>IFSC Code</label><input type="text" class="form-input" value="HDFC0001234"></div>
+                    <button class="btn-fill-primary" style="margin-top:10px;" onclick="triggerToast('✓ UPI Settings Updated')">Update UPI Credentials</button>
                 </div>
             </div>
 
-            <!-- 18. ADMIN DOJO RULES -->
+            <!-- 1.18 ADMIN DOJO RULES -->
             <div id="admin-rules" class="tab-view-container">
                 <div class="m3-surface">
-                    <span class="surface-title" style="margin-bottom:14px;">📜 DOJO KUN & 20 GUIDING PRINCIPLES</span>
-                    <p style="font-size:13px; color:var(--text-slate);">1. Seek perfection of character • 2. Be faithful • 3. Endeavor • 4. Respect others • 5. Refrain from violent behavior.</p>
+                    <div class="surface-header-row">
+                        <span class="surface-title">📜 DOJO RULES & TRADITIONAL MARTIAL STANDARDS</span>
+                    </div>
+                    <div style="font-size:13px; line-height:1.6; color:var(--text-slate);">
+                        <p>1. Bow with respect (Rei) upon entering and exiting the Dojo tatami.</p>
+                        <p>2. Keep your Karate Gi clean and fingernails/toenails trimmed.</p>
+                        <p>3. Punctuality is paramount; latecomers must kneel at the door until acknowledged by the Sensei.</p>
+                    </div>
                 </div>
             </div>
 
 
-            <!-- ============================== COACH VIEWS ============================== -->
+            <!-- ============================== 2. COACH VIEWS ============================== -->
 
-            <!-- COACH DASHBOARD -->
+            <!-- 2.1 COACH DASHBOARD -->
             <div id="coach-dashboard" class="tab-view-container">
                 <div class="guidance-banner">
                     <div class="guidance-icon-box">🥋</div>
                     <div class="guidance-text">
-                        <h4>COACH PORTAL: RENSHI V. SURYA</h4>
-                        <p>Manage daily attendance, view your assigned regular batches, and grant special training permissions.</p>
+                        <h4>SENSEI INSTRUCTOR DASHBOARD</h4>
+                        <p>Manage assigned batch sessions, record student attendance, and monitor syllabus progression.</p>
                     </div>
                 </div>
+
                 <div class="kpi-row">
-                    <div class="kpi-card">
-                        <span class="kpi-lbl">ASSIGNED BATCHES</span>
-                        <span class="kpi-val">2 Batches</span>
-                        <span class="kpi-sub">Morning 6-8 AM & Evening</span>
+                    <div class="kpi-card"><span class="kpi-lbl">ASSIGNED BATCHES</span><span class="kpi-val">2</span><span class="kpi-sub">Morning & Evening</span></div>
+                    <div class="kpi-card success"><span class="kpi-lbl">TODAY'S ATTENDANCE</span><span class="kpi-val">100%</span><span class="kpi-sub">All present</span></div>
+                    <div class="kpi-card"><span class="kpi-lbl">ACTIVE TRAINEES</span><span class="kpi-val">8</span><span class="kpi-sub">Under Guidance</span></div>
+                </div>
+            </div>
+
+            <!-- 2.2 COACH PROFILE -->
+            <div id="coach-profile" class="tab-view-container">
+                <div class="m3-surface">
+                    <div class="surface-header-row">
+                        <span class="surface-title">👤 COACH SENSEI PROFILE</span>
                     </div>
-                    <div class="kpi-card success">
-                        <span class="kpi-lbl">TODAY'S ATTENDANCE</span>
-                        <span class="kpi-val">100%</span>
-                        <span class="kpi-sub">All Marked Present</span>
+                    <p><strong>Name:</strong> Renshi V. Surya</p>
+                    <p><strong>Rank:</strong> 5th Dan Black Belt</p>
+                    <p><strong>Designation:</strong> Chief Technical Director</p>
+                </div>
+            </div>
+
+            <!-- 2.3 COACH MY BATCHES -->
+            <div id="coach-batches" class="tab-view-container">
+                <div class="m3-surface">
+                    <div class="surface-header-row">
+                        <span class="surface-title">👥 MY ASSIGNED BATCHES</span>
+                    </div>
+                    <div class="sub-card-box">
+                        <h4>Batch 1: Morning General Karate</h4>
+                        <p>Time: 06:00 AM – 08:00 AM • Mon to Sat</p>
                     </div>
                 </div>
             </div>
 
-            <!-- COACH ATTENDANCE -->
+            <!-- 2.4 COACH TAKE ATTENDANCE -->
             <div id="coach-attendance" class="tab-view-container">
                 <div class="m3-surface">
                     <div class="surface-header-row">
-                        <span class="surface-title">✅ TAKE DAILY BATCH ATTENDANCE</span>
-                        <button class="btn-fill-primary" onclick="triggerToast('Attendance Submitted to Admin!')">💾 Submit Attendance</button>
+                        <span class="surface-title">✅ BATCH ATTENDANCE REGISTER</span>
+                        <button class="btn-fill-primary" onclick="triggerToast('✓ Batch Attendance Submitted')">Save Attendance</button>
                     </div>
                     <div class="table-responsive">
                         <table>
-                            <thead><tr><th>STUDENT</th><th>BATCH</th><th>ATTENDANCE TOGGLE</th></tr></thead>
+                            <thead><tr><th>STUDENT</th><th>BELT</th><th>STATUS</th></tr></thead>
                             <tbody>
-                                <tr><td>Arun Kumar</td><td>Batch 3 (Evening 6-8 PM)</td><td><span class="status-chip success">✓ PRESENT</span></td></tr>
-                                <tr><td>Priya Sharma</td><td>Batch 1 (Morning 6-8 AM)</td><td><span class="status-chip success">✓ PRESENT</span></td></tr>
+                                <tr><td>Arun Kumar</td><td>Brown Belt</td><td><span class="status-chip success">Present</span></td></tr>
+                                <tr><td>Priya Sharma</td><td>Blue Belt</td><td><span class="status-chip success">Present</span></td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <div id="coach-profile" class="tab-view-container">
-                <div class="m3-surface"><span class="surface-title">👤 COACH PROFILE & BELT RANK</span><p>Renshi V. Surya • 5th Dan Black Belt • Chief Technical Director</p></div>
-            </div>
-            <div id="coach-batches" class="tab-view-container">
-                <div class="m3-surface"><span class="surface-title">👥 MY ASSIGNED BATCHES</span><p>Batch 1: Morning General Karate (6-8 AM)</p></div>
-            </div>
+            <!-- 2.5 COACH AVAILABILITY -->
             <div id="coach-availability" class="tab-view-container">
-                <div class="m3-surface"><span class="surface-title">🗓️ AVAILABILITY SCHEDULE</span><p>Available Mon to Sat (Morning & Evening sessions)</p></div>
+                <div class="m3-surface">
+                    <div class="surface-header-row"><span class="surface-title">🗓️ MY AVAILABILITY & TIME SLOTS</span></div>
+                    <p style="font-size:13px; color:var(--text-slate);">Available for personal 1-on-1 Kata training on Sundays 10:00 AM - 1:00 PM.</p>
+                </div>
             </div>
+
+            <!-- 2.6 COACH TOURNAMENTS -->
             <div id="coach-tournaments" class="tab-view-container">
-                <div class="m3-surface"><span class="surface-title">🏆 COACH TOURNAMENT SQUAD</span><p>12 Trainees Registered for National Championship</p></div>
+                <div class="m3-surface">
+                    <div class="surface-header-row"><span class="surface-title">🏆 TOURNAMENT SQUAD PREPARATION</span></div>
+                    <p style="font-size:13px; color:var(--text-slate);">Special intensive Kumite drill schedule for upcoming National Championship.</p>
+                </div>
             </div>
+
+            <!-- 2.7 COACH CHAT -->
             <div id="coach-chat" class="tab-view-container">
-                <div class="m3-surface"><span class="surface-title">💬 CHAT WITH ADMIN</span><p>Direct communication channel with Grandmaster Shihan Brucelee Raj.</p></div>
+                <div class="m3-surface">
+                    <div class="surface-header-row"><span class="surface-title">💬 CHAT WITH ADMIN</span></div>
+                    <p style="font-size:13px; color:var(--text-slate);">Direct communication channel with Grandmaster Shihan Brucelee Raj.</p>
+                </div>
             </div>
+
+            <!-- 2.8 COACH REQUESTS -->
             <div id="coach-requests" class="tab-view-container">
-                <div class="m3-surface"><span class="surface-title">📩 STUDENT REQUESTS</span><p>No pending batch change requests today.</p></div>
+                <div class="m3-surface">
+                    <div class="surface-header-row"><span class="surface-title">📩 STUDENT REQUESTS</span></div>
+                    <p style="font-size:13px; color:var(--text-slate);">No pending belt test requests at this time.</p>
+                </div>
             </div>
 
 
-            <!-- ============================== STUDENT VIEWS ============================== -->
+            <!-- ============================== 3. STUDENT VIEWS ============================== -->
 
-            <!-- STUDENT DASHBOARD -->
+            <!-- 3.1 STUDENT DASHBOARD -->
             <div id="student-dashboard" class="tab-view-container">
                 <div class="guidance-banner">
-                    <div class="guidance-icon-box">🏅</div>
+                    <div class="guidance-icon-box">🥋</div>
                     <div class="guidance-text">
-                        <h4>WELCOME BACK, ARUN KUMAR!</h4>
-                        <p>ID: ST-2026-001 • Brown Belt 3rd Kyu • Target: 1st Dan Black Belt</p>
+                        <h4>WELCOME BACK, ARUN KUMAR</h4>
+                        <p>Enrolled in Batch 3 (Evening 6-8 PM) • Brown Belt (3rd Kyu) • Next Goal: Black Belt 1st Dan (Shodan)</p>
                     </div>
                 </div>
+
                 <div class="kpi-row">
-                    <div class="kpi-card success">
-                        <span class="kpi-lbl">ATTENDANCE RATE</span>
-                        <span class="kpi-val">96.5%</span>
-                        <span class="kpi-sub">Eligible for Belt Exam</span>
-                    </div>
-                    <div class="kpi-card">
-                        <span class="kpi-lbl">AUGUST 2026 FEE</span>
-                        <span class="kpi-val" style="color:var(--status-success);">PAID ✓</span>
-                        <span class="kpi-sub">₹2,000 Verified</span>
+                    <div class="kpi-card"><span class="kpi-lbl">CURRENT BELT</span><span class="kpi-val" style="color:#78350F;">Brown Belt</span><span class="kpi-sub">3rd Kyu Senior</span></div>
+                    <div class="kpi-card success"><span class="kpi-lbl">ATTENDANCE</span><span class="kpi-val">96.5%</span><span class="kpi-sub">Eligible for Dan Exam</span></div>
+                    <div class="kpi-card"><span class="kpi-lbl">AUG 2026 FEE STATUS</span><span class="kpi-val" id="student-dash-fee-status" style="color:var(--status-success);">PAID</span><span class="kpi-sub">Receipt Generated</span></div>
+                </div>
+
+                <div class="m3-surface">
+                    <div class="surface-header-row"><span class="surface-title">⚡ QUICK ACCESS</span></div>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <button class="btn-fill-primary" onclick="showTab('student-fees')">💰 Pay Fees / View Receipts</button>
+                        <button class="btn-outline-neutral" onclick="showTab('student-karate')">🥋 View Karate Syllabus</button>
+                        <button class="btn-outline-neutral" onclick="showTab('student-chat')">💬 Message Sensei</button>
                     </div>
                 </div>
             </div>
 
-            <!-- STUDENT FEES -->
-            <div id="student-fees" class="tab-view-container">
+            <!-- 3.2 STUDENT PROFILE -->
+            <div id="student-profile" class="tab-view-container">
                 <div class="m3-surface">
-                    <span class="surface-title" style="margin-bottom:14px;">💰 MY ACADEMY FEES & OFFICIAL RECEIPTS</span>
+                    <div class="surface-header-row"><span class="surface-title">👤 STUDENT DIGITAL ID CARD</span></div>
+                    <div style="display:flex; gap:20px; align-items:center; flex-wrap:wrap;">
+                        <div style="width:80px; height:80px; border-radius:50%; background:var(--royal-blue); color:white; font-size:32px; font-weight:900; display:flex; align-items:center; justify-content:center;">A</div>
+                        <div>
+                            <h2 style="font-size:18px;">Arun Kumar</h2>
+                            <p style="font-size:12.5px; color:var(--text-slate);">Student ID: <strong>ST-2026-001</strong></p>
+                            <p style="font-size:12.5px; color:var(--text-slate);">Father's Name: <strong>R. S. Kumar</strong></p>
+                            <p style="font-size:12.5px; color:var(--text-slate);">Date of Birth: <strong>14 May 2008 (Age 18)</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3.3 STUDENT KARATE SYLLABUS -->
+            <div id="student-karate" class="tab-view-container">
+                <div class="m3-surface">
+                    <div class="surface-header-row">
+                        <span class="surface-title">🥋 MY KARATE SYLLABUS & PROGRESSION</span>
+                    </div>
+                    <p style="font-size:13px; color:var(--text-slate); margin-bottom:12px;">Active Rank: <strong>Brown Belt 3rd Kyu</strong> → Next Target: <strong>Black Belt 1st Dan (Shodan)</strong></p>
+                    <div class="sub-card-box">
+                        <h4>Required Katas for Shodan:</h4>
+                        <p>• Bassai Dai (To penetrate a fortress)</p>
+                        <p>• Jion (Temple sound)</p>
+                        <p>• Kanku Dai (Viewing the sky)</p>
+                        <p>• Weapon Kobudo: Bo Kihon 1-6 & Nunchaku Shodan Kata</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3.4 STUDENT CLASS & SCHEDULE -->
+            <div id="student-class" class="tab-view-container">
+                <div class="m3-surface">
+                    <div class="surface-header-row"><span class="surface-title">📅 MY BATCH & TRAINING SCHEDULE</span></div>
+                    <div class="sub-card-box">
+                        <h3>Batch 3: Evening Advanced & Dan</h3>
+                        <p>Schedule: <strong>06:00 PM – 08:00 PM (Monday to Saturday)</strong></p>
+                        <p>Master Instructor: <strong>Grandmaster Shihan Brucelee Raj</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3.5 STUDENT INSTRUCTORS -->
+            <div id="student-instructors" class="tab-view-container">
+                <div class="m3-surface">
+                    <div class="surface-header-row"><span class="surface-title">🥋 ACADEMY INSTRUCTORS & STANDARDS</span></div>
+                    <div class="card-grid-3">
+                        <div class="sub-card-box">
+                            <h4>Grandmaster Shihan Brucelee Raj</h4>
+                            <p style="font-size:12px; color:var(--royal-blue);">Head of Academy & 8th Dan</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3.6 STUDENT ATTENDANCE -->
+            <div id="student-attendance" class="tab-view-container">
+                <div class="m3-surface">
+                    <div class="surface-header-row"><span class="surface-title">✅ ATTENDANCE LOG & SUMMARY</span></div>
+                    <div class="kpi-row">
+                        <div class="kpi-card success"><span class="kpi-lbl">TOTAL ATTENDED</span><span class="kpi-val">118 / 124</span></div>
+                        <div class="kpi-card"><span class="kpi-lbl">PERCENTAGE</span><span class="kpi-val">95.2%</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3.7 STUDENT FEES & PAYMENTS -->
+            <div id="student-fees" class="tab-view-container">
+                <div class="guidance-banner">
+                    <div class="guidance-icon-box">💰</div>
+                    <div class="guidance-text">
+                        <h4>FEES & SECURE PAYMENT SUBMISSION</h4>
+                        <p>Regular karate training monthly fee is ₹2,000. You can submit UPI reference IDs directly for instant admin verification.</p>
+                    </div>
+                </div>
+
+                <div class="kpi-row">
+                    <div class="kpi-card success"><span class="kpi-lbl">MONTHS CLEARED</span><span class="kpi-val" id="student-paid-count">8 / 12</span></div>
+                    <div class="kpi-card warning"><span class="kpi-lbl">PENDING APPROVAL</span><span class="kpi-val" id="student-pending-count">0</span></div>
+                    <div class="kpi-card error"><span class="kpi-lbl">REMAINING DUES</span><span class="kpi-val" id="student-due-count">4</span></div>
+                </div>
+
+                <div class="m3-surface">
+                    <div class="surface-header-row">
+                        <span class="surface-title">💳 SUBMIT ONLINE PAYMENT REFERENCE / UTR</span>
+                        <button class="btn-fill-primary" onclick="openPaymentModal()">+ Submit New Payment</button>
+                    </div>
                     <div class="table-responsive">
                         <table>
-                            <thead><tr><th>FEE PARTICULARS</th><th>AMOUNT</th><th>STATUS</th><th>RECEIPT</th></tr></thead>
-                            <tbody>
-                                <tr><td>Regular Training Fee (August 2026)</td><td>₹2,000</td><td><span class="status-chip success">PAID</span></td><td><button class="btn-outline-neutral" onclick="triggerToast('Receipt Downloaded')">Download</button></td></tr>
-                                <tr><td>One-Time Lifetime Admission</td><td>₹1,000</td><td><span class="status-chip success">PAID</span></td><td><button class="btn-outline-neutral" onclick="triggerToast('Receipt Downloaded')">Download</button></td></tr>
-                                <tr><td>Official Karate Gi Uniform</td><td>₹1,500</td><td><span class="status-chip success">PAID</span></td><td><button class="btn-outline-neutral" onclick="triggerToast('Receipt Downloaded')">Download</button></td></tr>
+                            <thead>
+                                <tr><th>DATE</th><th>CATEGORY</th><th>AMOUNT</th><th>TRANSACTION REF</th><th>STATUS</th><th>RECEIPT</th></tr>
+                            </thead>
+                            <tbody id="student-payment-history-tbody">
+                                <!-- Dynamic Rendered -->
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <div id="student-profile" class="tab-view-container">
-                <div class="m3-surface"><span class="surface-title">👤 STUDENT PROFILE & DIGITAL ID</span><p>Arun Kumar • ST-2026-001 • Blood Group: B+ • Dojo Floor 1</p></div>
-            </div>
-            <div id="student-karate" class="tab-view-container">
-                <div class="m3-surface"><span class="surface-title">🥋 MY KARATE SYLLABUS</span><p>Brown Belt 3rd Kyu: Pinan Godan, Bassai Dai Kata, Advanced Bo Weapon drills.</p></div>
-            </div>
-            <div id="student-class" class="tab-view-container">
-                <div class="m3-surface"><span class="surface-title">📅 MY BATCH & SCHEDULE</span><p>Batch 3: Evening Advanced & Dan (6:00 PM – 8:00 PM • Mon to Sat)</p></div>
-            </div>
-            <div id="student-instructors" class="tab-view-container">
-                <div class="m3-surface"><span class="surface-title">🥋 INSTRUCTORS & STANDARDS</span><p>Grandmaster Shihan Brucelee Raj (8th Dan), Renshi V. Surya (5th Dan)</p></div>
-            </div>
-            <div id="student-attendance" class="tab-view-container">
-                <div class="m3-surface"><span class="surface-title">✅ ATTENDANCE LOG</span><p>August 2026: 22 / 23 Days Present (96%)</p></div>
-            </div>
+            <!-- 3.8 STUDENT TOURNAMENTS -->
             <div id="student-tournaments" class="tab-view-container">
-                <div class="m3-surface"><span class="surface-title">🏆 TOURNAMENTS</span><p>National Karate Championship 2026 (Enrolled in Kata & Kumite)</p></div>
+                <div class="m3-surface">
+                    <div class="surface-header-row"><span class="surface-title">🏆 REGISTERED TOURNAMENTS</span></div>
+                    <div class="sub-card-box">
+                        <h3>National Shito-Ryu Karate Championship 2026</h3>
+                        <p>Status: <span class="status-chip success">Registered - Kata & Kumite</span></p>
+                    </div>
+                </div>
             </div>
+
+            <!-- 3.9 STUDENT CERTIFICATES -->
             <div id="student-certificates" class="tab-view-container">
-                <div class="m3-surface"><span class="surface-title">📜 MY CERTIFICATES</span><p>Official 3rd Kyu Brown Belt Certificate (Verification ID: BR-CERT-39821)</p></div>
+                <div class="m3-surface">
+                    <div class="surface-header-row"><span class="surface-title">📜 ISSUED BELT CERTIFICATES</span></div>
+                    <div class="sub-card-box">
+                        <h4>Brown Belt (3rd Kyu) Certificate</h4>
+                        <p>Issued: 15 July 2026 • Certificate ID: CERT-2026-881</p>
+                        <button class="btn-outline-neutral" style="margin-top:6px;" onclick="triggerToast('📥 Downloaded Certificate PDF')">Download Certificate PDF</button>
+                    </div>
+                </div>
             </div>
+
+            <!-- 3.10 STUDENT ACHIEVEMENTS -->
             <div id="student-achievements" class="tab-view-container">
-                <div class="m3-surface"><span class="surface-title">🌟 ACHIEVEMENTS & MEDALS</span><p>Gold Medal in State Kumite Championship 2025</p></div>
+                <div class="m3-surface">
+                    <div class="surface-header-row"><span class="surface-title">🌟 MY AWARDS & MEDALS</span></div>
+                    <div class="sub-card-box">
+                        <h4>🥇 Gold Medal - State Championship 2025</h4>
+                        <p>Category: Senior Boys Individual Kata</p>
+                    </div>
+                </div>
             </div>
+
+            <!-- 3.11 STUDENT CALENDAR -->
             <div id="student-calendar" class="tab-view-container">
-                <div class="m3-surface"><span class="surface-title">📅 ACADEMY CALENDAR</span><p>Next Belt Exam: September 20, 2026</p></div>
+                <div class="m3-surface">
+                    <div class="surface-header-row"><span class="surface-title">📅 ACADEMY CALENDAR</span></div>
+                    <p>• Aug 15: Belt Grading Exam</p>
+                    <p>• Oct 15-18: National Karate Championship</p>
+                </div>
             </div>
+
+            <!-- 3.12 STUDENT ANNOUNCEMENTS -->
             <div id="student-announcements" class="tab-view-container">
-                <div class="m3-surface"><span class="surface-title">📢 ANNOUNCEMENTS FEED</span><p>Uniform distribution on Saturday.</p></div>
+                <div class="m3-surface">
+                    <div class="surface-header-row"><span class="surface-title">📢 NOTICES & CIRCULARS</span></div>
+                    <div class="sub-card-box">
+                        <span class="status-chip warning">IMPORTANT</span>
+                        <h4>Uniform & Protective Equipment Standard</h4>
+                        <p>All students participating in Kumite sparring must wear approved WKF gloves, shin guards, and mouth guards.</p>
+                    </div>
+                </div>
             </div>
+
+            <!-- 3.13 STUDENT CHAT -->
             <div id="student-chat" class="tab-view-container">
-                <div class="m3-surface"><span class="surface-title">💬 CHAT WITH SENSEI</span><p>Direct chat with Sensei Rajesh.</p></div>
+                <div class="m3-surface">
+                    <div class="surface-header-row"><span class="surface-title">💬 CHAT WITH SENSEI / ACADEMY</span></div>
+                    <div id="student-chat-messages" style="display:flex; flex-direction:column; gap:10px; max-height:350px; overflow-y:auto; margin-bottom:12px;">
+                        <div style="background:#EFF6FF; border:1px solid #BFDBFE; padding:12px; border-radius:10px; align-self:flex-end;">
+                            <strong>Arun Kumar:</strong> Sensei, I have registered for the 1-Day Camp on Sunday.
+                        </div>
+                        <div style="background:var(--secondary-bg); padding:12px; border-radius:10px; align-self:flex-start;">
+                            <strong>Shihan Brucelee Raj:</strong> Excellent Arun. Ensure your protective gear is packed.
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <input id="student-chat-input" type="text" placeholder="Type message to Sensei..." class="form-input" style="flex:1;">
+                        <button class="btn-fill-primary" onclick="sendStudentChat()">Send Message</button>
+                    </div>
+                </div>
             </div>
+
+            <!-- 3.14 STUDENT SETTINGS -->
             <div id="student-settings" class="tab-view-container">
-                <div class="m3-surface"><span class="surface-title">⚙️ SETTINGS & PREFERENCES</span><p>SMS Notifications, Dark Mode Toggle, Password Security</p></div>
+                <div class="m3-surface">
+                    <div class="surface-header-row"><span class="surface-title">⚙️ SETTINGS & SECURITY</span></div>
+                    <div class="form-group"><label>Phone Number</label><input type="text" class="form-input" value="+91 98765 43210"></div>
+                    <div class="form-group"><label>Notification Preferences</label><input type="text" class="form-input" value="SMS & WhatsApp Enabled"></div>
+                    <button class="btn-fill-primary" style="margin-top:10px;" onclick="triggerToast('✓ Settings Saved')">Save Profile</button>
+                </div>
             </div>
+
+            <!-- 3.15 STUDENT CONTACT -->
             <div id="student-contact" class="tab-view-container">
-                <div class="m3-surface"><span class="surface-title">📞 CONTACT ACADEMY</span><p>Hotline: +91 98765 43210 • Email: info@bromaacademy.com</p></div>
+                <div class="m3-surface">
+                    <div class="surface-header-row"><span class="surface-title">📞 ACADEMY HELPLINE & EMERGENCY</span></div>
+                    <p><strong>Main Dojo:</strong> 12/4, Main Ring Road, Bangalore</p>
+                    <p><strong>Office Phone:</strong> +91 98450 12345</p>
+                    <p><strong>WhatsApp Support:</strong> +91 98450 12345</p>
+                </div>
             </div>
 
         </div>
     </main>
 
-    <!-- Toast Notification -->
-    <div id="toast-snack" class="toast-snack">
-        <span id="toast-msg-text">✓ Action Completed</span>
+    <!-- ---------------- PAYMENT SUBMISSION MODAL (STUDENT -> ADMIN SYNC) ---------------- -->
+    <div id="payment-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3 style="font-size:16px; font-weight:800; color:var(--text-navy);">💳 Submit Fee Payment Reference</h3>
+            <p style="font-size:12px; color:var(--text-slate);">Transfer via UPI to <strong>bromaacademy@upi</strong> then enter details below.</p>
+            
+            <div class="form-group">
+                <label>Select Fee Category</label>
+                <select id="modal-fee-cat" class="form-input" onchange="updateModalAmount()">
+                    <option value="Regular Karate Monthly Fee - Aug 2026">Regular Monthly Fee - August 2026 (₹2,000)</option>
+                    <option value="Regular Karate Monthly Fee - Sep 2026">Regular Monthly Fee - September 2026 (₹2,000)</option>
+                    <option value="1-Day Special Karate Camp">1-Day Special Camp (₹4,999)</option>
+                    <option value="3-Days Special Karate Camp">3-Days Special Camp (₹9,999)</option>
+                    <option value="1-Week Special Karate Camp">1-Week Special Camp (₹14,999)</option>
+                    <option value="Belt Grading Examination Fee">Belt Grading Exam Fee (₹1,500)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Amount (₹)</label>
+                <input id="modal-amount" type="number" class="form-input" value="2000" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>UPI Transaction ID / Bank UTR Reference Number</label>
+                <input id="modal-utr" type="text" class="form-input" placeholder="e.g. 423891238912">
+            </div>
+
+            <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:10px;">
+                <button class="btn-outline-neutral" onclick="closePaymentModal()">Cancel</button>
+                <button class="btn-fill-primary" onclick="submitPayment()">Submit for Verification</button>
+            </div>
+        </div>
     </div>
 
-    <!-- ---------------- JAVASCRIPT CONTROLLER (COMPOSE LOGIC SYNC) ---------------- -->
+    <!-- ---------------- REGISTER NEW STUDENT MODAL ---------------- -->
+    <div id="student-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3 style="font-size:16px; font-weight:800; color:var(--text-navy);">👨🎓 Register New Academy Trainee</h3>
+            
+            <div class="form-group">
+                <label>Student Full Name</label>
+                <input id="new-stu-name" type="text" class="form-input" placeholder="e.g. Suresh Raina">
+            </div>
+            <div class="form-group">
+                <label>Father's / Guardian's Name</label>
+                <input id="new-stu-father" type="text" class="form-input" placeholder="e.g. Trilokchand">
+            </div>
+            <div class="form-group">
+                <label>Starting Belt Rank</label>
+                <select id="new-stu-belt" class="form-input">
+                    <option value="White Belt">White Belt</option>
+                    <option value="Yellow Belt">Yellow Belt</option>
+                    <option value="Green Belt">Green Belt</option>
+                    <option value="Blue Belt">Blue Belt</option>
+                    <option value="Brown Belt">Brown Belt</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Assign Training Batch</label>
+                <select id="new-stu-batch" class="form-input">
+                    <option value="Batch 1: Morning General (6-8 AM)">Batch 1: Morning General (6-8 AM)</option>
+                    <option value="Batch 2: Junior Cadets (5-6 PM)">Batch 2: Junior Cadets (5-6 PM)</option>
+                    <option value="Batch 3: Evening Advanced (6-8 PM)">Batch 3: Evening Advanced (6-8 PM)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input id="new-stu-phone" type="text" class="form-input" placeholder="+91 98765 00000">
+            </div>
+
+            <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:10px;">
+                <button class="btn-outline-neutral" onclick="closeStudentModal()">Cancel</button>
+                <button class="btn-fill-primary" onclick="submitNewStudent()">Register Student</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Banner -->
+    <div id="toast-bar" class="toast-snack">
+        <span id="toast-text">Message</span>
+    </div>
+
+    <!-- ============================== LIVE JAVASCRIPT & STATE ENGINE ============================== -->
     <script>
-        let currentRole = 'admin';
+        // ---------------- CENTRAL SYNCHRONIZED ACADEMY DATABASE STATE ----------------
+        const DB = {
+            activeRole: 'admin', // 'admin', 'coach', 'student'
+            selectedMonth: 'Aug',
+            
+            // Trainees list (12 Enrolled)
+            students: [
+                { id: 'ST-2026-001', name: 'Arun Kumar', belt: 'Brown Belt 3rd Kyu', beltColor: '#78350F', batch: 'Batch 3 (Evening 6-8 PM)', phone: '+91 98765 43210', admission: true, uniform: true, monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'] },
+                { id: 'ST-2026-002', name: 'Priya Sharma', belt: 'Blue Belt 5th Kyu', beltColor: '#2563EB', batch: 'Batch 1 (Morning 6-8 AM)', phone: '+91 98765 43211', admission: true, uniform: true, monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'] },
+                { id: 'ST-2026-003', name: 'Rohan Verma', belt: 'Green Belt 6th Kyu', beltColor: '#16A34A', batch: 'Batch 2 (Junior 5-6 PM)', phone: '+91 98765 43212', admission: true, uniform: true, monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'] },
+                { id: 'ST-2026-004', name: 'Ananya Patel', belt: 'Yellow Belt 8th Kyu', beltColor: '#EAB308', batch: 'Batch 1 (Morning 6-8 AM)', phone: '+91 98765 43213', admission: true, uniform: true, monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'] },
+                { id: 'ST-2026-005', name: 'Vikram Singh', belt: 'Orange Belt 7th Kyu', beltColor: '#F97316', batch: 'Batch 3 (Evening 6-8 PM)', phone: '+91 98765 43214', admission: true, uniform: true, monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'] },
+                { id: 'ST-2026-006', name: 'Kavya Nair', belt: 'White Belt 10th Kyu', beltColor: '#94A3B8', batch: 'Batch 1 (Morning 6-8 AM)', phone: '+91 98765 43215', admission: true, uniform: true, monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'] },
+                { id: 'ST-2026-007', name: 'Siddharth Rao', belt: 'Blue Belt 4th Kyu', beltColor: '#2563EB', batch: 'Batch 3 (Evening 6-8 PM)', phone: '+91 98765 43216', admission: true, uniform: true, monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'] },
+                { id: 'ST-2026-008', name: 'Deepika Joshi', belt: 'Green Belt 6th Kyu', beltColor: '#16A34A', batch: 'Batch 2 (Junior 5-6 PM)', phone: '+91 98765 43217', admission: true, uniform: true, monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'] },
+                { id: 'ST-2026-009', name: 'Manoj Kumar', belt: 'Brown Belt 2nd Kyu', beltColor: '#78350F', batch: 'Batch 3 (Evening 6-8 PM)', phone: '+91 98765 43218', admission: true, uniform: true, monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'] },
+                { id: 'ST-2026-010', name: 'Pooja Hegde', belt: 'Yellow Belt 8th Kyu', beltColor: '#EAB308', batch: 'Batch 1 (Morning 6-8 AM)', phone: '+91 98765 43219', admission: true, uniform: true, monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'] },
+                { id: 'ST-2026-011', name: 'Aditya Roy', belt: 'Orange Belt 7th Kyu', beltColor: '#F97316', batch: 'Batch 2 (Junior 5-6 PM)', phone: '+91 98765 43220', admission: true, uniform: true, monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'] },
+                { id: 'ST-2026-012', name: 'Neha Gupta', belt: 'White Belt 10th Kyu', beltColor: '#94A3B8', batch: 'Batch 1 (Morning 6-8 AM)', phone: '+91 98765 43221', admission: true, uniform: true, monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'] }
+            ],
 
-        function setRole(role, btnEl) {
-            currentRole = role;
+            // Verification Transactions Queue
+            payments: [
+                { id: 'PAY-101', studentId: 'ST-2026-003', studentName: 'Rohan Verma', category: 'Regular Karate Monthly Fee - Aug 2026', month: 'Aug', amount: 2000, utr: 'UPI491823912831', date: '24 Aug 2026', status: 'PENDING' },
+                { id: 'PAY-102', studentId: 'ST-2026-005', studentName: 'Vikram Singh', category: 'Regular Karate Monthly Fee - Aug 2026', month: 'Aug', amount: 2000, utr: 'UPI908123712894', date: '25 Aug 2026', status: 'PENDING' },
+                { id: 'PAY-100', studentId: 'ST-2026-001', studentName: 'Arun Kumar', category: 'Regular Karate Monthly Fee - Aug 2026', month: 'Aug', amount: 2000, utr: 'UPI771823912811', date: '01 Aug 2026', status: 'PAID' }
+            ]
+        };
+
+        // ---------------- PORTAL SWITCHING & NAVIGATION ----------------
+        function setRole(role, btnElem) {
+            DB.activeRole = role;
             document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
-            if (btnEl) btnEl.classList.add('active');
+            if(btnElem) btnElem.classList.add('active');
 
-            document.getElementById('menu-admin').style.display = 'none';
-            document.getElementById('menu-coach').style.display = 'none';
-            document.getElementById('menu-student').style.display = 'none';
+            // Toggle Sidebar Menu sections
+            document.getElementById('menu-admin').style.display = (role === 'admin') ? 'block' : 'none';
+            document.getElementById('menu-coach').style.display = (role === 'coach') ? 'block' : 'none';
+            document.getElementById('menu-student').style.display = (role === 'student') ? 'block' : 'none';
 
+            // Update Header Information
             if (role === 'admin') {
-                document.getElementById('menu-admin').style.display = 'block';
                 document.getElementById('sidebar-header-title').innerText = 'ADMIN CONTROL';
                 document.getElementById('sidebar-user-name').innerText = 'Shihan Brucelee Raj';
-                document.getElementById('portal-badge-text').innerText = 'ADMIN PORTAL';
                 document.getElementById('top-user-name').innerText = 'Grandmaster Shihan Brucelee Raj';
                 document.getElementById('top-user-role').innerText = 'Head Administrator & 8th Dan';
                 document.getElementById('user-avatar-letter').innerText = 'A';
-                showTab('admin-dashboard', document.querySelector('#menu-admin .nav-item'));
+                document.getElementById('portal-badge-text').innerText = 'ADMIN PORTAL';
+                showTab('admin-dashboard');
             } else if (role === 'coach') {
-                document.getElementById('menu-coach').style.display = 'block';
-                document.getElementById('sidebar-header-title').innerText = 'COACH CONTROL';
+                document.getElementById('sidebar-header-title').innerText = 'SENSEI PORTAL';
                 document.getElementById('sidebar-user-name').innerText = 'Renshi V. Surya';
-                document.getElementById('portal-badge-text').innerText = 'COACH PORTAL';
                 document.getElementById('top-user-name').innerText = 'Renshi V. Surya';
-                document.getElementById('top-user-role').innerText = 'Chief Technical Director & 5th Dan';
-                document.getElementById('user-avatar-letter').innerText = 'C';
-                showTab('coach-dashboard', document.querySelector('#menu-coach .nav-item'));
-            } else if (role === 'student') {
-                document.getElementById('menu-student').style.display = 'block';
-                document.getElementById('sidebar-header-title').innerText = 'STUDENT PORTAL';
-                document.getElementById('sidebar-user-name').innerText = 'Arun Kumar';
-                document.getElementById('portal-badge-text').innerText = 'STUDENT PORTAL';
-                document.getElementById('top-user-name').innerText = 'Arun Kumar';
-                document.getElementById('top-user-role').innerText = 'Brown Belt 3rd Kyu (ST-001)';
+                document.getElementById('top-user-role').innerText = 'Chief Technical Director (5th Dan)';
                 document.getElementById('user-avatar-letter').innerText = 'S';
-                showTab('student-dashboard', document.querySelector('#menu-student .nav-item'));
+                document.getElementById('portal-badge-text').innerText = 'COACH PORTAL';
+                showTab('coach-dashboard');
+            } else if (role === 'student') {
+                document.getElementById('sidebar-header-title').innerText = 'STUDENT ACADEMY';
+                document.getElementById('sidebar-user-name').innerText = 'Arun Kumar';
+                document.getElementById('top-user-name').innerText = 'Arun Kumar (ST-2026-001)';
+                document.getElementById('top-user-role').innerText = 'Brown Belt 3rd Kyu';
+                document.getElementById('user-avatar-letter').innerText = 'A';
+                document.getElementById('portal-badge-text').innerText = 'STUDENT PORTAL';
+                showTab('student-dashboard');
             }
 
-            if (window.innerWidth <= 960) {
-                document.getElementById('app-sidebar').classList.remove('open');
-            }
+            renderAllViews();
         }
 
-        function showTab(tabId, navEl) {
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            if (navEl) navEl.classList.add('active');
+        function showTab(tabId, navElem) {
+            // Hide all tab views
+            document.querySelectorAll('.tab-view-container').forEach(t => t.classList.remove('active'));
+            const target = document.getElementById(tabId);
+            if (target) target.classList.add('active');
 
-            document.querySelectorAll('.tab-view-container').forEach(c => c.classList.remove('active'));
-            const targetView = document.getElementById(tabId);
-            if (targetView) targetView.classList.add('active');
-
-            // Format Header Name
-            const titles = {
-                'admin-dashboard': 'Admin Dashboard',
-                'admin-fees-programs': 'Regular Training Monthly Fees Register',
-                'admin-students': 'Student Directory & Centre',
-                'admin-coaches': 'Instructors & Coaches',
-                'admin-batches': '6 Regular Dojo Training Batches',
-                'admin-tournaments': 'Tournaments & Championships',
-                'admin-leadership': 'Officials & Hierarchy',
-                'admin-chat': 'Message & Chat Centre',
-                'admin-payments': 'Payment Verification Queue',
-                'admin-certificates': 'Certificate Centre',
-                'admin-achievements': 'Student Achievements',
-                'admin-calendar': 'Calendar & Exam Dates',
-                'admin-announcements': 'Announcement Centre',
-                'admin-time-perms': 'Special Training Time Permissions',
-                'admin-analytics': 'Attendance Analytics',
-                'admin-contact': 'Academy Contact Settings',
-                'admin-settings': 'Payment & UPI Settings',
-                'admin-rules': 'Dojo Rules & Standards',
-                'coach-dashboard': 'Coach Dashboard',
-                'coach-attendance': 'Batch Attendance Register',
-                'coach-profile': 'Coach Profile',
-                'coach-batches': 'Assigned Batches',
-                'coach-availability': 'Availability & Schedule',
-                'coach-tournaments': 'Tournament Squad',
-                'coach-chat': 'Chat with Admin',
-                'coach-requests': 'Student Requests',
-                'student-dashboard': 'Student Dashboard',
-                'student-fees': 'My Fees & Receipts',
-                'student-profile': 'Student Profile',
-                'student-karate': 'My Karate Syllabus',
-                'student-class': 'My Batch & Schedule',
-                'student-instructors': 'Instructors & Standards',
-                'student-attendance': 'My Attendance Log',
-                'student-tournaments': 'Tournaments',
-                'student-certificates': 'Certificates',
-                'student-achievements': 'Achievements',
-                'student-calendar': 'Academy Calendar',
-                'student-announcements': 'Announcements Feed',
-                'student-chat': 'Chat with Sensei',
-                'student-settings': 'Settings & Privacy',
-                'student-contact': 'Contact Academy'
-            };
-
-            if (titles[tabId]) {
-                document.getElementById('page-header-text').innerText = titles[tabId];
+            // Set active nav link
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            if (navElem) {
+                navElem.classList.add('active');
+            } else {
+                const autoNav = document.querySelector(`a[onclick*="'${tabId}'"]`);
+                if (autoNav) autoNav.classList.add('active');
             }
 
-            if (window.innerWidth <= 960) {
-                document.getElementById('app-sidebar').classList.remove('open');
-            }
-        }
+            // Update top bar text
+            const cleanTitle = tabId.replace(/^(admin|coach|student)-/, '').replace(/-/g, ' ').toUpperCase();
+            document.getElementById('page-header-text').innerText = cleanTitle;
 
-        function changeMonth(month, pillEl) {
-            document.querySelectorAll('.month-tab-pill').forEach(p => p.classList.remove('active'));
-            if (pillEl) pillEl.classList.add('active');
-
-            document.getElementById('active-month-text').innerText = 'Selected: ' + month + ' 2026';
-            document.getElementById('admin-paid-lbl').innerText = month.toUpperCase() + ' 2026 COLLECTED';
-            document.getElementById('admin-due-lbl').innerText = month.toUpperCase() + ' 2026 PENDING';
-            triggerToast('✓ Switched to ' + month + ' 2026 Fees Register');
-        }
-
-        function markPay(btn, statusSpanId) {
-            const span = document.getElementById(statusSpanId);
-            if (span) {
-                span.className = 'status-chip success';
-                span.innerText = '✓ PAID (₹2,000)';
-            }
-            btn.className = 'btn-outline-neutral';
-            btn.innerText = 'View Receipt';
-            btn.onclick = function() { triggerToast('Receipt Verified'); };
-            triggerToast('✓ Payment Recorded & Synchronized!');
+            // Close mobile sidebar if open
+            document.getElementById('app-sidebar').classList.remove('open');
         }
 
         function toggleSidebar() {
             document.getElementById('app-sidebar').classList.toggle('open');
         }
 
-        function triggerSync() {
-            triggerToast('✓ Synchronized all portals with Google AI Studio database!');
+        // ---------------- MONTH CHANGER ----------------
+        function changeMonth(monthShort, pillElem) {
+            DB.selectedMonth = monthShort;
+            document.querySelectorAll('.month-tab-pill').forEach(p => p.classList.remove('active'));
+            if (pillElem) pillElem.classList.add('active');
+
+            const monthNames = { 'Jan': 'January', 'Feb': 'February', 'Mar': 'March', 'Apr': 'April', 'May': 'May', 'Jun': 'June', 'Jul': 'July', 'Aug': 'August', 'Sep': 'September', 'Oct': 'October', 'Nov': 'November', 'Dec': 'December' };
+            document.getElementById('active-month-text').innerText = `Selected: ${monthNames[monthShort]} 2026`;
+            
+            renderAdminFeeLedger();
         }
 
-        function triggerToast(text) {
-            const toast = document.getElementById('toast-snack');
-            document.getElementById('toast-msg-text').innerText = text;
-            toast.style.display = 'flex';
-            setTimeout(() => { toast.style.display = 'none'; }, 2800);
+        // ---------------- LIVE RENDERING ENGINE ----------------
+        function renderAllViews() {
+            renderAdminFeeLedger();
+            renderAdminStudentList();
+            renderPaymentVerificationQueue();
+            renderStudentPaymentHistory();
+            updateDashboardKPIs();
         }
+
+        function renderAdminFeeLedger() {
+            const tbody = document.getElementById('admin-fee-tbody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            let paidCount = 0;
+            let dueCount = 0;
+
+            DB.students.forEach(st => {
+                const isPaid = st.monthsPaid.includes(DB.selectedMonth);
+                if (isPaid) paidCount++; else dueCount++;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${st.name}</strong><br><span style="font-size:11px; color:var(--text-slate)">${st.id}</span></td>
+                    <td><span class="belt-chip"><span class="belt-dot-icon" style="background:${st.beltColor}"></span> ${st.belt}</span></td>
+                    <td><span class="status-chip success">✓ PAID</span></td>
+                    <td><span class="status-chip success">✓ PAID</span></td>
+                    <td>${isPaid ? '<span class="status-chip success">✓ PAID (₹2,000)</span>' : '<span class="status-chip warning">⏳ DUE (₹2,000)</span>'}</td>
+                    <td>${isPaid ? `<button class="btn-outline-neutral" onclick="triggerToast('Receipt Generated for ${st.name}')">View Receipt</button>` : `<button class="btn-fill-primary" onclick="markPaidDirect('${st.id}')">Mark Paid</button>`}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Update Monthly KPI
+            const collected = paidCount * 2000;
+            const due = dueCount * 2000;
+            document.getElementById('admin-paid-lbl').innerText = `${DB.selectedMonth.toUpperCase()} 2026 COLLECTED`;
+            document.getElementById('admin-paid-val').innerText = `₹${collected.toLocaleString('en-IN')}`;
+            document.getElementById('admin-paid-sub').innerText = `${paidCount} Paid`;
+
+            document.getElementById('admin-due-lbl').innerText = `${DB.selectedMonth.toUpperCase()} 2026 PENDING`;
+            document.getElementById('admin-due-val').innerText = `₹${due.toLocaleString('en-IN')}`;
+            document.getElementById('admin-due-sub').innerText = `${dueCount} Due`;
+        }
+
+        function renderAdminStudentList() {
+            const tbody = document.getElementById('admin-student-list-tbody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            DB.students.forEach(st => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${st.id}</strong></td>
+                    <td><strong>${st.name}</strong></td>
+                    <td><span class="belt-chip"><span class="belt-dot-icon" style="background:${st.beltColor}"></span> ${st.belt}</span></td>
+                    <td>${st.batch}</td>
+                    <td>${st.phone}</td>
+                    <td><span class="status-chip success">Active</span></td>
+                    <td><button class="btn-outline-neutral" onclick="triggerToast('Editing ${st.name}')">Edit</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+            document.getElementById('dash-trainees-count').innerText = DB.students.length;
+        }
+
+        function renderPaymentVerificationQueue() {
+            const tbody = document.getElementById('payment-verification-tbody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            const pending = DB.payments.filter(p => p.status === 'PENDING');
+            document.getElementById('admin-badge-pending').innerText = pending.length;
+            document.getElementById('btn-count-pay').innerText = pending.length;
+            document.getElementById('dash-pending-val').innerText = pending.length;
+
+            if (pending.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:20px; color:var(--text-slate);">No pending payment verifications. All transactions clear!</td></tr>`;
+                return;
+            }
+
+            pending.forEach(p => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${p.studentName}</strong><br><span style="font-size:11px; color:var(--text-slate)">${p.studentId}</span></td>
+                    <td>${p.category}</td>
+                    <td><strong style="color:var(--royal-blue)">₹${p.amount.toLocaleString('en-IN')}</strong></td>
+                    <td><code style="font-family:'JetBrains Mono', monospace; font-size:12px; background:var(--secondary-bg); padding:2px 6px; border-radius:4px;">${p.utr}</code></td>
+                    <td>${p.date}</td>
+                    <td>
+                        <button class="btn-fill-primary" onclick="approvePayment('${p.id}')">✓ Approve & Clear Fee</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderStudentPaymentHistory() {
+            const tbody = document.getElementById('student-payment-history-tbody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            const studentPays = DB.payments.filter(p => p.studentId === 'ST-2026-001');
+
+            studentPays.forEach(p => {
+                const tr = document.createElement('tr');
+                const isPaid = p.status === 'PAID';
+                tr.innerHTML = `
+                    <td>${p.date}</td>
+                    <td><strong>${p.category}</strong></td>
+                    <td>₹${p.amount.toLocaleString('en-IN')}</td>
+                    <td><code style="font-family:'JetBrains Mono', monospace; font-size:12px;">${p.utr}</code></td>
+                    <td>${isPaid ? '<span class="status-chip success">✓ PAID</span>' : '<span class="status-chip warning">⏳ PENDING VERIFICATION</span>'}</td>
+                    <td>${isPaid ? `<button class="btn-outline-neutral" onclick="triggerToast('PDF Receipt ${p.id} Generated')">📥 Download Receipt</button>` : `<span style="font-size:11px; color:var(--text-slate)">Under Review</span>`}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function updateDashboardKPIs() {
+            const paidCount = DB.students.filter(s => s.monthsPaid.includes('Aug')).length;
+            const rev = paidCount * 2000;
+            document.getElementById('dash-revenue-val').innerText = `₹${rev.toLocaleString('en-IN')}`;
+            document.getElementById('dash-rev-sub').innerText = `${((paidCount/DB.students.length)*100).toFixed(1)}% Collected`;
+        }
+
+        // ---------------- CORE ACTIONS & INTERCONNECTED LOGIC ----------------
+        function approvePayment(payId) {
+            const pay = DB.payments.find(p => p.id === payId);
+            if (!pay) return;
+
+            pay.status = 'PAID';
+            
+            // Mark month paid in student record
+            const student = DB.students.find(s => s.id === pay.studentId);
+            if (student && pay.month && !student.monthsPaid.includes(pay.month)) {
+                student.monthsPaid.push(pay.month);
+            }
+
+            renderAllViews();
+            triggerToast(`✓ Payment ${payId} Approved! ${student ? student.name : ''} status set to PAID.`);
+        }
+
+        function markPaidDirect(studentId) {
+            const student = DB.students.find(s => s.id === studentId);
+            if (student && !student.monthsPaid.includes(DB.selectedMonth)) {
+                student.monthsPaid.push(DB.selectedMonth);
+            }
+
+            // Also add record in payments
+            DB.payments.push({
+                id: 'PAY-' + Math.floor(1000 + Math.random() * 9000),
+                studentId: studentId,
+                studentName: student.name,
+                category: `Regular Karate Monthly Fee - ${DB.selectedMonth} 2026`,
+                month: DB.selectedMonth,
+                amount: 2000,
+                utr: 'CASH-REC-' + Date.now().toString().slice(-6),
+                date: '25 Aug 2026',
+                status: 'PAID'
+            });
+
+            renderAllViews();
+            triggerToast(`✓ Fee marked as PAID for ${student.name} (${DB.selectedMonth} 2026)`);
+        }
+
+        // ---------------- MODAL MANAGEMENT ----------------
+        function openPaymentModal() {
+            document.getElementById('payment-modal').style.display = 'flex';
+        }
+        function closePaymentModal() {
+            document.getElementById('payment-modal').style.display = 'none';
+        }
+        function updateModalAmount() {
+            const cat = document.getElementById('modal-fee-cat').value;
+            let amt = 2000;
+            if (cat.includes('1-Day')) amt = 4999;
+            else if (cat.includes('3-Days')) amt = 9999;
+            else if (cat.includes('1-Week')) amt = 14999;
+            else if (cat.includes('Grading')) amt = 1500;
+            document.getElementById('modal-amount').value = amt;
+        }
+
+        function submitPayment() {
+            const cat = document.getElementById('modal-fee-cat').value;
+            const amt = parseFloat(document.getElementById('modal-amount').value);
+            const utr = document.getElementById('modal-utr').value.trim();
+
+            if (!utr) {
+                alert('Please enter a valid Transaction UTR reference number');
+                return;
+            }
+
+            const newPay = {
+                id: 'PAY-' + Math.floor(1000 + Math.random() * 9000),
+                studentId: 'ST-2026-001',
+                studentName: 'Arun Kumar',
+                category: cat,
+                month: cat.includes('Aug') ? 'Aug' : (cat.includes('Sep') ? 'Sep' : 'Camp'),
+                amount: amt,
+                utr: utr,
+                date: '25 Aug 2026',
+                status: 'PENDING'
+            };
+
+            DB.payments.unshift(newPay);
+            closePaymentModal();
+            renderAllViews();
+            triggerToast('✓ Payment submitted for Admin Verification!');
+        }
+
+        function openStudentModal() {
+            document.getElementById('student-modal').style.display = 'flex';
+        }
+        function closeStudentModal() {
+            document.getElementById('student-modal').style.display = 'none';
+        }
+        function submitNewStudent() {
+            const name = document.getElementById('new-stu-name').value.trim();
+            const father = document.getElementById('new-stu-father').value.trim();
+            const belt = document.getElementById('new-stu-belt').value;
+            const batch = document.getElementById('new-stu-batch').value;
+            const phone = document.getElementById('new-stu-phone').value.trim();
+
+            if (!name) {
+                alert('Please enter student full name');
+                return;
+            }
+
+            const newId = 'ST-2026-0' + (DB.students.length + 1).toString().padStart(2, '0');
+            DB.students.push({
+                id: newId,
+                name: name,
+                belt: belt,
+                beltColor: belt.includes('White') ? '#94A3B8' : (belt.includes('Yellow') ? '#EAB308' : '#16A34A'),
+                batch: batch,
+                phone: phone || '+91 98000 00000',
+                admission: true,
+                uniform: true,
+                monthsPaid: ['Aug']
+            });
+
+            closeStudentModal();
+            renderAllViews();
+            triggerToast(`✓ Student ${name} Registered successfully (${newId})`);
+        }
+
+        // ---------------- CHAT MESSAGES ----------------
+        function sendAdminChat() {
+            const input = document.getElementById('admin-chat-input');
+            const txt = input.value.trim();
+            if (!txt) return;
+
+            const box = document.getElementById('admin-chat-messages');
+            box.innerHTML += `<div style="background:#EFF6FF; border:1px solid #BFDBFE; padding:12px; border-radius:10px; align-self:flex-end;"><strong>Shihan Brucelee Raj:</strong> ${txt}</div>`;
+            
+            // Mirror to student chat
+            const stuBox = document.getElementById('student-chat-messages');
+            if (stuBox) stuBox.innerHTML += `<div style="background:var(--secondary-bg); padding:12px; border-radius:10px; align-self:flex-start;"><strong>Shihan Brucelee Raj:</strong> ${txt}</div>`;
+            
+            input.value = '';
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function sendStudentChat() {
+            const input = document.getElementById('student-chat-input');
+            const txt = input.value.trim();
+            if (!txt) return;
+
+            const box = document.getElementById('student-chat-messages');
+            box.innerHTML += `<div style="background:#EFF6FF; border:1px solid #BFDBFE; padding:12px; border-radius:10px; align-self:flex-end;"><strong>Arun Kumar:</strong> ${txt}</div>`;
+            
+            // Mirror to admin chat
+            const adminBox = document.getElementById('admin-chat-messages');
+            if (adminBox) adminBox.innerHTML += `<div style="background:var(--secondary-bg); padding:12px; border-radius:10px; align-self:flex-start;"><strong>Arun Kumar (ST-001):</strong> ${txt}</div>`;
+            
+            input.value = '';
+            box.scrollTop = box.scrollHeight;
+        }
+
+        // ---------------- TOAST NOTIFICATION ----------------
+        function triggerToast(msg) {
+            const toast = document.getElementById('toast-bar');
+            document.getElementById('toast-text').innerText = msg;
+            toast.style.display = 'flex';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3200);
+        }
+
+        function syncAllPortals() {
+            renderAllViews();
+            triggerToast('🔄 All Portals & Data Stores Synchronized');
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            renderAllViews();
+        });
     </script>
 </body>
 </html>
