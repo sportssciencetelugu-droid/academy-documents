@@ -6,540 +6,1131 @@
     <title>BROMAA - Brucelee Raj Online Martial Arts Academy</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cinzel:wght@700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #990000;
-            --primary-dark: #660000;
-            --navy: #0B1120;
-            --navy-light: #1E293B;
-            --gold: #D97706;
-            --gold-light: #F59E0B;
+            --deep-navy: #0F172A;
+            --slate-blue: #334155;
+            --royal-blue: #2563EB;
+            --royal-blue-hover: #1D4ED8;
             --bg-light: #F8FAFC;
-            --text-dark: #0F172A;
+            --card-white: #FFFFFF;
+            --secondary-bg: #F1F5F9;
+            --text-navy: #0F172A;
             --text-slate: #64748B;
+            --text-muted: #94A3B8;
+            --border-light: #E2E8F0;
+            --status-success: #16A34A;
+            --status-success-bg: #DCFCE7;
+            --status-warning: #D97706;
+            --status-warning-bg: #FEF3C7;
+            --status-error: #DC2626;
+            --status-error-bg: #FEE2E2;
+            --belt-yellow: #EAB308;
+            --belt-orange: #F97316;
+            --belt-green: #16A34A;
+            --belt-blue: #2563EB;
+            --belt-purple: #9333EA;
+            --belt-brown: #78350F;
+            --belt-black: #0F172A;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: var(--bg-light);
-            color: var(--text-dark);
-            line-height: 1.6;
-        }
-
-        /* Top Bar */
-        .topbar {
-            background: linear-gradient(135deg, #7F1D1D 0%, #990000 50%, #450A0A 100%);
-            color: white;
-            padding: 12px 24px;
-            text-align: center;
-            font-size: 13px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        /* Header */
-        header {
-            background: white;
-            border-bottom: 1px solid #E2E8F0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 16px 24px;
+            color: var(--text-navy);
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .brand-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            color: var(--navy);
-        }
-
-        .logo-crest {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: radial-gradient(circle, #DC2626 0%, #7F1D1D 100%);
-            border: 2px solid var(--gold);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Cinzel', serif;
-            font-weight: 900;
-            color: white;
-            font-size: 18px;
-            box-shadow: 0 2px 6px rgba(153, 0, 0, 0.3);
-        }
-
-        .brand-title {
-            font-family: 'Cinzel', serif;
-            font-weight: 800;
-            font-size: 18px;
-            color: var(--navy);
-            letter-spacing: 0.5px;
-        }
-
-        .brand-subtitle {
-            font-size: 11px;
-            color: var(--text-slate);
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
-
-        .btn-header {
-            background: var(--primary);
-            color: white;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 700;
-            transition: all 0.2s ease;
-        }
-
-        .btn-header:hover {
-            background: var(--primary-dark);
-            box-shadow: 0 4px 12px rgba(153, 0, 0, 0.25);
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(180deg, #0B1120 0%, #1E293B 100%);
-            color: white;
-            padding: 80px 24px;
-            text-align: center;
-            position: relative;
+            height: 100vh;
             overflow: hidden;
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 800px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(220, 38, 38, 0.15) 0%, transparent 70%);
-            pointer-events: none;
+        /* Sidebar Navigation matching Android Jetpack Compose Drawer */
+        .sidebar {
+            width: 280px;
+            background: var(--card-white);
+            border-right: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            overflow-y: auto;
+            z-index: 20;
         }
 
-        .hero-container {
-            max-width: 900px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
+        .sidebar-header {
+            padding: 20px 16px;
+            border-bottom: 1px solid var(--border-light);
+            background: var(--secondary-bg);
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .hero-badge {
-            display: inline-flex;
+        .logo-circle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #2563EB 0%, #0F172A 100%);
+            border: 2px solid var(--royal-blue);
+            color: white;
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+        }
+
+        .sidebar-brand-title {
+            font-family: 'Cinzel', serif;
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--text-navy);
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-brand-sub {
+            font-size: 11px;
+            color: var(--text-slate);
+            font-weight: 600;
+        }
+
+        /* Role Switcher Pill */
+        .role-selector-bar {
+            padding: 12px 16px;
+            background: var(--card-white);
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            gap: 6px;
+        }
+
+        .role-pill {
+            flex: 1;
+            padding: 7px 4px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 1px solid var(--border-light);
+            background: var(--secondary-bg);
+            color: var(--text-slate);
+            transition: all 0.15s ease;
+        }
+
+        .role-pill.active {
+            background: var(--deep-navy);
+            color: white;
+            border-color: var(--deep-navy);
+        }
+
+        /* Sidebar Navigation Menu */
+        .nav-section-title {
+            padding: 14px 16px 6px;
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            margin: 2px 10px;
+            border-radius: 10px;
+            color: var(--text-slate);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-decoration: none;
+        }
+
+        .nav-item:hover {
+            background: var(--secondary-bg);
+            color: var(--text-navy);
+        }
+
+        .nav-item.active {
+            background: #EFF6FF;
+            color: var(--royal-blue);
+            font-weight: 700;
+        }
+
+        .nav-icon {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Workspace Content Area */
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--bg-light);
+        }
+
+        /* Android OptIn Top Bar */
+        .app-topbar {
+            background: var(--card-white);
+            border-bottom: 1px solid var(--border-light);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .topbar-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-navy);
+            display: flex;
             align-items: center;
             gap: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 6px 16px;
-            border-radius: 50px;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: var(--gold-light);
-            margin-bottom: 24px;
         }
 
-        .hero h1 {
-            font-family: 'Cinzel', serif;
-            font-size: 42px;
-            font-weight: 900;
-            margin-bottom: 16px;
-            letter-spacing: 1px;
+        .topbar-badge {
+            background: #DCFCE7;
+            color: #15803D;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-profile-chip {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--secondary-bg);
+            padding: 6px 14px 6px 6px;
+            border-radius: 30px;
+            border: 1px solid var(--border-light);
+        }
+
+        .avatar-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--royal-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 13px;
+        }
+
+        .user-name-role {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .user-name {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-navy);
             line-height: 1.2;
         }
 
-        .hero p {
-            font-size: 17px;
-            color: #94A3B8;
-            max-width: 700px;
-            margin: 0 auto 36px;
-            line-height: 1.6;
+        .user-role-label {
+            font-size: 10px;
+            color: var(--text-slate);
+            font-weight: 600;
         }
 
-        .hero-actions {
+        /* Scrollable Content Container */
+        .content-scrollable {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        .view-content {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .view-content.active {
             display: flex;
-            justify-content: center;
-            gap: 16px;
-            flex-wrap: wrap;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #DC2626 0%, #990000 100%);
+        /* Banner Card */
+        .banner-card {
+            background: #EFF6FF;
+            border: 1px solid #BFDBFE;
+            border-radius: 14px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .banner-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--royal-blue);
             color: white;
-            text-decoration: none;
-            padding: 14px 32px;
-            border-radius: 10px;
-            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .banner-text h4 {
             font-size: 15px;
-            display: inline-flex;
+            font-weight: 800;
+            color: var(--text-navy);
+        }
+
+        .banner-text p {
+            font-size: 12.5px;
+            color: var(--slate-blue);
+            margin-top: 2px;
+        }
+
+        /* KPI Cards Grid */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+
+        .kpi-card {
+            background: var(--card-white);
+            border-radius: 14px;
+            padding: 18px 20px;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .kpi-label {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--text-slate);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-value {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-navy);
+            line-height: 1.1;
+        }
+
+        .kpi-subtext {
+            font-size: 11.5px;
+            color: var(--text-slate);
+            font-weight: 500;
+        }
+
+        .kpi-card.success {
+            border-color: #86EFAC;
+            background: #F0FDF4;
+        }
+        .kpi-card.success .kpi-value { color: var(--status-success); }
+
+        .kpi-card.warning {
+            border-color: #FCD34D;
+            background: #FFFBEB;
+        }
+        .kpi-card.warning .kpi-value { color: var(--status-warning); }
+
+        /* M3 Style Card */
+        .m3-card {
+            background: var(--card-white);
+            border-radius: 16px;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            padding: 20px;
+        }
+
+        .card-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .card-header-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--text-navy);
+            display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 4px 16px rgba(220, 38, 38, 0.4);
-            transition: all 0.2s ease;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.6);
+        /* Month Selector Ribbon */
+        .month-ribbon {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 6px;
         }
 
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            text-decoration: none;
-            padding: 14px 28px;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.2s ease;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        /* Features Section */
-        .section {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 70px 24px;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
-        .section-title {
-            font-family: 'Cinzel', serif;
-            font-size: 30px;
-            font-weight: 800;
-            color: var(--navy);
-            margin-bottom: 10px;
-        }
-
-        .section-subtitle {
-            font-size: 15px;
+        .month-pill {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            border: 1px solid var(--border-light);
+            background: var(--secondary-bg);
             color: var(--text-slate);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.15s ease;
         }
 
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 24px;
+        .month-pill:hover {
+            border-color: #CBD5E1;
+            color: var(--text-navy);
         }
 
-        .card {
+        .month-pill.active {
+            background: var(--royal-blue);
+            color: white;
+            border-color: var(--royal-blue);
+            box-shadow: 0 2px 8px rgba(37,99,235,0.3);
+        }
+
+        /* Data Tables */
+        .data-table-container {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        th {
+            background: var(--secondary-bg);
+            color: var(--text-navy);
+            font-weight: 700;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-light);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text-navy);
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: #F8FAFC;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-success { background: var(--status-success-bg); color: #14532D; border: 1px solid #86EFAC; }
+        .badge-warning { background: var(--status-warning-bg); color: #78350F; border: 1px solid #FCD34D; }
+        .badge-info { background: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; }
+        .badge-navy { background: var(--deep-navy); color: white; }
+
+        .belt-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            border: 1px solid #CBD5E1;
+            background: #F8FAFC;
+        }
+
+        .belt-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        /* Action Buttons */
+        .btn-action {
+            background: var(--royal-blue);
+            color: white;
+            border: none;
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-action:hover {
+            background: var(--royal-blue-hover);
+        }
+
+        .btn-outline {
             background: white;
-            border-radius: 16px;
-            padding: 28px;
-            border: 1px solid #E2E8F0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-            transition: all 0.2s ease;
+            color: var(--text-navy);
+            border: 1px solid var(--border-light);
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
         }
 
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+        .btn-outline:hover {
+            background: var(--secondary-bg);
             border-color: #CBD5E1;
         }
 
-        .card-badge {
-            display: inline-block;
-            background: #FEF3C7;
-            color: #92400E;
-            font-size: 11px;
-            font-weight: 800;
-            padding: 4px 10px;
-            border-radius: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
+        /* 3 Camps Grid Cards */
+        .camps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 16px;
         }
 
-        .card h3 {
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--navy);
-            margin-bottom: 8px;
+        .camp-item-card {
+            background: var(--card-white);
+            border: 1px solid var(--border-light);
+            border-radius: 14px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            transition: transform 0.15s ease;
         }
 
-        .card-price {
-            font-size: 28px;
+        .camp-item-card:hover {
+            transform: translateY(-2px);
+            border-color: #CBD5E1;
+        }
+
+        .camp-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--text-navy);
+        }
+
+        .camp-fee {
+            font-size: 22px;
             font-weight: 900;
-            color: var(--primary);
-            margin-bottom: 14px;
+            color: var(--royal-blue);
         }
 
-        .card-price span {
-            font-size: 14px;
-            color: var(--text-slate);
+        .session-split-box {
+            background: var(--secondary-bg);
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 11.5px;
+            color: var(--text-navy);
             font-weight: 600;
-        }
-
-        .card p {
-            color: var(--text-slate);
-            font-size: 14px;
-            margin-bottom: 16px;
+            border-left: 3px solid var(--royal-blue);
             line-height: 1.5;
         }
 
-        .schedule-box {
-            background: #F1F5F9;
+        /* Toast Modal */
+        .toast-notification {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--deep-navy);
+            color: white;
+            padding: 12px 20px;
             border-radius: 10px;
-            padding: 12px 16px;
             font-size: 13px;
             font-weight: 600;
-            color: var(--navy);
-            border-left: 4px solid var(--primary);
-        }
-
-        /* Portals Section */
-        .portals {
-            background: #F1F5F9;
-            padding: 70px 24px;
-            border-top: 1px solid #E2E8F0;
-            border-bottom: 1px solid #E2E8F0;
-        }
-
-        .portal-card {
-            background: white;
-            border-radius: 16px;
-            padding: 32px;
-            text-align: center;
-            border: 1px solid #E2E8F0;
-        }
-
-        .portal-icon {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 16px;
-            border-radius: 16px;
-            display: flex;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            display: none;
             align-items: center;
-            justify-content: center;
-            font-size: 28px;
+            gap: 10px;
+            z-index: 1000;
+            animation: fadeIn 0.2s ease;
         }
 
-        .portal-icon.admin { background: #FEE2E2; color: #990000; }
-        .portal-icon.coach { background: #FEF3C7; color: #D97706; }
-        .portal-icon.student { background: #DBEAFE; color: #1D4ED8; }
-
-        /* Footer */
-        footer {
-            background: var(--navy);
-            color: white;
-            text-align: center;
-            padding: 40px 24px;
-            font-size: 14px;
-            color: #94A3B8;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        footer strong {
-            color: white;
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 30px; }
-            .hero p { font-size: 15px; }
-            .grid-3 { grid-template-columns: 1fr; }
+        @media (max-width: 900px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; max-height: 240px; }
+            .role-selector-bar { overflow-x: auto; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Top Announcement Bar -->
-    <div class="topbar">
-        🥋 BROMA ACADEMY • AFFILIATED WITH SHITO-RYU KARATE-DO FEDERATION & WORLD KARATE BODIES
+    <!-- Sidebar Navigation (Synchronized with Jetpack Compose AdminPortalLayout) -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-circle">B</div>
+            <div>
+                <div class="sidebar-brand-title">BROMAA</div>
+                <div class="sidebar-brand-sub">BRUCELEE RAJ ONLINE ACADEMY</div>
+            </div>
+        </div>
+
+        <!-- Role Switching Tabs -->
+        <div class="role-selector-bar">
+            <div class="role-pill active" onclick="switchRole('admin')">🛡️ ADMIN</div>
+            <div class="role-pill" onclick="switchRole('coach')">🥋 COACH</div>
+            <div class="role-pill" onclick="switchRole('student')">🏅 STUDENT</div>
+        </div>
+
+        <!-- ADMIN MENU ITEMS -->
+        <div id="admin-menu">
+            <div class="nav-section-title">ADMIN MANAGEMENT</div>
+            <a class="nav-item active" onclick="switchTab('admin-fees')">
+                <span class="nav-icon">💰</span> Fees & Register
+            </a>
+            <a class="nav-item" onclick="switchTab('admin-camps')">
+                <span class="nav-icon">🥋</span> Special Training Camps
+            </a>
+            <a class="nav-item" onclick="switchTab('admin-students')">
+                <span class="nav-icon">👥</span> Student Directory (12)
+            </a>
+            <a class="nav-item" onclick="switchTab('admin-batches')">
+                <span class="nav-icon">📋</span> Batch Management (6)
+            </a>
+            <a class="nav-item" onclick="switchTab('admin-analytics')">
+                <span class="nav-icon">📊</span> Attendance Charts
+            </a>
+        </div>
+
+        <!-- COACH MENU ITEMS -->
+        <div id="coach-menu" style="display: none;">
+            <div class="nav-section-title">COACH PORTAL</div>
+            <a class="nav-item" onclick="switchTab('coach-attendance')">
+                <span class="nav-icon">✅</span> Daily Batch Attendance
+            </a>
+            <a class="nav-item" onclick="switchTab('coach-permissions')">
+                <span class="nav-icon">⏱️</span> Special Training Perms
+            </a>
+        </div>
+
+        <!-- STUDENT MENU ITEMS -->
+        <div id="student-menu" style="display: none;">
+            <div class="nav-section-title">STUDENT PORTAL</div>
+            <a class="nav-item" onclick="switchTab('student-profile')">
+                <span class="nav-icon">🏅</span> Belt Grading & Profile
+            </a>
+            <a class="nav-item" onclick="switchTab('student-fees')">
+                <span class="nav-icon">💳</span> My Fees & Receipts
+            </a>
+        </div>
+
+        <div style="margin-top: auto; padding: 16px; border-top: 1px solid var(--border-light);">
+            <div style="font-size: 11px; color: var(--text-muted); text-align: center;">
+                Synchronized with Google AI Studio • Ver 2.6
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Workspace Area -->
+    <main class="main-container">
+        <!-- Top App Bar -->
+        <header class="app-topbar">
+            <div class="topbar-left">
+                <h1 class="topbar-title" id="page-title">
+                    <span>Regular Training Monthly Fees Register</span>
+                </h1>
+                <span class="topbar-badge" id="role-badge">
+                    ● ADMIN PORTAL
+                </span>
+            </div>
+
+            <div class="topbar-right">
+                <button class="btn-outline" onclick="showToast('✓ Data synchronized across all portals!')">
+                    🔄 Refresh Data
+                </button>
+                <div class="user-profile-chip">
+                    <div class="avatar-circle" id="user-avatar">A</div>
+                    <div class="user-name-role">
+                        <span class="user-name" id="user-name-display">Grandmaster Shihan Brucelee Raj</span>
+                        <span class="user-role-label" id="user-role-display">Head Administrator</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dynamic Content Body -->
+        <div class="content-scrollable">
+
+            <!-- 1. ADMIN: FEES & MONTHLY REGISTER TAB -->
+            <div id="admin-fees" class="view-content active">
+                <div class="banner-card">
+                    <div class="banner-icon">📋</div>
+                    <div class="banner-text">
+                        <h4>REGULAR TRAINING MONTHLY FEES REGISTER (₹2,000 / Month)</h4>
+                        <p>Complete training curriculum encompassing Karate-Do, Physical Fitness & Conditioning, Practical Self Defence, and Traditional Weapons (Nunchaku & Bo). All student balances and receipts synchronized.</p>
+                    </div>
+                </div>
+
+                <!-- KPI Metric Strip -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <span class="kpi-label">TOTAL REGULAR STUDENTS</span>
+                        <span class="kpi-value" id="kpi-total-students">12</span>
+                        <span class="kpi-subtext">Academy Enrolled</span>
+                    </div>
+                    <div class="kpi-card success">
+                        <span class="kpi-label" id="kpi-paid-label">AUG 2026 COLLECTED</span>
+                        <span class="kpi-value" id="kpi-paid-val">₹20,000</span>
+                        <span class="kpi-subtext">10 of 12 Students Paid</span>
+                    </div>
+                    <div class="kpi-card warning">
+                        <span class="kpi-label" id="kpi-due-label">AUG 2026 PENDING</span>
+                        <span class="kpi-value" id="kpi-due-val">₹4,000</span>
+                        <span class="kpi-subtext">2 Students Pending</span>
+                    </div>
+                </div>
+
+                <!-- Month Selector Ribbon -->
+                <div class="m3-card">
+                    <div class="card-header-bar">
+                        <span class="card-header-title">📅 ACADEMIC YEAR 2026 MONTH SELECTOR</span>
+                        <span style="font-size: 12px; font-weight: 700; color: var(--royal-blue);" id="active-month-text">Selected: August 2026</span>
+                    </div>
+                    <div class="month-ribbon">
+                        <div class="month-pill" onclick="selectMonth('Jan')">Jan 2026</div>
+                        <div class="month-pill" onclick="selectMonth('Feb')">Feb 2026</div>
+                        <div class="month-pill" onclick="selectMonth('Mar')">Mar 2026</div>
+                        <div class="month-pill" onclick="selectMonth('Apr')">Apr 2026</div>
+                        <div class="month-pill" onclick="selectMonth('May')">May 2026</div>
+                        <div class="month-pill" onclick="selectMonth('Jun')">Jun 2026</div>
+                        <div class="month-pill" onclick="selectMonth('Jul')">Jul 2026</div>
+                        <div class="month-pill active" onclick="selectMonth('Aug')">Aug 2026 (Active)</div>
+                        <div class="month-pill" onclick="selectMonth('Sep')">Sep 2026</div>
+                        <div class="month-pill" onclick="selectMonth('Oct')">Oct 2026</div>
+                        <div class="month-pill" onclick="selectMonth('Nov')">Nov 2026</div>
+                        <div class="month-pill" onclick="selectMonth('Dec')">Dec 2026</div>
+                    </div>
+                </div>
+
+                <!-- Students Monthly Register Table -->
+                <div class="m3-card">
+                    <div class="card-header-bar">
+                        <span class="card-header-title">👥 STUDENT 12-MONTH FEE LEDGER & REGISTRATION STATUS</span>
+                        <button class="btn-action" onclick="showToast('✓ Receipt PDF Generated!')">📥 Export Ledger</button>
+                    </div>
+                    <div class="data-table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>STUDENT / ID</th>
+                                    <th>CURRENT BELT</th>
+                                    <th>ADMISSION (₹1,000)</th>
+                                    <th>GI UNIFORM (₹1,500)</th>
+                                    <th>SELECTED MONTH STATUS</th>
+                                    <th>ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody id="student-ledger-body">
+                                <tr>
+                                    <td><strong>Arun Kumar</strong><br><span style="font-size:11px; color:var(--text-slate)">ST-2026-001</span></td>
+                                    <td><span class="belt-tag"><span class="belt-dot" style="background:#78350F"></span> Brown Belt 3rd Kyu</span></td>
+                                    <td><span class="badge badge-success">✓ PAID</span></td>
+                                    <td><span class="badge badge-success">✓ PAID</span></td>
+                                    <td><span class="badge badge-success">✓ PAID (₹2,000)</span></td>
+                                    <td><button class="btn-outline" onclick="togglePay(this)">View Receipt</button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Priya Sharma</strong><br><span style="font-size:11px; color:var(--text-slate)">ST-2026-002</span></td>
+                                    <td><span class="belt-tag"><span class="belt-dot" style="background:#2563EB"></span> Blue Belt 5th Kyu</span></td>
+                                    <td><span class="badge badge-success">✓ PAID</span></td>
+                                    <td><span class="badge badge-success">✓ PAID</span></td>
+                                    <td><span class="badge badge-success">✓ PAID (₹2,000)</span></td>
+                                    <td><button class="btn-outline" onclick="togglePay(this)">View Receipt</button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Rohan Verma</strong><br><span style="font-size:11px; color:var(--text-slate)">ST-2026-003</span></td>
+                                    <td><span class="belt-tag"><span class="belt-dot" style="background:#16A34A"></span> Green Belt 6th Kyu</span></td>
+                                    <td><span class="badge badge-success">✓ PAID</span></td>
+                                    <td><span class="badge badge-success">✓ PAID</span></td>
+                                    <td><span class="badge badge-warning">⏳ DUE (₹2,000)</span></td>
+                                    <td><button class="btn-action" onclick="recordPay(this)">Mark Paid</button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ananya Patel</strong><br><span style="font-size:11px; color:var(--text-slate)">ST-2026-004</span></td>
+                                    <td><span class="belt-tag"><span class="belt-dot" style="background:#EAB308"></span> Yellow Belt 8th Kyu</span></td>
+                                    <td><span class="badge badge-success">✓ PAID</span></td>
+                                    <td><span class="badge badge-success">✓ PAID</span></td>
+                                    <td><span class="badge badge-success">✓ PAID (₹2,000)</span></td>
+                                    <td><button class="btn-outline" onclick="togglePay(this)">View Receipt</button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Vikram Singh</strong><br><span style="font-size:11px; color:var(--text-slate)">ST-2026-005</span></td>
+                                    <td><span class="belt-tag"><span class="belt-dot" style="background:#F97316"></span> Orange Belt 7th Kyu</span></td>
+                                    <td><span class="badge badge-success">✓ PAID</span></td>
+                                    <td><span class="badge badge-success">✓ PAID</span></td>
+                                    <td><span class="badge badge-warning">⏳ DUE (₹2,000)</span></td>
+                                    <td><button class="btn-action" onclick="recordPay(this)">Mark Paid</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. ADMIN: SPECIAL TRAINING CAMPS TAB -->
+            <div id="admin-camps" class="view-content">
+                <div class="banner-card">
+                    <div class="banner-icon">🥋</div>
+                    <div class="banner-text">
+                        <h4>SPECIAL TRAINING CAMPS & INTENSIVE WORKSHOPS</h4>
+                        <p>Configure special courses, custom timings, fees, and session splits. Synchronized with Student Enrollment and Coach Permissions.</p>
+                    </div>
+                </div>
+
+                <div class="camps-grid">
+                    <!-- 1-Day Camp -->
+                    <div class="camp-item-card">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div>
+                                <span class="badge badge-info">1-DAY INTENSIVE</span>
+                                <h3 class="camp-title" style="margin-top: 6px;">1-Day Special Karate Camp</h3>
+                            </div>
+                            <span class="camp-fee">₹4,999</span>
+                        </div>
+                        <p style="font-size: 13px; color: var(--text-slate);">6 Hours intensive martial arts camp covering Kihon, Bunkai Kata & Sparring fundamentals.</p>
+                        <div class="session-split-box">
+                            <strong>3 Split Sessions (6 Hours Total):</strong><br>
+                            • Morning: 6:00 AM – 8:00 AM (Kihon & Conditioning)<br>
+                            • Afternoon: 11:00 AM – 1:00 PM (Kata & Self Defence)<br>
+                            • Evening: 6:00 PM – 8:00 PM (Kumite & Weapon Drills)
+                        </div>
+                        <button class="btn-outline" onclick="showToast('✓ Camp schedule updated!')">Edit Parameters</button>
+                    </div>
+
+                    <!-- 3-Days Camp -->
+                    <div class="camp-item-card">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div>
+                                <span class="badge badge-warning">3-DAYS BOOTCAMP</span>
+                                <h3 class="camp-title" style="margin-top: 6px;">3-Days Special Karate Camp</h3>
+                            </div>
+                            <span class="camp-fee">₹9,999</span>
+                        </div>
+                        <p style="font-size: 13px; color: var(--text-slate);">4 Hours/Day (12 Hours total) intensive training focusing on tactical Kumite and stamina.</p>
+                        <div class="session-split-box">
+                            <strong>2 Split Sessions (4 Hours/Day):</strong><br>
+                            • Morning: 6:00 AM – 8:00 AM (Agility & Stances)<br>
+                            • Evening: 6:00 PM – 8:00 PM (Counter-Attack & Sparring)
+                        </div>
+                        <button class="btn-outline" onclick="showToast('✓ Camp schedule updated!')">Edit Parameters</button>
+                    </div>
+
+                    <!-- 1-Week Camp -->
+                    <div class="camp-item-card">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div>
+                                <span class="badge badge-navy">1-WEEK MASTERCLASS</span>
+                                <h3 class="camp-title" style="margin-top: 6px;">1-Week Special Karate Camp</h3>
+                            </div>
+                            <span class="camp-fee">₹14,999</span>
+                        </div>
+                        <p style="font-size: 13px; color: var(--text-slate);">4 Hours/Day (28 Hours total) comprehensive mastery covering advanced Katas and weapons.</p>
+                        <div class="session-split-box">
+                            <strong>2 Split Sessions (4 Hours/Day):</strong><br>
+                            • Morning: 6:00 AM – 8:00 AM (Kobudo Weapons & Conditioning)<br>
+                            • Evening: 6:00 PM – 8:00 PM (Master Katas & Dan Prep)
+                        </div>
+                        <button class="btn-outline" onclick="showToast('✓ Camp schedule updated!')">Edit Parameters</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. ADMIN: STUDENTS DIRECTORY -->
+            <div id="admin-students" class="view-content">
+                <div class="m3-card">
+                    <div class="card-header-bar">
+                        <span class="card-header-title">👥 ACADEMY STUDENT ROSTER (12 ENROLLED)</span>
+                        <button class="btn-action" onclick="showToast('✓ New Student Registered!')">+ Add Student</button>
+                    </div>
+                    <div class="data-table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>NAME</th>
+                                    <th>STUDENT ID</th>
+                                    <th>CURRENT BELT</th>
+                                    <th>ACTIVE BATCH</th>
+                                    <th>ATTENDANCE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Arun Kumar</td><td>ST-2026-001</td><td>Brown Belt 3rd Kyu</td><td>Evening Senior Batch (6-8 PM)</td><td><span class="badge badge-success">96% Present</span></td></tr>
+                                <tr><td>Priya Sharma</td><td>ST-2026-002</td><td>Blue Belt 5th Kyu</td><td>Morning General Batch (6-8 AM)</td><td><span class="badge badge-success">92% Present</span></td></tr>
+                                <tr><td>Rohan Verma</td><td>ST-2026-003</td><td>Green Belt 6th Kyu</td><td>Evening Kids Batch (5-6 PM)</td><td><span class="badge badge-warning">84% Present</span></td></tr>
+                                <tr><td>Ananya Patel</td><td>ST-2026-004</td><td>Yellow Belt 8th Kyu</td><td>Morning General Batch (6-8 AM)</td><td><span class="badge badge-success">95% Present</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. ADMIN: BATCHES -->
+            <div id="admin-batches" class="view-content">
+                <div class="m3-card">
+                    <span class="card-header-title" style="margin-bottom: 16px;">📋 6 REGULAR DOJO TRAINING BATCHES</span>
+                    <div class="camps-grid">
+                        <div class="camp-item-card">
+                            <h4>Batch 1: Morning General Karate</h4>
+                            <p style="font-size: 13px; color: var(--text-slate);">06:00 AM – 08:00 AM • Mon to Sat • Main Dojo Arena</p>
+                            <span class="badge badge-info">Coach: Renshi V. Surya</span>
+                        </div>
+                        <div class="camp-item-card">
+                            <h4>Batch 2: Evening Junior Cadets</h4>
+                            <p style="font-size: 13px; color: var(--text-slate);">05:00 PM – 06:00 PM • Mon to Sat • Dojo Floor 1</p>
+                            <span class="badge badge-info">Coach: Sensei Rajesh</span>
+                        </div>
+                        <div class="camp-item-card">
+                            <h4>Batch 3: Evening Advanced & Dan</h4>
+                            <p style="font-size: 13px; color: var(--text-slate);">06:00 PM – 08:00 PM • Mon to Sat • Main Dojo Arena</p>
+                            <span class="badge badge-navy">Grandmaster Brucelee Raj</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. ADMIN: ATTENDANCE ANALYTICS -->
+            <div id="admin-analytics" class="view-content">
+                <div class="m3-card">
+                    <span class="card-header-title">📊 DOJO ATTENDANCE METRICS & PARTICIPATION</span>
+                    <div style="padding: 30px; text-align: center; color: var(--text-slate); background: var(--secondary-bg); border-radius: 12px; margin-top: 14px;">
+                        <h3 style="color: var(--text-navy);">94.2% Average Academy Attendance</h3>
+                        <p style="margin-top: 6px;">Daily biometric and coach register entries synchronized across all 6 batches.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. COACH: ATTENDANCE TAB -->
+            <div id="coach-attendance" class="view-content">
+                <div class="m3-card">
+                    <div class="card-header-bar">
+                        <span class="card-header-title">✅ DAILY BATCH ATTENDANCE REGISTER</span>
+                        <button class="btn-action" onclick="showToast('✓ Attendance Submitted for Today!')">💾 Save Attendance</button>
+                    </div>
+                    <div class="data-table-container">
+                        <table>
+                            <thead>
+                                <tr><th>STUDENT</th><th>BATCH</th><th>TODAY'S STATUS</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Arun Kumar</td><td>Evening Advanced (6-8 PM)</td><td><span class="badge badge-success">✓ PRESENT</span></td></tr>
+                                <tr><td>Priya Sharma</td><td>Morning General (6-8 AM)</td><td><span class="badge badge-success">✓ PRESENT</span></td></tr>
+                                <tr><td>Rohan Verma</td><td>Evening Kids (5-6 PM)</td><td><span class="badge badge-warning">⏳ NOT MARKED</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. COACH: SPECIAL PERMISSIONS TAB -->
+            <div id="coach-permissions" class="view-content">
+                <div class="m3-card">
+                    <span class="card-header-title" style="margin-bottom: 14px;">⏱️ GRANT SPECIAL TRAINING TIME PERMISSIONS</span>
+                    <p style="font-size: 13px; color: var(--text-slate); margin-bottom: 16px;">Directly assign special camp time slots (Morning 6-8 AM, Afternoon 11-1 PM, Evening 6-8 PM) to eligible students.</p>
+                    <button class="btn-action" onclick="showToast('✓ Special Training Permission Granted!')">Grant Time Permission</button>
+                </div>
+            </div>
+
+            <!-- 8. STUDENT: PROFILE TAB -->
+            <div id="student-profile" class="view-content">
+                <div class="m3-card">
+                    <div class="card-header-bar">
+                        <span class="card-header-title">🏅 STUDENT BELT EXAMINATION & GRADING HISTORY</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
+                        <div class="logo-circle" style="width: 56px; height: 56px; font-size: 24px;">A</div>
+                        <div>
+                            <h3>Arun Kumar</h3>
+                            <p style="color: var(--text-slate); font-size: 13px;">ST-2026-001 • Brown Belt 3rd Kyu • Target: 1st Dan Black Belt</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9. STUDENT: MY FEES TAB -->
+            <div id="student-fees" class="view-content">
+                <div class="m3-card">
+                    <div class="card-header-bar">
+                        <span class="card-header-title">💳 MY ACADEMY FEE RECEIPTS & DUE STATUS</span>
+                    </div>
+                    <div class="banner-card" style="margin-bottom: 16px;">
+                        <div class="banner-icon">✓</div>
+                        <div class="banner-text">
+                            <h4>All Active Fees Paid (August 2026)</h4>
+                            <p>Regular Training: ₹2,000 • Gi Uniform: ₹1,500 • Admission: ₹1,000 (All verified)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Toast Notification Element -->
+    <div id="toast" class="toast-notification">
+        <span id="toast-message">✓ Action completed!</span>
     </div>
 
-    <!-- Header -->
-    <header>
-        <div class="header-content">
-            <a href="#" class="brand-logo">
-                <div class="logo-crest">B</div>
-                <div>
-                    <div class="brand-title">BROMAA</div>
-                    <div class="brand-subtitle">BRUCELEE RAJ ONLINE MARTIAL ARTS</div>
-                </div>
-            </a>
-            <a href="https://ais-pre-jtw7wm653n34bcypawe6sm-880028634429.asia-east1.run.app" class="btn-header" target="_blank">
-                Launch App
-            </a>
-        </div>
-    </header>
+    <!-- JavaScript Controller Synchronized with Android Jetpack Compose Logic -->
+    <script>
+        function switchRole(role) {
+            document.querySelectorAll('.role-pill').forEach(el => el.classList.remove('active'));
+            document.getElementById('admin-menu').style.display = 'none';
+            document.getElementById('coach-menu').style.display = 'none';
+            document.getElementById('student-menu').style.display = 'none';
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-container">
-            <div class="hero-badge">OFFICIAL ACADEMY DIGITAL PLATFORM</div>
-            <h1>Martial Arts Mastery, Attendance & Fee Portal</h1>
-            <p>Welcome to BROMA Academy — complete management for Karate, Physical Fitness, Practical Self Defence, and Weapon Training under Grandmaster Shihan Brucelee Raj.</p>
-            <div class="hero-actions">
-                <a href="#interactive-app" class="btn-primary">
-                    📱 Test In-Browser App
-                </a>
-                <a href="https://ais-pre-jtw7wm653n34bcypawe6sm-880028634429.asia-east1.run.app" class="btn-primary" style="background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%); box-shadow: 0 4px 16px rgba(37,99,235,0.4);" target="_blank">
-                    🚀 Launch Full Cloud Portal
-                </a>
-                <a href="#camps" class="btn-secondary">
-                    View Fee Structure & Camps
-                </a>
-            </div>
-            
-            <!-- Embedded Cloud View & Emulator Frame -->
-            <div id="interactive-app" style="margin-top: 40px; background: rgba(15, 23, 42, 0.85); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
-                    <div style="text-align: left;">
-                        <span style="background: #10B981; color: #022C22; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 20px; text-transform: uppercase;">● Cloud Active</span>
-                        <h3 style="color: white; font-size: 17px; font-weight: 800; margin-top: 4px;">BROMAA Multi-Portal Live Cloud Stream</h3>
-                    </div>
-                    <a href="https://ais-pre-jtw7wm653n34bcypawe6sm-880028634429.asia-east1.run.app" target="_blank" style="color: #60A5FA; font-size: 13px; font-weight: 700; text-decoration: underline;">
-                        Open in New Tab ↗
-                    </a>
-                </div>
-                <div style="position: relative; width: 100%; height: 720px; border-radius: 12px; overflow: hidden; background: #000; border: 1px solid rgba(255,255,255,0.1);">
-                    <iframe src="https://ais-pre-jtw7wm653n34bcypawe6sm-880028634429.asia-east1.run.app" style="width: 100%; height: 100%; border: none;" title="BROMAA App"></iframe>
-                </div>
-            </div>
-        </div>
-    </section>
+            if (role === 'admin') {
+                event.target.classList.add('active');
+                document.getElementById('admin-menu').style.display = 'block';
+                document.getElementById('role-badge').innerText = '● ADMIN PORTAL';
+                document.getElementById('user-name-display').innerText = 'Grandmaster Shihan Brucelee Raj';
+                document.getElementById('user-role-display').innerText = 'Head Administrator';
+                document.getElementById('user-avatar').innerText = 'A';
+                switchTab('admin-fees');
+            } else if (role === 'coach') {
+                event.target.classList.add('active');
+                document.getElementById('coach-menu').style.display = 'block';
+                document.getElementById('role-badge').innerText = '● COACH PORTAL';
+                document.getElementById('user-name-display').innerText = 'Renshi V. Surya';
+                document.getElementById('user-role-display').innerText = 'Senior Instructor';
+                document.getElementById('user-avatar').innerText = 'C';
+                switchTab('coach-attendance');
+            } else if (role === 'student') {
+                event.target.classList.add('active');
+                document.getElementById('student-menu').style.display = 'block';
+                document.getElementById('role-badge').innerText = '● STUDENT PORTAL';
+                document.getElementById('user-name-display').innerText = 'Arun Kumar';
+                document.getElementById('user-role-display').innerText = 'Brown Belt 3rd Kyu';
+                document.getElementById('user-avatar').innerText = 'S';
+                switchTab('student-profile');
+            }
+        }
 
-    <!-- Special Camps Section -->
-    <section class="section" id="camps">
-        <div class="section-header">
-            <h2 class="section-title">Special Training Camps & Programs</h2>
-            <p class="section-subtitle">Intensive courses split into structured daily slots for maximum technique mastery</p>
-        </div>
+        function switchTab(tabId) {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            if (event && event.currentTarget && event.currentTarget.classList) {
+                event.currentTarget.classList.add('active');
+            }
 
-        <div class="grid-3">
-            <!-- 1 Day Camp -->
-            <div class="card">
-                <span class="card-badge">Intensive 1-Day</span>
-                <h3>1-Day Special Karate Camp</h3>
-                <div class="card-price">₹4,999 <span>/ Course</span></div>
-                <p>6 Hours intensive martial arts camp covering Kihon fundamentals, Kata Bunkai, and Sparring drills.</p>
-                <div class="schedule-box">
-                    <strong>3 Daily Sessions:</strong><br>
-                    • Morning: 6:00 AM – 8:00 AM<br>
-                    • Afternoon: 11:00 AM – 1:00 PM<br>
-                    • Evening: 6:00 PM – 8:00 PM
-                </div>
-            </div>
+            document.querySelectorAll('.view-content').forEach(el => el.classList.remove('active'));
+            const target = document.getElementById(tabId);
+            if (target) target.classList.add('active');
 
-            <!-- 3 Days Camp -->
-            <div class="card">
-                <span class="card-badge">3-Days Bootcamp</span>
-                <h3>3-Days Special Karate Camp</h3>
-                <div class="card-price">₹9,999 <span>/ Course</span></div>
-                <p>4 Hours per day (12 Hours total) intensive training focusing on tactical Kumite and conditioning.</p>
-                <div class="schedule-box">
-                    <strong>2 Daily Sessions (4 Hrs/Day):</strong><br>
-                    • Morning: 6:00 AM – 8:00 AM<br>
-                    • Evening: 6:00 PM – 8:00 PM
-                </div>
-            </div>
+            // Update Header Title
+            const titles = {
+                'admin-fees': 'Regular Training Monthly Fees Register',
+                'admin-camps': 'Special Training Camps & Programs',
+                'admin-students': 'Student Directory & Roster',
+                'admin-batches': '6 Regular Dojo Training Batches',
+                'admin-analytics': 'Attendance Charts & Analytics',
+                'coach-attendance': 'Daily Batch Attendance Register',
+                'coach-permissions': 'Special Training Time Permissions',
+                'student-profile': 'Student Belt Grading & Profile',
+                'student-fees': 'My Fees, Receipts & Due Status'
+            };
+            if (titles[tabId]) {
+                document.getElementById('page-title').innerHTML = '<span>' + titles[tabId] + '</span>';
+            }
+        }
 
-            <!-- 1 Week Camp -->
-            <div class="card">
-                <span class="card-badge">1-Week Masterclass</span>
-                <h3>1-Week Special Karate Camp</h3>
-                <div class="card-price">₹14,999 <span>/ Course</span></div>
-                <p>4 Hours per day (28 Hours total) comprehensive mastery covering advanced Katas, Kobudo weapons, and Dan prep.</p>
-                <div class="schedule-box">
-                    <strong>2 Daily Sessions (4 Hrs/Day):</strong><br>
-                    • Morning: 6:00 AM – 8:00 AM<br>
-                    • Evening: 6:00 PM – 8:00 PM
-                </div>
-            </div>
-        </div>
-    </section>
+        function selectMonth(month) {
+            document.querySelectorAll('.month-pill').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('active-month-text').innerText = 'Selected: ' + month + ' 2026';
+            document.getElementById('kpi-paid-label').innerText = month.toUpperCase() + ' 2026 COLLECTED';
+            document.getElementById('kpi-due-label').innerText = month.toUpperCase() + ' 2026 PENDING';
+            showToast('✓ Loaded ' + month + ' 2026 fee register data!');
+        }
 
-    <!-- Regular Training & Admission -->
-    <section class="section" style="padding-top: 0;">
-        <div class="grid-3">
-            <div class="card" style="border-top: 4px solid #16A34A;">
-                <span class="card-badge" style="background:#DCFCE7; color:#15803D;">Standard Training</span>
-                <h3>Regular Training Program</h3>
-                <div class="card-price">₹2,000 <span>/ Month</span></div>
-                <p>Covers all four disciplines: <strong>Karate-Do</strong>, <strong>Physical Fitness</strong>, <strong>Self Defence</strong>, and <strong>Weapons (Bo & Nunchaku)</strong>.</p>
-                <div class="schedule-box">
-                    <strong>Daily Sessions (Mon – Sat):</strong><br>
-                    • Morning 6:00 AM – 8:00 AM & Evening 6:00 PM – 8:00 PM
-                </div>
-            </div>
+        function recordPay(btn) {
+            const row = btn.closest('tr');
+            const statusCell = row.cells[4];
+            statusCell.innerHTML = '<span class="badge badge-success">✓ PAID (₹2,000)</span>';
+            btn.className = 'btn-outline';
+            btn.innerText = 'View Receipt';
+            btn.onclick = function() { togglePay(btn); };
+            showToast('✓ Fee payment recorded and verified!');
+        }
 
-            <div class="card" style="border-top: 4px solid #D97706;">
-                <span class="card-badge">One-Time Registration</span>
-                <h3>Admission & Registration</h3>
-                <div class="card-price">₹1,000 <span>/ One-Time</span></div>
-                <p>Official lifetime academy enrollment, digital ID generation, syllabus handbook, and membership registration.</p>
-            </div>
+        function togglePay(btn) {
+            showToast('✓ Verified Receipt: BR-RCPT-' + Math.floor(100000 + Math.random() * 900000));
+        }
 
-            <div class="card" style="border-top: 4px solid #2563EB;">
-                <span class="card-badge" style="background:#DBEAFE; color:#1E40AF;">Official Kit</span>
-                <h3>Karate Gi & Uniform Dress</h3>
-                <div class="card-price">₹1,500 <span>/ One-Time</span></div>
-                <p>Heavyweight official BROMAA Shito-Ryu Karate Gi with embroidered crest, white belt, and academy badges.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Multi-Portal System -->
-    <section class="portals">
-        <div class="section-header">
-            <h2 class="section-title">Integrated Multi-Portal System</h2>
-            <p class="section-subtitle">Tailored interfaces for Administrators, Coaches, and Students</p>
-        </div>
-
-        <div class="grid-3" style="max-width: 1200px; margin: 0 auto;">
-            <div class="portal-card">
-                <div class="portal-icon admin">🛡️</div>
-                <h3>Admin Portal</h3>
-                <p>Full financial ledger, monthly fee registers, batch configurations, coach permissions, and real-time analytics.</p>
-            </div>
-            <div class="portal-card">
-                <div class="portal-icon coach">🥋</div>
-                <h3>Coach Portal</h3>
-                <p>Attendance register for 6 regular batches, special camp permissions, student performance notes, and grading clears.</p>
-            </div>
-            <div class="portal-card">
-                <div class="portal-icon student">🏅</div>
-                <h3>Student Portal</h3>
-                <p>Belt promotion history, fee receipts, syllabus access, digital ID card, event calendar, and special camp registrations.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <p>© 2026 <strong>BROMAA - Brucelee Raj Online Martial Arts Academy</strong>. All rights reserved.</p>
-        <p style="margin-top: 8px; font-size: 12px;">Grandmaster: Shihan Brucelee Raj • Head Coach: Renshi V. Surya</p>
-    </footer>
-
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-message').innerText = msg;
+            t.style.display = 'flex';
+            setTimeout(() => { t.style.display = 'none'; }, 2800);
+        }
+    </script>
 </body>
 </html>
