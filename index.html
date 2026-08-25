@@ -764,11 +764,13 @@
             <a class="nav-item" onclick="showTab('admin-achievements', this)"><span class="nav-icon">🌟</span> Student Achievements</a>
             <a class="nav-item" onclick="showTab('admin-calendar', this)"><span class="nav-icon">📅</span> Calendar Centre</a>
             <a class="nav-item" onclick="showTab('admin-announcements', this)"><span class="nav-icon">📢</span> Announcement Centre</a>
+            <a class="nav-item" onclick="showTab('admin-database', this)"><span class="nav-icon">🗄️</span> Database & SQL Schema</a>
             <a class="nav-item" onclick="showTab('admin-time-perms', this)"><span class="nav-icon">⏰</span> Special Time Perms</a>
             <a class="nav-item" onclick="showTab('admin-analytics', this)"><span class="nav-icon">📊</span> Attendance Analytics</a>
             <a class="nav-item" onclick="showTab('admin-contact', this)"><span class="nav-icon">📍</span> Contact Settings</a>
             <a class="nav-item" onclick="showTab('admin-settings', this)"><span class="nav-icon">⚙️</span> Payment & UPI Settings</a>
             <a class="nav-item" onclick="showTab('admin-rules', this)"><span class="nav-icon">📜</span> Dojo Rules & Standards</a>
+            <a class="nav-item" onclick="openAuthModal()"><span class="nav-icon">🔐</span> User Auth & Switch Account</a>
         </div>
 
         <!-- 2. COACH MENU SECTION -->
@@ -782,13 +784,14 @@
             <a class="nav-item" onclick="showTab('coach-tournaments', this)"><span class="nav-icon">🏆</span> Tournaments</a>
             <a class="nav-item" onclick="showTab('coach-chat', this)"><span class="nav-icon">💬</span> Chat with Admin</a>
             <a class="nav-item" onclick="showTab('coach-requests', this)"><span class="nav-icon">📩</span> Student Requests</a>
+            <a class="nav-item" onclick="openAuthModal()"><span class="nav-icon">🔐</span> User Auth & Switch Account</a>
         </div>
 
         <!-- 3. STUDENT MENU SECTION -->
         <div id="menu-student" class="drawer-nav-group" style="display: none;">
             <div class="drawer-section-title">OVERVIEW</div>
             <a class="nav-item" onclick="showTab('student-dashboard', this)"><span class="nav-icon">🏠</span> Dashboard</a>
-            <a class="nav-item" onclick="showTab('student-profile', this)"><span class="nav-icon">👤</span> My Profile</a>
+            <a class="nav-item" onclick="showTab('student-profile', this)"><span class="nav-icon">👤</span> My Complete Profile</a>
             <a class="nav-item" onclick="showTab('student-karate', this)"><span class="nav-icon">🥋</span> My Karate</a>
             <a class="nav-item" onclick="showTab('student-class', this)"><span class="nav-icon">📅</span> My Batch & Schedule</a>
             <a class="nav-item" onclick="showTab('student-instructors', this)"><span class="nav-icon">🥋</span> Instructors & Standards</a>
@@ -805,7 +808,8 @@
             <a class="nav-item" onclick="showTab('student-announcements', this)"><span class="nav-icon">📢</span> Announcements</a>
             <a class="nav-item" onclick="showTab('student-chat', this)"><span class="nav-icon">💬</span> Chat with Admin</a>
             
-            <div class="drawer-section-title">SYSTEM</div>
+            <div class="drawer-section-title">ACCOUNT & AUTH</div>
+            <a class="nav-item" onclick="openAuthModal()"><span class="nav-icon">👨‍👩‍👧</span> Family Switcher / Login</a>
             <a class="nav-item" onclick="showTab('student-settings', this)"><span class="nav-icon">⚙️</span> Settings & Privacy</a>
             <a class="nav-item" onclick="showTab('student-contact', this)"><span class="nav-icon">📞</span> Contact Academy</a>
         </div>
@@ -828,8 +832,9 @@
             </div>
 
             <div class="app-bar-right">
-                <button class="btn-outline-neutral" onclick="syncAllPortals()">🔄 Synchronize</button>
-                <div class="user-chip">
+                <button class="btn-outline-neutral" onclick="openAuthModal()">🔐 Sign In / Auth</button>
+                <button class="btn-outline-neutral" onclick="syncAllPortals()">🔄 Sync</button>
+                <div class="user-chip" onclick="openAuthModal()" style="cursor: pointer;" title="Click to view User Auth / Switch profile">
                     <div class="user-avatar-round" id="user-avatar-letter">A</div>
                     <div class="user-meta-col">
                         <span class="user-name-txt" id="top-user-name">Grandmaster Shihan Brucelee Raj</span>
@@ -1237,6 +1242,56 @@
                 </div>
             </div>
 
+            <!-- 1.13B ADMIN DATABASE & SQL SCHEMA EXPLORER -->
+            <div id="admin-database" class="tab-view-container">
+                <div class="guidance-banner">
+                    <div class="guidance-icon-box">🗄️</div>
+                    <div class="guidance-text">
+                        <h4>ROOM DATABASE & SQL SCHEMA ARCHITECTURE INSPECTOR</h4>
+                        <p>Complete schema mirroring Kotlin Room entities (`UserAccountEntity`, `BatchEntity`, `AttendanceRecordEntity`, `FeeItemEntity`, `PaymentRecordEntity`, `CertificateEntity`, `StudentRequestEntity`, `AdminSettingsEntity`).</p>
+                    </div>
+                </div>
+
+                <div class="kpi-row">
+                    <div class="kpi-card"><span class="kpi-lbl">ROOM ENTITIES</span><span class="kpi-val">17 Tables</span><span class="kpi-sub">Fully Normalized SQLite</span></div>
+                    <div class="kpi-card success"><span class="kpi-lbl">TOTAL USERS</span><span class="kpi-val" id="db-kpi-users">12 Active</span><span class="kpi-sub">Students, Coaches, Admins</span></div>
+                    <div class="kpi-card"><span class="kpi-lbl">PAYMENT RECORDS</span><span class="kpi-val" id="db-kpi-payments">18 Records</span><span class="kpi-sub">Indexed by Receipt No</span></div>
+                    <div class="kpi-card warning"><span class="kpi-lbl">PENDING REQUESTS</span><span class="kpi-val" id="db-kpi-requests">2</span><span class="kpi-sub">Belt / Batch / Profile</span></div>
+                </div>
+
+                <!-- Database Entity Schema Selector -->
+                <div class="m3-surface">
+                    <div class="surface-header-row">
+                        <span class="surface-title">📋 SELECT DATABASE TABLE FOR DEEP INSPECTION</span>
+                        <button class="btn-fill-primary" onclick="runSqlSimulator()">▶ Execute SQL Query</button>
+                    </div>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;">
+                        <button class="btn-outline-neutral" style="background:#EFF6FF; border-color:var(--royal-blue); color:var(--royal-blue);" onclick="inspectTable('users')">📄 users (UserAccountEntity)</button>
+                        <button class="btn-outline-neutral" onclick="inspectTable('batches')">📄 batches (BatchEntity)</button>
+                        <button class="btn-outline-neutral" onclick="inspectTable('payment_records')">📄 payment_records (PaymentRecordEntity)</button>
+                        <button class="btn-outline-neutral" onclick="inspectTable('student_requests')">📄 student_requests (StudentRequestEntity)</button>
+                        <button class="btn-outline-neutral" onclick="inspectTable('attendance')">📄 attendance (AttendanceRecordEntity)</button>
+                        <button class="btn-outline-neutral" onclick="inspectTable('certificates')">📄 certificates (CertificateEntity)</button>
+                        <button class="btn-outline-neutral" onclick="inspectTable('training_programs')">📄 training_programs (TrainingProgramEntity)</button>
+                        <button class="btn-outline-neutral" onclick="inspectTable('admin_settings')">📄 admin_settings (AdminSettingsEntity)</button>
+                    </div>
+
+                    <!-- SQL Query Playground Console -->
+                    <div style="background:#0F172A; color:#38BDF8; padding:12px; border-radius:8px; font-family:'JetBrains Mono', monospace; font-size:12px; margin-bottom:12px;">
+                        <div style="display:flex; justify-content:space-between; color:#94A3B8; font-size:11px; margin-bottom:6px;">
+                            <span>SQL Console (Live Room DB In-Memory Engine)</span>
+                            <span style="color:#4ADE80;">● ONLINE</span>
+                        </div>
+                        <input id="sql-query-input" type="text" value="SELECT userId, fullName, currentBelt, batchName, phone, bloodGroup, parentEmail, status FROM users;" style="width:100%; background:transparent; border:none; color:#F8FAFC; font-family:'JetBrains Mono', monospace; font-size:12.5px; outline:none;" />
+                    </div>
+
+                    <!-- Inspected Schema & Data Grid -->
+                    <div class="table-responsive" id="db-table-output-container">
+                        <!-- Dynamic rendered by inspectTable -->
+                    </div>
+                </div>
+            </div>
+
             <!-- 1.14 ADMIN TIME PERMISSIONS -->
             <div id="admin-time-perms" class="tab-view-container">
                 <div class="m3-surface">
@@ -1427,20 +1482,156 @@
                 </div>
             </div>
 
-            <!-- 3.2 STUDENT PROFILE -->
+            <!-- 3.2 STUDENT PROFILE (COMPLETE IN-DEPTH DOSSIER) -->
             <div id="student-profile" class="tab-view-container">
-                <div class="m3-surface">
-                    <div class="surface-header-row"><span class="surface-title">👤 STUDENT DIGITAL ID CARD</span></div>
-                    <div style="display:flex; gap:20px; align-items:center; flex-wrap:wrap;">
-                        <div style="width:80px; height:80px; border-radius:50%; background:var(--royal-blue); color:white; font-size:32px; font-weight:900; display:flex; align-items:center; justify-content:center;">A</div>
+                <!-- Family Multi-Student Switcher Header -->
+                <div class="m3-surface" style="background: linear-gradient(135deg, #EFF6FF 0%, #FFFFFF 100%); border-color: #BFDBFE;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
                         <div>
-                            <h2 style="font-size:18px;">Arun Kumar</h2>
-                            <p style="font-size:12.5px; color:var(--text-slate);">Student ID: <strong>ST-2026-001</strong></p>
-                            <p style="font-size:12.5px; color:var(--text-slate);">Father's Name: <strong>R. S. Kumar</strong></p>
-                            <p style="font-size:12.5px; color:var(--text-slate);">Date of Birth: <strong>14 May 2008 (Age 18)</strong></p>
+                            <span style="font-size:11px; font-weight:800; color:var(--royal-blue); letter-spacing:0.8px;">👨‍👩‍👧 FAMILY ACCOUNT — MULTI-STUDENT SELECTOR</span>
+                            <h4 style="font-size:14px; font-weight:800; color:var(--text-navy);">Parent Account: Ramesh Kumar (2 Children Registered)</h4>
+                        </div>
+                        <div id="family-child-chips-container" style="display:flex; gap:8px; flex-wrap:wrap;">
+                            <!-- Dynamic rendered by renderFamilySwitcher -->
                         </div>
                     </div>
                 </div>
+
+                <!-- Digital ID Card Header Banner -->
+                <div class="m3-surface" style="border-top: 4px solid var(--royal-blue);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; margin-bottom:16px;">
+                        <div style="display:flex; gap:18px; align-items:center;">
+                            <div id="stu-prof-avatar" style="width:84px; height:84px; border-radius:50%; background:var(--royal-blue); color:white; font-size:32px; font-weight:900; display:flex; align-items:center; justify-content:center; border: 3px solid #BFDBFE; box-shadow:0 4px 10px rgba(37,99,235,0.2);">
+                                A
+                            </div>
+                            <div>
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    <h2 id="stu-prof-fullname" style="font-size:20px; font-weight:900; color:var(--text-navy);">ARUN KUMAR</h2>
+                                    <span id="stu-prof-status-chip" class="status-chip success">● ACTIVE TRAINEE</span>
+                                </div>
+                                <div style="display:flex; gap:8px; align-items:center; margin-top:4px; flex-wrap:wrap;">
+                                    <span id="stu-prof-id-badge" style="font-family:'JetBrains Mono', monospace; font-size:12px; background:var(--secondary-bg); padding:3px 8px; border-radius:6px; font-weight:700; border:1px solid var(--border-light);">ID: ST-2026-001</span>
+                                    <span id="stu-prof-belt-badge" class="belt-chip"><span class="belt-dot-icon" style="background:#78350F;"></span> Brown Belt (3rd Kyu)</span>
+                                    <span id="stu-prof-level-badge" style="font-size:11px; background:#FEF3C7; color:#92400E; padding:3px 8px; border-radius:6px; font-weight:700; border:1px solid #FDE68A;">Level 3</span>
+                                </div>
+                                <p style="font-size:12px; color:var(--text-slate); margin-top:4px;">Main Dojang - Central Branch • Affiliation: Modern Shito-Ryu Karate Do Association</p>
+                            </div>
+                        </div>
+
+                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                            <button class="btn-fill-primary" onclick="openStudentEditSelfModal()">✏️ Edit Personal Details</button>
+                            <button class="btn-outline-neutral" onclick="openStudentRequestModal()">🔒 Request Official Change</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2-Column In-Depth Information Grid -->
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap:16px;">
+                    
+                    <!-- 1. PERSONAL INFORMATION -->
+                    <div class="m3-surface">
+                        <div class="surface-header-row">
+                            <span class="surface-title">📋 1. PERSONAL & BIODATA DETAILS</span>
+                        </div>
+                        <table style="width:100%; font-size:12.5px;">
+                            <tbody>
+                                <tr><td style="color:var(--text-slate); width:40%; padding:8px 0; border-bottom:1px solid var(--border-light);">User ID / Student ID</td><td id="row-stu-id" style="font-weight:700; font-family:'JetBrains Mono';">ST-2026-001</td></tr>
+                                <tr><td style="color:var(--text-slate); padding:8px 0; border-bottom:1px solid var(--border-light);">Username</td><td id="row-stu-username" style="font-weight:700;">arun.karate</td></tr>
+                                <tr><td style="color:var(--text-slate); padding:8px 0; border-bottom:1px solid var(--border-light);">Date of Birth (DOB)</td><td id="row-stu-dob" style="font-weight:700;">14 May 2008 (18 Yrs)</td></tr>
+                                <tr><td style="color:var(--text-slate); padding:8px 0; border-bottom:1px solid var(--border-light);">Gender</td><td id="row-stu-gender" style="font-weight:700;">Male</td></tr>
+                                <tr><td style="color:var(--text-slate); padding:8px 0; border-bottom:1px solid var(--border-light);">Blood Group</td><td id="row-stu-blood" style="font-weight:700; color:var(--crimson-primary);">O+ (Positive)</td></tr>
+                                <tr><td style="color:var(--text-slate); padding:8px 0; border-bottom:1px solid var(--border-light);">Mobile Contact</td><td id="row-stu-phone" style="font-weight:700;">+91 98765 43210</td></tr>
+                                <tr><td style="color:var(--text-slate); padding:8px 0; border-bottom:1px solid var(--border-light);">Email Address</td><td id="row-stu-email" style="font-weight:700;">arun.kumar@gmail.com</td></tr>
+                                <tr><td style="color:var(--text-slate); padding:8px 0; border-bottom:1px solid var(--border-light);">Residential Address</td><td id="row-stu-address" style="font-weight:700;">Plot 42, Kakateeya Nagar, Gajuwaka</td></tr>
+                                <tr><td style="color:var(--text-slate); padding:8px 0;">Emergency Contact</td><td id="row-stu-emergency" style="font-weight:700; color:var(--status-error);">+91 98765 33333 (Father)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 2. ACADEMY & DISCIPLINE RECORD -->
+                    <div class="m3-surface">
+                        <div class="surface-header-row">
+                            <span class="surface-title">🥋 2. ACADEMY DISCIPLINE & BATCH RECORD</span>
+                        </div>
+                        <table style="width:100%; font-size:12.5px;">
+                            <tbody>
+                                <tr><td style="color:var(--text-slate); width:40%; padding:8px 0; border-bottom:1px solid var(--border-light);">Admission Date</td><td id="row-stu-joining" style="font-weight:700;">01 January 2026</td></tr>
+                                <tr><td style="color:var(--text-slate); padding:8px 0; border-bottom:1px solid var(--border-light);">Current Belt Rank</td><td id="row-stu-belt-rank" style="font-weight:700; color:#78350F;">Brown Belt 3rd Kyu</td></tr>
+                                <tr><td style="color:var(--text-slate); padding:8px 0; border-bottom:1px solid var(--border-light);">Belt Level</td><td id="row-stu-belt-lvl" style="font-weight:700;">Level 3 Senior</td></tr>
+                                <tr><td style="color:var(--text-slate); padding:8px 0; border-bottom:1px solid var(--border-light);">Assigned Batch</td><td id="row-stu-batch" style="font-weight:700;">Batch 3 (Evening 6:00 – 8:00 PM)</td></tr>
+                                <tr><td style="color:var(--text-slate); padding:8px 0; border-bottom:1px solid var(--border-light);">Training Days</td><td id="row-stu-days" style="font-weight:700;">Monday to Saturday (6 Days/Wk)</td></tr>
+                                <tr><td style="color:var(--text-slate); padding:8px 0; border-bottom:1px solid var(--border-light);">Head Sensei / Coach</td><td id="row-stu-coach" style="font-weight:700; color:var(--royal-blue);">Grandmaster Shihan Brucelee Raj</td></tr>
+                                <tr><td style="color:var(--text-slate); padding:8px 0; border-bottom:1px solid var(--border-light);">Enrolled Programs</td><td id="row-stu-programs" style="font-weight:700;">Karate-Do, Conditioning, Weapon Kobudo</td></tr>
+                                <tr><td style="color:var(--text-slate); padding:8px 0;">Belt History</td><td id="row-stu-belt-history" style="font-weight:700;">White (Jan) → Yellow (Mar) → Green (May) → Brown (Jul)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 3. PARENT & GUARDIAN DETAILS -->
+                    <div class="m3-surface">
+                        <div class="surface-header-row">
+                            <span class="surface-title">👨‍👩‍👦 3. PARENT & GUARDIAN INFORMATION</span>
+                        </div>
+                        <table style="width:100%; font-size:12.5px;">
+                            <tbody>
+                                <tr><td style="color:var(--text-slate); width:40%; padding:8px 0; border-bottom:1px solid var(--border-light);">Father / Guardian</td><td id="row-stu-father" style="font-weight:700;">Ch. Ramesh Kumar</td></tr>
+                                <tr><td style="color:var(--text-slate); padding:8px 0; border-bottom:1px solid var(--border-light);">Mother / Guardian</td><td id="row-stu-mother" style="font-weight:700;">Ch. Sunita Kumar</td></tr>
+                                <tr><td style="color:var(--text-slate); padding:8px 0; border-bottom:1px solid var(--border-light);">Parent Email</td><td id="row-stu-parent-email" style="font-weight:700;">ramesh.kumar@gmail.com</td></tr>
+                                <tr><td style="color:var(--text-slate); padding:8px 0; border-bottom:1px solid var(--border-light);">Parent Phone</td><td id="row-stu-parent-phone" style="font-weight:700;">+91 98765 22222</td></tr>
+                                <tr><td style="color:var(--text-slate); padding:8px 0;">Parent Occupation</td><td id="row-stu-occupation" style="font-weight:700;">Software Engineering Lead</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 4. HEALTH, FITNESS & MEDICAL CLEARANCE -->
+                    <div class="m3-surface">
+                        <div class="surface-header-row">
+                            <span class="surface-title">🩺 4. MEDICAL & SPARRING CLEARANCE</span>
+                        </div>
+                        <table style="width:100%; font-size:12.5px;">
+                            <tbody>
+                                <tr><td style="color:var(--text-slate); width:40%; padding:8px 0; border-bottom:1px solid var(--border-light);">Physical Fitness Status</td><td><span class="status-chip success">✓ 100% Fit for Combat Training</span></td></tr>
+                                <tr><td style="color:var(--text-slate); padding:8px 0; border-bottom:1px solid var(--border-light);">Kumite Sparring Clearance</td><td><span class="status-chip success">✓ Authorized Full Contact Sparring</span></td></tr>
+                                <tr><td style="color:var(--text-slate); padding:8px 0; border-bottom:1px solid var(--border-light);">Allergies / Chronic Conditions</td><td id="row-stu-medical" style="font-weight:700;">None reported. Fully healthy.</td></tr>
+                                <tr><td style="color:var(--text-slate); padding:8px 0;">Official Karate Gi & Gear</td><td><span class="status-chip success">✓ Issued & Inspected</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <!-- 5. STUDENT OFFICIAL CHANGE REQUESTS -->
+                <div class="m3-surface">
+                    <div class="surface-header-row">
+                        <span class="surface-title">📩 5. MY OFFICIAL CHANGE REQUESTS (BELT / BATCH / PROFILE)</span>
+                        <button class="btn-fill-primary" onclick="openStudentRequestModal()">+ Submit Change Request</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>REQUEST ID</th>
+                                    <th>TYPE</th>
+                                    <th>CURRENT VALUE</th>
+                                    <th>REQUESTED VALUE</th>
+                                    <th>REASON & NOTES</th>
+                                    <th>STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="student-requests-tbody">
+                                <tr>
+                                    <td><code style="font-family:'JetBrains Mono'; font-size:11px;">REQ-2026-081</code></td>
+                                    <td><strong>Belt Promotion</strong></td>
+                                    <td>Brown Belt 3rd Kyu</td>
+                                    <td><strong style="color:var(--deep-navy);">Black Belt 1st Dan (Shodan)</strong></td>
+                                    <td>Completed 12 months minimum training and all Kata requirements.</td>
+                                    <td><span class="status-chip warning">⏳ PENDING SHIHAN REVIEW</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
 
             <!-- 3.3 STUDENT KARATE SYLLABUS -->
@@ -1678,19 +1869,19 @@
             <div class="form-group">
                 <label>Starting Belt Rank</label>
                 <select id="new-stu-belt" class="form-input">
-                    <option value="White Belt">White Belt</option>
-                    <option value="Yellow Belt">Yellow Belt</option>
-                    <option value="Green Belt">Green Belt</option>
-                    <option value="Blue Belt">Blue Belt</option>
-                    <option value="Brown Belt">Brown Belt</option>
+                    <option value="White Belt 10th Kyu">White Belt 10th Kyu</option>
+                    <option value="Yellow Belt 8th Kyu">Yellow Belt 8th Kyu</option>
+                    <option value="Green Belt 6th Kyu">Green Belt 6th Kyu</option>
+                    <option value="Blue Belt 5th Kyu">Blue Belt 5th Kyu</option>
+                    <option value="Brown Belt 3rd Kyu">Brown Belt 3rd Kyu</option>
                 </select>
             </div>
             <div class="form-group">
                 <label>Assign Training Batch</label>
                 <select id="new-stu-batch" class="form-input">
-                    <option value="Batch 1: Morning General (6-8 AM)">Batch 1: Morning General (6-8 AM)</option>
-                    <option value="Batch 2: Junior Cadets (5-6 PM)">Batch 2: Junior Cadets (5-6 PM)</option>
-                    <option value="Batch 3: Evening Advanced (6-8 PM)">Batch 3: Evening Advanced (6-8 PM)</option>
+                    <option value="Batch 1 (Morning 6-8 AM)">Batch 1 (Morning 6-8 AM)</option>
+                    <option value="Batch 2 (Junior 5-6 PM)">Batch 2 (Junior 5-6 PM)</option>
+                    <option value="Batch 3 (Evening 6-8 PM)">Batch 3 (Evening 6-8 PM)</option>
                 </select>
             </div>
             <div class="form-group">
@@ -1701,6 +1892,296 @@
             <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:10px;">
                 <button class="btn-outline-neutral" onclick="closeStudentModal()">Cancel</button>
                 <button class="btn-fill-primary" onclick="submitNewStudent()">Register Student</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ---------------- 1. USER AUTHENTICATION & LOGIN / REGISTER / FORGOT MODAL ---------------- -->
+    <div id="auth-modal" class="modal-overlay">
+        <div class="modal-card" style="max-width: 520px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <div style="width:32px; height:32px; border-radius:50%; background:var(--royal-blue); color:white; display:flex; align-items:center; justify-content:center; font-weight:900;">🥋</div>
+                    <div>
+                        <h3 style="font-size:16px; font-weight:800; color:var(--text-navy);">BROMAA User Authentication</h3>
+                        <p style="font-size:11px; color:var(--text-slate);">Unified Security, RBAC Portals & Family Accounts</p>
+                    </div>
+                </div>
+                <button onclick="closeAuthModal()" style="border:none; background:transparent; font-size:18px; cursor:pointer; color:var(--text-slate);">✕</button>
+            </div>
+
+            <!-- Auth Mode Switcher Tabs -->
+            <div style="display:flex; gap:6px; background:var(--secondary-bg); padding:4px; border-radius:10px; margin-bottom:14px;">
+                <button id="auth-tab-signin-btn" class="role-btn active" onclick="switchAuthTab('signin')">Sign In</button>
+                <button id="auth-tab-register-btn" class="role-btn" onclick="switchAuthTab('register')">Register New</button>
+                <button id="auth-tab-forgot-btn" class="role-btn" onclick="switchAuthTab('forgot')">Forgot PIN</button>
+            </div>
+
+            <!-- 1.1 SIGN IN TAB -->
+            <div id="auth-view-signin">
+                <!-- 1-Click Role Quick Logins -->
+                <div style="background:#EFF6FF; border:1px solid #BFDBFE; border-radius:10px; padding:10px; margin-bottom:12px;">
+                    <div style="font-size:10.5px; font-weight:800; color:var(--royal-blue); margin-bottom:6px; text-transform:uppercase;">⚡ 1-Click Quick Demo Sign-in</div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                        <button class="btn-outline-neutral" style="font-size:11px; padding:6px 8px; justify-content:center;" onclick="quickLogin('admin')">🛡️ Admin (Shihan)</button>
+                        <button class="btn-outline-neutral" style="font-size:11px; padding:6px 8px; justify-content:center;" onclick="quickLogin('coach')">🥋 Coach (Renshi)</button>
+                        <button class="btn-outline-neutral" style="font-size:11px; padding:6px 8px; justify-content:center;" onclick="quickLogin('parent')">👨‍👩‍👧 Parent (2 Kids)</button>
+                        <button class="btn-outline-neutral" style="font-size:11px; padding:6px 8px; justify-content:center;" onclick="quickLogin('student')">🏅 Student (Arun)</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address or Username</label>
+                    <input id="auth-email-input" type="text" class="form-input" placeholder="e.g. arun.kumar@gmail.com or admin@broma.com" value="arun.kumar@gmail.com">
+                </div>
+                <div class="form-group">
+                    <label>Password / Security PIN</label>
+                    <input id="auth-password-input" type="password" class="form-input" placeholder="••••••••" value="broma2026">
+                </div>
+                <div class="form-group">
+                    <label>Select Login Role</label>
+                    <select id="auth-role-select" class="form-input">
+                        <option value="student">Student / Parent Account</option>
+                        <option value="coach">Coach / Instructor (Sensei)</option>
+                        <option value="admin">Administrator (Shihan)</option>
+                    </select>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px;">
+                    <span style="font-size:11.5px; color:var(--royal-blue); cursor:pointer; font-weight:600;" onclick="switchAuthTab('forgot')">Forgot Password?</span>
+                    <button class="btn-fill-primary" onclick="performAuthSignIn()">Sign In to Academy</button>
+                </div>
+            </div>
+
+            <!-- 1.2 REGISTER TAB -->
+            <div id="auth-view-register" style="display: none;">
+                <div class="form-group">
+                    <label>Account Type</label>
+                    <select id="reg-role" class="form-input">
+                        <option value="student">Student / Trainee Profile</option>
+                        <option value="parent">Parent Account (Multi-Child)</option>
+                        <option value="coach">Coach / Black Belt Instructor</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Full Legal Name</label>
+                    <input id="reg-fullname" type="text" class="form-input" placeholder="e.g. Diya Kumar">
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input id="reg-phone" type="text" class="form-input" placeholder="+91 98765 00000">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input id="reg-email" type="email" class="form-input" placeholder="name@domain.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Preferred Password</label>
+                    <input id="reg-password" type="password" class="form-input" placeholder="Create secure password">
+                </div>
+                <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:12px;">
+                    <button class="btn-outline-neutral" onclick="switchAuthTab('signin')">Back to Sign In</button>
+                    <button class="btn-fill-primary" onclick="performAuthRegister()">Create Account</button>
+                </div>
+            </div>
+
+            <!-- 1.3 FORGOT PASSWORD TAB -->
+            <div id="auth-view-forgot" style="display: none;">
+                <p style="font-size:12.5px; color:var(--text-slate); margin-bottom:12px;">Enter your registered email or phone number. We will verify your account and issue an instant reset PIN.</p>
+                <div class="form-group">
+                    <label>Registered Email or Phone</label>
+                    <input id="forgot-id-input" type="text" class="form-input" placeholder="e.g. arun.kumar@gmail.com" value="arun.kumar@gmail.com">
+                </div>
+                <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:12px;">
+                    <button class="btn-outline-neutral" onclick="switchAuthTab('signin')">Back to Sign In</button>
+                    <button class="btn-fill-primary" onclick="performAuthReset()">Request Reset OTP</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ---------------- 2. ADMIN MASTER STUDENT EDIT MODAL (EVERY COLUMN & OPTION) ---------------- -->
+    <div id="admin-student-edit-modal" class="modal-overlay">
+        <div class="modal-card" style="max-width: 760px; max-height: 90vh; overflow-y: auto;">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-light); padding-bottom:10px; margin-bottom:14px;">
+                <div>
+                    <h3 style="font-size:16px; font-weight:800; color:var(--text-navy);">✏️ Admin Master Student Dossier & DB Record Editor</h3>
+                    <p style="font-size:11px; color:var(--text-slate);">Complete control of all SQLite Room table columns for <strong id="admin-edit-title-name">Arun Kumar</strong></p>
+                </div>
+                <button onclick="closeAdminEditModal()" style="border:none; background:transparent; font-size:18px; cursor:pointer; color:var(--text-slate);">✕</button>
+            </div>
+
+            <input type="hidden" id="edit-stu-id">
+
+            <!-- 1. Identification & Credentials -->
+            <div style="font-size:12px; font-weight:800; color:var(--royal-blue); margin-bottom:6px;">1. IDENTIFICATION & CREDENTIALS</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+                <div class="form-group"><label>Student ID (Primary Key)</label><input id="edit-stu-userid" type="text" class="form-input" readonly style="background:#F1F5F9;"></div>
+                <div class="form-group"><label>Full Legal Name</label><input id="edit-stu-fullname" type="text" class="form-input"></div>
+                <div class="form-group"><label>Username</label><input id="edit-stu-username" type="text" class="form-input"></div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+                <div class="form-group"><label>Email Address</label><input id="edit-stu-email" type="email" class="form-input"></div>
+                <div class="form-group"><label>Phone Number</label><input id="edit-stu-phone" type="text" class="form-input"></div>
+                <div class="form-group"><label>Account Status</label>
+                    <select id="edit-stu-status" class="form-input">
+                        <option value="ACTIVE">ACTIVE</option>
+                        <option value="SUSPENDED">SUSPENDED</option>
+                        <option value="DEACTIVATED">DEACTIVATED</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 2. Martial Arts Rank & Batch -->
+            <div style="font-size:12px; font-weight:800; color:var(--royal-blue); margin:10px 0 6px;">2. MARTIAL ARTS RANK, BATCH & DISCIPLINE</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+                <div class="form-group">
+                    <label>Current Belt Rank</label>
+                    <select id="edit-stu-belt" class="form-input">
+                        <option value="White Belt 10th Kyu">White Belt 10th Kyu</option>
+                        <option value="Yellow Belt 8th Kyu">Yellow Belt 8th Kyu</option>
+                        <option value="Orange Belt 7th Kyu">Orange Belt 7th Kyu</option>
+                        <option value="Green Belt 6th Kyu">Green Belt 6th Kyu</option>
+                        <option value="Blue Belt 5th Kyu">Blue Belt 5th Kyu</option>
+                        <option value="Purple Belt 4th Kyu">Purple Belt 4th Kyu</option>
+                        <option value="Brown Belt 3rd Kyu">Brown Belt 3rd Kyu</option>
+                        <option value="Brown Belt 2nd Kyu">Brown Belt 2nd Kyu</option>
+                        <option value="Brown Belt 1st Kyu">Brown Belt 1st Kyu</option>
+                        <option value="Black Belt 1st Dan (Shodan)">Black Belt 1st Dan (Shodan)</option>
+                        <option value="Black Belt 2nd Dan (Nidan)">Black Belt 2nd Dan (Nidan)</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Belt Level</label><input id="edit-stu-beltlevel" type="number" min="1" max="10" class="form-input" value="3"></div>
+                <div class="form-group">
+                    <label>Assigned Batch</label>
+                    <select id="edit-stu-batch" class="form-input">
+                        <option value="Batch 1 (Morning 6-8 AM)">Batch 1: Morning General (6-8 AM)</option>
+                        <option value="Batch 2 (Junior 5-6 PM)">Batch 2: Junior Cadets (5-6 PM)</option>
+                        <option value="Batch 3 (Evening 6-8 PM)">Batch 3: Evening Advanced (6-8 PM)</option>
+                    </select>
+                </div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <div class="form-group">
+                    <label>Assigned Coach / Sensei</label>
+                    <select id="edit-stu-coach" class="form-input">
+                        <option value="Grandmaster Shihan Brucelee Raj">Grandmaster Shihan Brucelee Raj (8th Dan)</option>
+                        <option value="Renshi V. Surya">Renshi V. Surya (5th Dan)</option>
+                        <option value="Sensei Rajesh Kumar">Sensei Rajesh Kumar (3rd Dan)</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Training Programs Enrolled</label><input id="edit-stu-programs" type="text" class="form-input" value="Regular Karate-Do, Physical Conditioning, Weapon Kobudo"></div>
+            </div>
+
+            <!-- 3. Demographics, Health & Guardian -->
+            <div style="font-size:12px; font-weight:800; color:var(--royal-blue); margin:10px 0 6px;">3. BIODATA, HEALTH & PARENT DETAILS</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+                <div class="form-group"><label>Date of Birth</label><input id="edit-stu-dob" type="text" class="form-input" placeholder="YYYY-MM-DD" value="2008-05-14"></div>
+                <div class="form-group"><label>Gender</label>
+                    <select id="edit-stu-gender" class="form-input">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Blood Group</label>
+                    <select id="edit-stu-blood" class="form-input">
+                        <option value="O+">O+</option>
+                        <option value="A+">A+</option>
+                        <option value="B+">B+</option>
+                        <option value="AB+">AB+</option>
+                        <option value="O-">O-</option>
+                        <option value="A-">A-</option>
+                        <option value="B-">B-</option>
+                        <option value="AB-">AB-</option>
+                    </select>
+                </div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <div class="form-group"><label>Father / Guardian Name</label><input id="edit-stu-father" type="text" class="form-input" value="Ch. Ramesh"></div>
+                <div class="form-group"><label>Mother / Guardian Name</label><input id="edit-stu-mother" type="text" class="form-input" value="Ch. Sunita"></div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+                <div class="form-group"><label>Parent Email</label><input id="edit-stu-parent-email" type="email" class="form-input" value="ramesh.kumar@gmail.com"></div>
+                <div class="form-group"><label>Emergency Contact Phone</label><input id="edit-stu-emergency" type="text" class="form-input" value="+91 98765 33333"></div>
+                <div class="form-group"><label>Parent Occupation</label><input id="edit-stu-occupation" type="text" class="form-input" value="Software Engineer"></div>
+            </div>
+            <div class="form-group"><label>Residential Address</label><input id="edit-stu-address" type="text" class="form-input" value="Plot 42, Kakateeya Nagar, Gajuwaka"></div>
+
+            <!-- 4. Academy Fee & Kit Clearance -->
+            <div style="font-size:12px; font-weight:800; color:var(--royal-blue); margin:10px 0 6px;">4. ACADEMY REGISTRATION & FEE CLEARANCE</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <div class="form-group"><label>Admission Fee (₹1,000)</label>
+                    <select id="edit-stu-admission" class="form-input">
+                        <option value="true">✓ PAID (Full Clearance)</option>
+                        <option value="false">⏳ PENDING / DUE</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Karate Gi Uniform (₹1,500)</label>
+                    <select id="edit-stu-uniform" class="form-input">
+                        <option value="true">✓ ISSUED & PAID</option>
+                        <option value="false">⏳ NOT ISSUED</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-light); padding-top:12px; margin-top:14px;">
+                <button class="btn-outline-neutral" style="color:var(--status-error);" onclick="deleteStudentRecord()">🗑️ Delete Trainee</button>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn-outline-neutral" onclick="closeAdminEditModal()">Cancel</button>
+                    <button class="btn-fill-primary" onclick="saveAdminStudentEdit()">💾 Save Changes to Database</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ---------------- 3. STUDENT SELF EDIT PERSONAL DETAILS MODAL ---------------- -->
+    <div id="student-edit-self-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3 style="font-size:16px; font-weight:800; color:var(--text-navy);">✏️ Update My Contact & Personal Details</h3>
+            <p style="font-size:12px; color:var(--text-slate); margin-bottom:12px;">Keep your contact information and emergency phone numbers updated.</p>
+
+            <div class="form-group"><label>My Mobile Phone</label><input id="self-edit-phone" type="text" class="form-input" value="+91 98765 43210"></div>
+            <div class="form-group"><label>Email Address</label><input id="self-edit-email" type="email" class="form-input" value="arun.kumar@gmail.com"></div>
+            <div class="form-group"><label>Residential Address</label><input id="self-edit-address" type="text" class="form-input" value="Plot 42, Kakateeya Nagar, Gajuwaka"></div>
+            <div class="form-group"><label>Emergency Contact Number</label><input id="self-edit-emergency" type="text" class="form-input" value="+91 98765 33333"></div>
+
+            <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:12px;">
+                <button class="btn-outline-neutral" onclick="closeStudentEditSelfModal()">Cancel</button>
+                <button class="btn-fill-primary" onclick="saveStudentSelfEdit()">Save Details</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ---------------- 4. STUDENT REQUEST OFFICIAL CHANGE MODAL ---------------- -->
+    <div id="student-request-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3 style="font-size:16px; font-weight:800; color:var(--text-navy);">🔒 Submit Official Academy Change Request</h3>
+            <p style="font-size:12px; color:var(--text-slate); margin-bottom:12px;">Official requests for Belt tests, Batch transfers, or Profile alterations are reviewed by Head Instructor.</p>
+
+            <div class="form-group">
+                <label>Request Category</label>
+                <select id="req-type" class="form-input">
+                    <option value="Belt Update">Belt Promotion / Dan Examination Request</option>
+                    <option value="Batch Transfer">Training Batch / Time Slot Transfer</option>
+                    <option value="Profile Detail">Official Profile & Name Correction</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Requested Value / Change</label>
+                <input id="req-val" type="text" class="form-input" placeholder="e.g. Transfer to Batch 1 (Morning 6-8 AM)">
+            </div>
+            <div class="form-group">
+                <label>Reason & Justification</label>
+                <textarea id="req-reason" class="form-input" style="height:70px;" placeholder="Describe reasons for coach and Shihan review..."></textarea>
+            </div>
+
+            <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:12px;">
+                <button class="btn-outline-neutral" onclick="closeStudentRequestModal()">Cancel</button>
+                <button class="btn-fill-primary" onclick="submitOfficialStudentRequest()">Submit Request</button>
             </div>
         </div>
     </div>
@@ -1716,21 +2197,437 @@
         const DB = {
             activeRole: 'admin', // 'admin', 'coach', 'student'
             selectedMonth: 'Aug',
+            activeStudentId: 'ST-2026-001',
+            currentUser: {
+                id: 'ADMIN-001',
+                name: 'Grandmaster Shihan Brucelee Raj',
+                role: 'admin',
+                email: 'admin@broma.com'
+            },
             
-            // Trainees list (12 Enrolled)
+            // Family Multi-Child accounts
+            familyAccounts: [
+                {
+                    parentId: 'PARENT-101',
+                    parentName: 'Ch. Ramesh Kumar',
+                    email: 'ramesh.kumar@gmail.com',
+                    phone: '+91 98765 22222',
+                    childrenIds: ['ST-2026-001', 'ST-2026-002']
+                }
+            ],
+
+            // Trainees list with complete UserAccountEntity schema mirroring Kotlin Room DB
             students: [
-                { id: 'ST-2026-001', name: 'Arun Kumar', belt: 'Brown Belt 3rd Kyu', beltColor: '#78350F', batch: 'Batch 3 (Evening 6-8 PM)', phone: '+91 98765 43210', admission: true, uniform: true, monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'] },
-                { id: 'ST-2026-002', name: 'Priya Sharma', belt: 'Blue Belt 5th Kyu', beltColor: '#2563EB', batch: 'Batch 1 (Morning 6-8 AM)', phone: '+91 98765 43211', admission: true, uniform: true, monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'] },
-                { id: 'ST-2026-003', name: 'Rohan Verma', belt: 'Green Belt 6th Kyu', beltColor: '#16A34A', batch: 'Batch 2 (Junior 5-6 PM)', phone: '+91 98765 43212', admission: true, uniform: true, monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'] },
-                { id: 'ST-2026-004', name: 'Ananya Patel', belt: 'Yellow Belt 8th Kyu', beltColor: '#EAB308', batch: 'Batch 1 (Morning 6-8 AM)', phone: '+91 98765 43213', admission: true, uniform: true, monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'] },
-                { id: 'ST-2026-005', name: 'Vikram Singh', belt: 'Orange Belt 7th Kyu', beltColor: '#F97316', batch: 'Batch 3 (Evening 6-8 PM)', phone: '+91 98765 43214', admission: true, uniform: true, monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'] },
-                { id: 'ST-2026-006', name: 'Kavya Nair', belt: 'White Belt 10th Kyu', beltColor: '#94A3B8', batch: 'Batch 1 (Morning 6-8 AM)', phone: '+91 98765 43215', admission: true, uniform: true, monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'] },
-                { id: 'ST-2026-007', name: 'Siddharth Rao', belt: 'Blue Belt 4th Kyu', beltColor: '#2563EB', batch: 'Batch 3 (Evening 6-8 PM)', phone: '+91 98765 43216', admission: true, uniform: true, monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'] },
-                { id: 'ST-2026-008', name: 'Deepika Joshi', belt: 'Green Belt 6th Kyu', beltColor: '#16A34A', batch: 'Batch 2 (Junior 5-6 PM)', phone: '+91 98765 43217', admission: true, uniform: true, monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'] },
-                { id: 'ST-2026-009', name: 'Manoj Kumar', belt: 'Brown Belt 2nd Kyu', beltColor: '#78350F', batch: 'Batch 3 (Evening 6-8 PM)', phone: '+91 98765 43218', admission: true, uniform: true, monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'] },
-                { id: 'ST-2026-010', name: 'Pooja Hegde', belt: 'Yellow Belt 8th Kyu', beltColor: '#EAB308', batch: 'Batch 1 (Morning 6-8 AM)', phone: '+91 98765 43219', admission: true, uniform: true, monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'] },
-                { id: 'ST-2026-011', name: 'Aditya Roy', belt: 'Orange Belt 7th Kyu', beltColor: '#F97316', batch: 'Batch 2 (Junior 5-6 PM)', phone: '+91 98765 43220', admission: true, uniform: true, monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'] },
-                { id: 'ST-2026-012', name: 'Neha Gupta', belt: 'White Belt 10th Kyu', beltColor: '#94A3B8', batch: 'Batch 1 (Morning 6-8 AM)', phone: '+91 98765 43221', admission: true, uniform: true, monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'] }
+                {
+                    id: 'ST-2026-001',
+                    name: 'Arun Kumar',
+                    username: 'arun.karate',
+                    email: 'arun.kumar@gmail.com',
+                    dob: '2008-05-14',
+                    age: 18,
+                    gender: 'Male',
+                    bloodGroup: 'O+',
+                    phone: '+91 98765 43210',
+                    address: 'Plot 42, Kakateeya Nagar, Gajuwaka',
+                    emergencyContact: '+91 98765 33333 (Father)',
+                    joiningDate: '01 January 2026',
+                    belt: 'Brown Belt 3rd Kyu',
+                    beltLevel: 3,
+                    beltColor: '#78350F',
+                    beltHistory: 'White (Jan) → Yellow (Mar) → Green (May) → Brown (Jul)',
+                    batch: 'Batch 3 (Evening 6-8 PM)',
+                    batchId: 'BATCH-003',
+                    coach: 'Grandmaster Shihan Brucelee Raj',
+                    trainingPrograms: 'Regular Karate-Do, Physical Conditioning, Weapon Kobudo',
+                    trainingDays: 'Monday to Saturday (6 Days/Wk)',
+                    fatherName: 'Ch. Ramesh Kumar',
+                    motherName: 'Ch. Sunita Kumar',
+                    parentEmail: 'ramesh.kumar@gmail.com',
+                    parentPhone: '+91 98765 22222',
+                    occupation: 'Software Engineering Lead',
+                    status: 'ACTIVE',
+                    admission: true,
+                    uniform: true,
+                    monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                    medicalNotes: 'None reported. 100% fit for combat training & full-contact sparring.',
+                    requests: [
+                        { id: 'REQ-2026-081', type: 'Belt Update', from: 'Brown Belt 3rd Kyu', to: 'Black Belt 1st Dan (Shodan)', reason: 'Completed 12 months minimum training and all Kata requirements.', status: 'PENDING' }
+                    ]
+                },
+                {
+                    id: 'ST-2026-002',
+                    name: 'Diya Kumar',
+                    username: 'diya.kumar',
+                    email: 'diya.kumar@gmail.com',
+                    dob: '2012-09-22',
+                    age: 14,
+                    gender: 'Female',
+                    bloodGroup: 'B+',
+                    phone: '+91 98765 43211',
+                    address: 'Plot 42, Kakateeya Nagar, Gajuwaka',
+                    emergencyContact: '+91 98765 22222 (Father)',
+                    joiningDate: '15 February 2026',
+                    belt: 'Yellow Belt 8th Kyu',
+                    beltLevel: 2,
+                    beltColor: '#EAB308',
+                    beltHistory: 'White (Feb) → Yellow (Jun)',
+                    batch: 'Batch 2 (Junior 5-6 PM)',
+                    batchId: 'BATCH-002',
+                    coach: 'Sensei Rajesh Kumar',
+                    trainingPrograms: 'Regular Karate-Do, Practical Self Defence',
+                    trainingDays: 'Monday to Saturday (5:00 – 6:00 PM)',
+                    fatherName: 'Ch. Ramesh Kumar',
+                    motherName: 'Ch. Sunita Kumar',
+                    parentEmail: 'ramesh.kumar@gmail.com',
+                    parentPhone: '+91 98765 22222',
+                    occupation: 'Software Engineering Lead',
+                    status: 'ACTIVE',
+                    admission: true,
+                    uniform: true,
+                    monthsPaid: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                    medicalNotes: 'Fit. Cleared for junior sparring.',
+                    requests: []
+                },
+                {
+                    id: 'ST-2026-003',
+                    name: 'Rohan Verma',
+                    username: 'rohan.verma',
+                    email: 'rohan.verma@gmail.com',
+                    dob: '2010-03-11',
+                    age: 16,
+                    gender: 'Male',
+                    bloodGroup: 'A+',
+                    phone: '+91 98765 43212',
+                    address: 'Sector 5, MVP Colony, Vizag',
+                    emergencyContact: '+91 98765 44444',
+                    joiningDate: '10 January 2026',
+                    belt: 'Green Belt 6th Kyu',
+                    beltLevel: 4,
+                    beltColor: '#16A34A',
+                    beltHistory: 'White (Jan) → Yellow (Apr) → Green (Jul)',
+                    batch: 'Batch 2 (Junior 5-6 PM)',
+                    batchId: 'BATCH-002',
+                    coach: 'Sensei Rajesh Kumar',
+                    trainingPrograms: 'Regular Karate-Do, Physical Conditioning',
+                    trainingDays: 'Monday to Saturday',
+                    fatherName: 'K. S. Verma',
+                    motherName: 'K. Anita Verma',
+                    parentEmail: 'verma.ks@gmail.com',
+                    parentPhone: '+91 98765 44444',
+                    occupation: 'Bank Officer',
+                    status: 'ACTIVE',
+                    admission: true,
+                    uniform: true,
+                    monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                    medicalNotes: 'No restrictions.',
+                    requests: []
+                },
+                {
+                    id: 'ST-2026-004',
+                    name: 'Ananya Patel',
+                    username: 'ananya.p',
+                    email: 'ananya.patel@gmail.com',
+                    dob: '2009-11-05',
+                    age: 17,
+                    gender: 'Female',
+                    bloodGroup: 'AB+',
+                    phone: '+91 98765 43213',
+                    address: 'Road 12, Seethammadhara',
+                    emergencyContact: '+91 98765 55555',
+                    joiningDate: '05 January 2026',
+                    belt: 'Yellow Belt 8th Kyu',
+                    beltLevel: 2,
+                    beltColor: '#EAB308',
+                    beltHistory: 'White (Jan) → Yellow (May)',
+                    batch: 'Batch 1 (Morning 6-8 AM)',
+                    batchId: 'BATCH-001',
+                    coach: 'Renshi V. Surya',
+                    trainingPrograms: 'Regular Karate-Do, Weapon Kobudo',
+                    trainingDays: 'Monday to Saturday',
+                    fatherName: 'Hasmukh Patel',
+                    motherName: 'Meena Patel',
+                    parentEmail: 'patel.h@gmail.com',
+                    parentPhone: '+91 98765 55555',
+                    occupation: 'Business',
+                    status: 'ACTIVE',
+                    admission: true,
+                    uniform: true,
+                    monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                    medicalNotes: 'Healthy and cleared for training.',
+                    requests: []
+                },
+                {
+                    id: 'ST-2026-005',
+                    name: 'Vikram Singh',
+                    username: 'vikram.singh',
+                    email: 'vikram.singh@gmail.com',
+                    dob: '2007-08-19',
+                    age: 19,
+                    gender: 'Male',
+                    bloodGroup: 'O+',
+                    phone: '+91 98765 43214',
+                    address: 'Naval Quarters, Marripalem',
+                    emergencyContact: '+91 98765 66666',
+                    joiningDate: '12 January 2026',
+                    belt: 'Orange Belt 7th Kyu',
+                    beltLevel: 3,
+                    beltColor: '#F97316',
+                    beltHistory: 'White (Jan) → Orange (Jun)',
+                    batch: 'Batch 3 (Evening 6-8 PM)',
+                    batchId: 'BATCH-003',
+                    coach: 'Grandmaster Shihan Brucelee Raj',
+                    trainingPrograms: 'Regular Karate-Do, Physical Conditioning, Weapon Kobudo',
+                    trainingDays: 'Monday to Saturday',
+                    fatherName: 'Col. R. S. Singh',
+                    motherName: 'Geeta Singh',
+                    parentEmail: 'singh.rs@army.mil',
+                    parentPhone: '+91 98765 66666',
+                    occupation: 'Defence Officer',
+                    status: 'ACTIVE',
+                    admission: true,
+                    uniform: true,
+                    monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                    medicalNotes: 'Excellent athletic conditioning.',
+                    requests: []
+                },
+                {
+                    id: 'ST-2026-006',
+                    name: 'Kavya Nair',
+                    username: 'kavya.nair',
+                    email: 'kavya.nair@gmail.com',
+                    dob: '2011-04-30',
+                    age: 15,
+                    gender: 'Female',
+                    bloodGroup: 'A-',
+                    phone: '+91 98765 43215',
+                    address: 'Dwaraka Nagar 3rd Lane',
+                    emergencyContact: '+91 98765 77777',
+                    joiningDate: '20 January 2026',
+                    belt: 'White Belt 10th Kyu',
+                    beltLevel: 1,
+                    beltColor: '#94A3B8',
+                    beltHistory: 'White (Jan)',
+                    batch: 'Batch 1 (Morning 6-8 AM)',
+                    batchId: 'BATCH-001',
+                    coach: 'Renshi V. Surya',
+                    trainingPrograms: 'Regular Karate-Do',
+                    trainingDays: 'Monday to Saturday',
+                    fatherName: 'M. K. Nair',
+                    motherName: 'Bindu Nair',
+                    parentEmail: 'nair.mk@gmail.com',
+                    parentPhone: '+91 98765 77777',
+                    occupation: 'Professor',
+                    status: 'ACTIVE',
+                    admission: true,
+                    uniform: true,
+                    monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                    medicalNotes: 'Cleared for all basic activities.',
+                    requests: []
+                },
+                {
+                    id: 'ST-2026-007',
+                    name: 'Siddharth Rao',
+                    username: 'sid.rao',
+                    email: 'sid.rao@gmail.com',
+                    dob: '2006-12-04',
+                    age: 19,
+                    gender: 'Male',
+                    bloodGroup: 'B+',
+                    phone: '+91 98765 43216',
+                    address: 'Madhurawada IT SEZ Road',
+                    emergencyContact: '+91 98765 88888',
+                    joiningDate: '01 January 2026',
+                    belt: 'Blue Belt 4th Kyu',
+                    beltLevel: 5,
+                    beltColor: '#2563EB',
+                    beltHistory: 'White → Yellow → Green → Blue',
+                    batch: 'Batch 3 (Evening 6-8 PM)',
+                    batchId: 'BATCH-003',
+                    coach: 'Grandmaster Shihan Brucelee Raj',
+                    trainingPrograms: 'Regular Karate-Do, Conditioning, Weapon Kobudo',
+                    trainingDays: 'Monday to Saturday',
+                    fatherName: 'T. V. Rao',
+                    motherName: 'T. Lalitha',
+                    parentEmail: 'rao.tv@gmail.com',
+                    parentPhone: '+91 98765 88888',
+                    occupation: 'Architect',
+                    status: 'ACTIVE',
+                    admission: true,
+                    uniform: true,
+                    monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                    medicalNotes: 'Combat cleared.',
+                    requests: []
+                },
+                {
+                    id: 'ST-2026-008',
+                    name: 'Deepika Joshi',
+                    username: 'deepika.j',
+                    email: 'deepika.j@gmail.com',
+                    dob: '2010-07-15',
+                    age: 16,
+                    gender: 'Female',
+                    bloodGroup: 'O+',
+                    phone: '+91 98765 43217',
+                    address: 'Lawsons Bay Colony',
+                    emergencyContact: '+91 98765 99999',
+                    joiningDate: '02 February 2026',
+                    belt: 'Green Belt 6th Kyu',
+                    beltLevel: 4,
+                    beltColor: '#16A34A',
+                    beltHistory: 'White → Yellow → Green',
+                    batch: 'Batch 2 (Junior 5-6 PM)',
+                    batchId: 'BATCH-002',
+                    coach: 'Sensei Rajesh Kumar',
+                    trainingPrograms: 'Regular Karate-Do, Self Defence',
+                    trainingDays: 'Monday to Saturday',
+                    fatherName: 'Sunil Joshi',
+                    motherName: 'Padma Joshi',
+                    parentEmail: 'joshi.sunil@gmail.com',
+                    parentPhone: '+91 98765 99999',
+                    occupation: 'Chartered Accountant',
+                    status: 'ACTIVE',
+                    admission: true,
+                    uniform: true,
+                    monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                    medicalNotes: 'Fit.',
+                    requests: []
+                },
+                {
+                    id: 'ST-2026-009',
+                    name: 'Manoj Kumar',
+                    username: 'manoj.k',
+                    email: 'manoj.k@gmail.com',
+                    dob: '2008-01-20',
+                    age: 18,
+                    gender: 'Male',
+                    bloodGroup: 'AB+',
+                    phone: '+91 98765 43218',
+                    address: 'Kurmannapalem Steel City',
+                    emergencyContact: '+91 98765 11111',
+                    joiningDate: '01 January 2026',
+                    belt: 'Brown Belt 2nd Kyu',
+                    beltLevel: 6,
+                    beltColor: '#78350F',
+                    beltHistory: 'White → Yellow → Green → Blue → Brown',
+                    batch: 'Batch 3 (Evening 6-8 PM)',
+                    batchId: 'BATCH-003',
+                    coach: 'Grandmaster Shihan Brucelee Raj',
+                    trainingPrograms: 'Regular Karate-Do, Weapon Kobudo, Self Defence',
+                    trainingDays: 'Monday to Saturday',
+                    fatherName: 'V. Manoj Sr.',
+                    motherName: 'V. Lakshmi',
+                    parentEmail: 'manoj.sr@gmail.com',
+                    parentPhone: '+91 98765 11111',
+                    occupation: 'Steel Plant Executive',
+                    status: 'ACTIVE',
+                    admission: true,
+                    uniform: true,
+                    monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                    medicalNotes: 'Full combat clearance.',
+                    requests: []
+                },
+                {
+                    id: 'ST-2026-010',
+                    name: 'Pooja Hegde',
+                    username: 'pooja.h',
+                    email: 'pooja.h@gmail.com',
+                    dob: '2011-09-09',
+                    age: 15,
+                    gender: 'Female',
+                    bloodGroup: 'B+',
+                    phone: '+91 98765 43219',
+                    address: 'Siripuram Towers',
+                    emergencyContact: '+91 98765 22221',
+                    joiningDate: '15 January 2026',
+                    belt: 'Yellow Belt 8th Kyu',
+                    beltLevel: 2,
+                    beltColor: '#EAB308',
+                    beltHistory: 'White → Yellow',
+                    batch: 'Batch 1 (Morning 6-8 AM)',
+                    batchId: 'BATCH-001',
+                    coach: 'Renshi V. Surya',
+                    trainingPrograms: 'Regular Karate-Do',
+                    trainingDays: 'Monday to Saturday',
+                    fatherName: 'N. Hegde',
+                    motherName: 'S. Hegde',
+                    parentEmail: 'hegde.n@gmail.com',
+                    parentPhone: '+91 98765 22221',
+                    occupation: 'Doctor',
+                    status: 'ACTIVE',
+                    admission: true,
+                    uniform: true,
+                    monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                    medicalNotes: 'Fit.',
+                    requests: []
+                },
+                {
+                    id: 'ST-2026-011',
+                    name: 'Aditya Roy',
+                    username: 'aditya.roy',
+                    email: 'aditya.roy@gmail.com',
+                    dob: '2012-06-18',
+                    age: 14,
+                    gender: 'Male',
+                    bloodGroup: 'O+',
+                    phone: '+91 98765 43220',
+                    address: 'Pedda Waltair Beach Rd',
+                    emergencyContact: '+91 98765 33334',
+                    joiningDate: '01 February 2026',
+                    belt: 'Orange Belt 7th Kyu',
+                    beltLevel: 3,
+                    beltColor: '#F97316',
+                    beltHistory: 'White → Orange',
+                    batch: 'Batch 2 (Junior 5-6 PM)',
+                    batchId: 'BATCH-002',
+                    coach: 'Sensei Rajesh Kumar',
+                    trainingPrograms: 'Regular Karate-Do, Physical Conditioning',
+                    trainingDays: 'Monday to Saturday',
+                    fatherName: 'Subir Roy',
+                    motherName: 'Mousumi Roy',
+                    parentEmail: 'roy.subir@gmail.com',
+                    parentPhone: '+91 98765 33334',
+                    occupation: 'Naval Architect',
+                    status: 'ACTIVE',
+                    admission: true,
+                    uniform: true,
+                    monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                    medicalNotes: 'Fit.',
+                    requests: []
+                },
+                {
+                    id: 'ST-2026-012',
+                    name: 'Neha Gupta',
+                    username: 'neha.gupta',
+                    email: 'neha.gupta@gmail.com',
+                    dob: '2011-02-14',
+                    age: 15,
+                    gender: 'Female',
+                    bloodGroup: 'A+',
+                    phone: '+91 98765 43221',
+                    address: 'Asilmetta Junction',
+                    emergencyContact: '+91 98765 44445',
+                    joiningDate: '10 February 2026',
+                    belt: 'White Belt 10th Kyu',
+                    beltLevel: 1,
+                    beltColor: '#94A3B8',
+                    beltHistory: 'White (Feb)',
+                    batch: 'Batch 1 (Morning 6-8 AM)',
+                    batchId: 'BATCH-001',
+                    coach: 'Renshi V. Surya',
+                    trainingPrograms: 'Regular Karate-Do',
+                    trainingDays: 'Monday to Saturday',
+                    fatherName: 'Rajeev Gupta',
+                    motherName: 'Aarti Gupta',
+                    parentEmail: 'gupta.rajeev@gmail.com',
+                    parentPhone: '+91 98765 44445',
+                    occupation: 'Merchant Navy Captain',
+                    status: 'ACTIVE',
+                    admission: true,
+                    uniform: true,
+                    monthsPaid: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                    medicalNotes: 'Fit.',
+                    requests: []
+                }
             ],
 
             // Verification Transactions Queue
@@ -1741,250 +2638,363 @@
             ]
         };
 
-        // ---------------- PORTAL SWITCHING & NAVIGATION ----------------
-        function setRole(role, btnElem) {
-            DB.activeRole = role;
-            document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
-            if(btnElem) btnElem.classList.add('active');
+        // ---------------- USER AUTHENTICATION & LOGIN FLOWS ----------------
+        function openAuthModal() {
+            document.getElementById('auth-modal').style.display = 'flex';
+        }
+        function closeAuthModal() {
+            document.getElementById('auth-modal').style.display = 'none';
+        }
+        function switchAuthTab(tab) {
+            document.getElementById('auth-tab-signin-btn').classList.toggle('active', tab === 'signin');
+            document.getElementById('auth-tab-register-btn').classList.toggle('active', tab === 'register');
+            document.getElementById('auth-tab-forgot-btn').classList.toggle('active', tab === 'forgot');
 
-            // Toggle Sidebar Menu sections
-            document.getElementById('menu-admin').style.display = (role === 'admin') ? 'block' : 'none';
-            document.getElementById('menu-coach').style.display = (role === 'coach') ? 'block' : 'none';
-            document.getElementById('menu-student').style.display = (role === 'student') ? 'block' : 'none';
+            document.getElementById('auth-view-signin').style.display = (tab === 'signin') ? 'block' : 'none';
+            document.getElementById('auth-view-register').style.display = (tab === 'register') ? 'block' : 'none';
+            document.getElementById('auth-view-forgot').style.display = (tab === 'forgot') ? 'block' : 'none';
+        }
 
-            // Update Header Information
+        function quickLogin(roleType) {
+            if (roleType === 'admin') {
+                document.getElementById('auth-email-input').value = 'admin@broma.com';
+                document.getElementById('auth-role-select').value = 'admin';
+            } else if (roleType === 'coach') {
+                document.getElementById('auth-email-input').value = 'surya.sensei@broma.com';
+                document.getElementById('auth-role-select').value = 'coach';
+            } else if (roleType === 'parent') {
+                document.getElementById('auth-email-input').value = 'ramesh.kumar@gmail.com';
+                document.getElementById('auth-role-select').value = 'student';
+            } else if (roleType === 'student') {
+                document.getElementById('auth-email-input').value = 'arun.kumar@gmail.com';
+                document.getElementById('auth-role-select').value = 'student';
+            }
+            performAuthSignIn();
+        }
+
+        function performAuthSignIn() {
+            const role = document.getElementById('auth-role-select').value;
+            const email = document.getElementById('auth-email-input').value.trim();
+
+            closeAuthModal();
+
             if (role === 'admin') {
-                document.getElementById('sidebar-header-title').innerText = 'ADMIN CONTROL';
-                document.getElementById('sidebar-user-name').innerText = 'Shihan Brucelee Raj';
-                document.getElementById('top-user-name').innerText = 'Grandmaster Shihan Brucelee Raj';
-                document.getElementById('top-user-role').innerText = 'Head Administrator & 8th Dan';
-                document.getElementById('user-avatar-letter').innerText = 'A';
-                document.getElementById('portal-badge-text').innerText = 'ADMIN PORTAL';
-                showTab('admin-dashboard');
+                setRole('admin', document.querySelectorAll('.role-btn')[0]);
+                triggerToast('✓ Authenticated as Administrator (Grandmaster Shihan Brucelee Raj)');
             } else if (role === 'coach') {
-                document.getElementById('sidebar-header-title').innerText = 'SENSEI PORTAL';
-                document.getElementById('sidebar-user-name').innerText = 'Renshi V. Surya';
-                document.getElementById('top-user-name').innerText = 'Renshi V. Surya';
-                document.getElementById('top-user-role').innerText = 'Chief Technical Director (5th Dan)';
-                document.getElementById('user-avatar-letter').innerText = 'S';
-                document.getElementById('portal-badge-text').innerText = 'COACH PORTAL';
-                showTab('coach-dashboard');
-            } else if (role === 'student') {
-                document.getElementById('sidebar-header-title').innerText = 'STUDENT ACADEMY';
-                document.getElementById('sidebar-user-name').innerText = 'Arun Kumar';
-                document.getElementById('top-user-name').innerText = 'Arun Kumar (ST-2026-001)';
-                document.getElementById('top-user-role').innerText = 'Brown Belt 3rd Kyu';
-                document.getElementById('user-avatar-letter').innerText = 'A';
-                document.getElementById('portal-badge-text').innerText = 'STUDENT PORTAL';
-                showTab('student-dashboard');
-            }
-
-            renderAllViews();
-        }
-
-        function showTab(tabId, navElem) {
-            // Hide all tab views
-            document.querySelectorAll('.tab-view-container').forEach(t => t.classList.remove('active'));
-            const target = document.getElementById(tabId);
-            if (target) target.classList.add('active');
-
-            // Set active nav link
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            if (navElem) {
-                navElem.classList.add('active');
+                setRole('coach', document.querySelectorAll('.role-btn')[1]);
+                triggerToast('✓ Authenticated as Sensei / Coach (Renshi V. Surya)');
             } else {
-                const autoNav = document.querySelector(`a[onclick*="'${tabId}'"]`);
-                if (autoNav) autoNav.classList.add('active');
+                setRole('student', document.querySelectorAll('.role-btn')[2]);
+                if (email.includes('diya')) {
+                    switchActiveStudentChild('ST-2026-002');
+                } else {
+                    switchActiveStudentChild('ST-2026-001');
+                }
+                triggerToast(`✓ Authenticated Student / Family Portal (${email})`);
             }
-
-            // Update top bar text
-            const cleanTitle = tabId.replace(/^(admin|coach|student)-/, '').replace(/-/g, ' ').toUpperCase();
-            document.getElementById('page-header-text').innerText = cleanTitle;
-
-            // Close mobile sidebar if open
-            document.getElementById('app-sidebar').classList.remove('open');
         }
 
-        function toggleSidebar() {
-            document.getElementById('app-sidebar').classList.toggle('open');
-        }
+        function performAuthRegister() {
+            const name = document.getElementById('reg-fullname').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const phone = document.getElementById('reg-phone').value.trim();
 
-        // ---------------- MONTH CHANGER ----------------
-        function changeMonth(monthShort, pillElem) {
-            DB.selectedMonth = monthShort;
-            document.querySelectorAll('.month-tab-pill').forEach(p => p.classList.remove('active'));
-            if (pillElem) pillElem.classList.add('active');
-
-            const monthNames = { 'Jan': 'January', 'Feb': 'February', 'Mar': 'March', 'Apr': 'April', 'May': 'May', 'Jun': 'June', 'Jul': 'July', 'Aug': 'August', 'Sep': 'September', 'Oct': 'October', 'Nov': 'November', 'Dec': 'December' };
-            document.getElementById('active-month-text').innerText = `Selected: ${monthNames[monthShort]} 2026`;
-            
-            renderAdminFeeLedger();
-        }
-
-        // ---------------- LIVE RENDERING ENGINE ----------------
-        function renderAllViews() {
-            renderAdminFeeLedger();
-            renderAdminStudentList();
-            renderPaymentVerificationQueue();
-            renderStudentPaymentHistory();
-            updateDashboardKPIs();
-        }
-
-        function renderAdminFeeLedger() {
-            const tbody = document.getElementById('admin-fee-tbody');
-            if (!tbody) return;
-            tbody.innerHTML = '';
-
-            let paidCount = 0;
-            let dueCount = 0;
-
-            DB.students.forEach(st => {
-                const isPaid = st.monthsPaid.includes(DB.selectedMonth);
-                if (isPaid) paidCount++; else dueCount++;
-
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><strong>${st.name}</strong><br><span style="font-size:11px; color:var(--text-slate)">${st.id}</span></td>
-                    <td><span class="belt-chip"><span class="belt-dot-icon" style="background:${st.beltColor}"></span> ${st.belt}</span></td>
-                    <td><span class="status-chip success">✓ PAID</span></td>
-                    <td><span class="status-chip success">✓ PAID</span></td>
-                    <td>${isPaid ? '<span class="status-chip success">✓ PAID (₹2,000)</span>' : '<span class="status-chip warning">⏳ DUE (₹2,000)</span>'}</td>
-                    <td>${isPaid ? `<button class="btn-outline-neutral" onclick="triggerToast('Receipt Generated for ${st.name}')">View Receipt</button>` : `<button class="btn-fill-primary" onclick="markPaidDirect('${st.id}')">Mark Paid</button>`}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-
-            // Update Monthly KPI
-            const collected = paidCount * 2000;
-            const due = dueCount * 2000;
-            document.getElementById('admin-paid-lbl').innerText = `${DB.selectedMonth.toUpperCase()} 2026 COLLECTED`;
-            document.getElementById('admin-paid-val').innerText = `₹${collected.toLocaleString('en-IN')}`;
-            document.getElementById('admin-paid-sub').innerText = `${paidCount} Paid`;
-
-            document.getElementById('admin-due-lbl').innerText = `${DB.selectedMonth.toUpperCase()} 2026 PENDING`;
-            document.getElementById('admin-due-val').innerText = `₹${due.toLocaleString('en-IN')}`;
-            document.getElementById('admin-due-sub').innerText = `${dueCount} Due`;
-        }
-
-        function renderAdminStudentList() {
-            const tbody = document.getElementById('admin-student-list-tbody');
-            if (!tbody) return;
-            tbody.innerHTML = '';
-
-            DB.students.forEach(st => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><strong>${st.id}</strong></td>
-                    <td><strong>${st.name}</strong></td>
-                    <td><span class="belt-chip"><span class="belt-dot-icon" style="background:${st.beltColor}"></span> ${st.belt}</span></td>
-                    <td>${st.batch}</td>
-                    <td>${st.phone}</td>
-                    <td><span class="status-chip success">Active</span></td>
-                    <td><button class="btn-outline-neutral" onclick="triggerToast('Editing ${st.name}')">Edit</button></td>
-                `;
-                tbody.appendChild(tr);
-            });
-            document.getElementById('dash-trainees-count').innerText = DB.students.length;
-        }
-
-        function renderPaymentVerificationQueue() {
-            const tbody = document.getElementById('payment-verification-tbody');
-            if (!tbody) return;
-            tbody.innerHTML = '';
-
-            const pending = DB.payments.filter(p => p.status === 'PENDING');
-            document.getElementById('admin-badge-pending').innerText = pending.length;
-            document.getElementById('btn-count-pay').innerText = pending.length;
-            document.getElementById('dash-pending-val').innerText = pending.length;
-
-            if (pending.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:20px; color:var(--text-slate);">No pending payment verifications. All transactions clear!</td></tr>`;
+            if (!name || !email) {
+                alert('Please enter Name and Email Address');
                 return;
             }
 
-            pending.forEach(p => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><strong>${p.studentName}</strong><br><span style="font-size:11px; color:var(--text-slate)">${p.studentId}</span></td>
-                    <td>${p.category}</td>
-                    <td><strong style="color:var(--royal-blue)">₹${p.amount.toLocaleString('en-IN')}</strong></td>
-                    <td><code style="font-family:'JetBrains Mono', monospace; font-size:12px; background:var(--secondary-bg); padding:2px 6px; border-radius:4px;">${p.utr}</code></td>
-                    <td>${p.date}</td>
-                    <td>
-                        <button class="btn-fill-primary" onclick="approvePayment('${p.id}')">✓ Approve & Clear Fee</button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
+            const newId = 'ST-2026-0' + (DB.students.length + 1).toString().padStart(2, '0');
+            DB.students.push({
+                id: newId,
+                name: name,
+                username: name.toLowerCase().replace(/\s+/g, '.'),
+                email: email,
+                dob: '2010-01-01',
+                age: 16,
+                gender: 'Other',
+                bloodGroup: 'O+',
+                phone: phone || '+91 98765 00000',
+                address: 'Academy Central Dojang Zone',
+                emergencyContact: phone || '+91 98765 00000',
+                joiningDate: '25 August 2026',
+                belt: 'White Belt 10th Kyu',
+                beltLevel: 1,
+                beltColor: '#94A3B8',
+                beltHistory: 'White (Aug)',
+                batch: 'Batch 1 (Morning 6-8 AM)',
+                batchId: 'BATCH-001',
+                coach: 'Renshi V. Surya',
+                trainingPrograms: 'Regular Karate-Do',
+                trainingDays: 'Monday to Saturday',
+                fatherName: 'Guardian',
+                motherName: 'Guardian',
+                parentEmail: email,
+                parentPhone: phone,
+                occupation: 'Parent',
+                status: 'ACTIVE',
+                admission: true,
+                uniform: true,
+                monthsPaid: ['Aug'],
+                medicalNotes: 'New enrollee. Cleared.',
+                requests: []
             });
+
+            closeAuthModal();
+            DB.activeStudentId = newId;
+            setRole('student', document.querySelectorAll('.role-btn')[2]);
+            triggerToast(`✓ New Profile Registered & Logged in: ${name} (${newId})`);
         }
 
-        function renderStudentPaymentHistory() {
-            const tbody = document.getElementById('student-payment-history-tbody');
-            if (!tbody) return;
-            tbody.innerHTML = '';
-
-            const studentPays = DB.payments.filter(p => p.studentId === 'ST-2026-001');
-
-            studentPays.forEach(p => {
-                const tr = document.createElement('tr');
-                const isPaid = p.status === 'PAID';
-                tr.innerHTML = `
-                    <td>${p.date}</td>
-                    <td><strong>${p.category}</strong></td>
-                    <td>₹${p.amount.toLocaleString('en-IN')}</td>
-                    <td><code style="font-family:'JetBrains Mono', monospace; font-size:12px;">${p.utr}</code></td>
-                    <td>${isPaid ? '<span class="status-chip success">✓ PAID</span>' : '<span class="status-chip warning">⏳ PENDING VERIFICATION</span>'}</td>
-                    <td>${isPaid ? `<button class="btn-outline-neutral" onclick="triggerToast('PDF Receipt ${p.id} Generated')">📥 Download Receipt</button>` : `<span style="font-size:11px; color:var(--text-slate)">Under Review</span>`}</td>
-                `;
-                tbody.appendChild(tr);
-            });
+        function performAuthReset() {
+            const email = document.getElementById('forgot-id-input').value.trim();
+            if (!email) {
+                alert('Please enter your email address');
+                return;
+            }
+            closeAuthModal();
+            triggerToast(`✓ Temporary Reset PIN sent to ${email}. Default access active.`);
         }
 
-        function updateDashboardKPIs() {
-            const paidCount = DB.students.filter(s => s.monthsPaid.includes('Aug')).length;
-            const rev = paidCount * 2000;
-            document.getElementById('dash-revenue-val').innerText = `₹${rev.toLocaleString('en-IN')}`;
-            document.getElementById('dash-rev-sub').innerText = `${((paidCount/DB.students.length)*100).toFixed(1)}% Collected`;
+        // ---------------- ADMIN MASTER STUDENT EDIT MODAL ----------------
+        function openAdminEditModal(studentId) {
+            const stu = DB.students.find(s => s.id === studentId);
+            if (!stu) return;
+
+            document.getElementById('edit-stu-id').value = stu.id;
+            document.getElementById('admin-edit-title-name').innerText = `${stu.name} (${stu.id})`;
+            document.getElementById('edit-stu-userid').value = stu.id;
+            document.getElementById('edit-stu-fullname').value = stu.name;
+            document.getElementById('edit-stu-username').value = stu.username || stu.name.toLowerCase().replace(/\s+/g, '.');
+            document.getElementById('edit-stu-email').value = stu.email;
+            document.getElementById('edit-stu-phone').value = stu.phone;
+            document.getElementById('edit-stu-status').value = stu.status || 'ACTIVE';
+
+            document.getElementById('edit-stu-belt').value = stu.belt;
+            document.getElementById('edit-stu-beltlevel').value = stu.beltLevel || 1;
+            document.getElementById('edit-stu-batch').value = stu.batch;
+            document.getElementById('edit-stu-coach').value = stu.coach || 'Grandmaster Shihan Brucelee Raj';
+            document.getElementById('edit-stu-programs').value = stu.trainingPrograms || 'Regular Karate-Do';
+
+            document.getElementById('edit-stu-dob').value = stu.dob || '2008-01-01';
+            document.getElementById('edit-stu-gender').value = stu.gender || 'Male';
+            document.getElementById('edit-stu-blood').value = stu.bloodGroup || 'O+';
+            document.getElementById('edit-stu-father').value = stu.fatherName || '';
+            document.getElementById('edit-stu-mother').value = stu.motherName || '';
+            document.getElementById('edit-stu-parent-email').value = stu.parentEmail || '';
+            document.getElementById('edit-stu-emergency').value = stu.emergencyContact || '';
+            document.getElementById('edit-stu-occupation').value = stu.occupation || '';
+            document.getElementById('edit-stu-address').value = stu.address || '';
+
+            document.getElementById('edit-stu-admission').value = stu.admission ? 'true' : 'false';
+            document.getElementById('edit-stu-uniform').value = stu.uniform ? 'true' : 'false';
+
+            document.getElementById('admin-student-edit-modal').style.display = 'flex';
         }
 
-        // ---------------- CORE ACTIONS & INTERCONNECTED LOGIC ----------------
-        function approvePayment(payId) {
-            const pay = DB.payments.find(p => p.id === payId);
-            if (!pay) return;
+        function closeAdminEditModal() {
+            document.getElementById('admin-student-edit-modal').style.display = 'none';
+        }
 
-            pay.status = 'PAID';
-            
-            // Mark month paid in student record
-            const student = DB.students.find(s => s.id === pay.studentId);
-            if (student && pay.month && !student.monthsPaid.includes(pay.month)) {
-                student.monthsPaid.push(pay.month);
+        function saveAdminStudentEdit() {
+            const sid = document.getElementById('edit-stu-id').value;
+            const stu = DB.students.find(s => s.id === sid);
+            if (!stu) return;
+
+            stu.name = document.getElementById('edit-stu-fullname').value.trim();
+            stu.username = document.getElementById('edit-stu-username').value.trim();
+            stu.email = document.getElementById('edit-stu-email').value.trim();
+            stu.phone = document.getElementById('edit-stu-phone').value.trim();
+            stu.status = document.getElementById('edit-stu-status').value;
+
+            stu.belt = document.getElementById('edit-stu-belt').value;
+            stu.beltLevel = parseInt(document.getElementById('edit-stu-beltlevel').value) || 1;
+            stu.beltColor = stu.belt.includes('White') ? '#94A3B8' : (stu.belt.includes('Yellow') ? '#EAB308' : (stu.belt.includes('Orange') ? '#F97316' : (stu.belt.includes('Green') ? '#16A34A' : (stu.belt.includes('Blue') ? '#2563EB' : (stu.belt.includes('Brown') ? '#78350F' : '#0F172A')))));
+            stu.batch = document.getElementById('edit-stu-batch').value;
+            stu.coach = document.getElementById('edit-stu-coach').value;
+            stu.trainingPrograms = document.getElementById('edit-stu-programs').value;
+
+            stu.dob = document.getElementById('edit-stu-dob').value;
+            stu.gender = document.getElementById('edit-stu-gender').value;
+            stu.bloodGroup = document.getElementById('edit-stu-blood').value;
+            stu.fatherName = document.getElementById('edit-stu-father').value;
+            stu.motherName = document.getElementById('edit-stu-mother').value;
+            stu.parentEmail = document.getElementById('edit-stu-parent-email').value;
+            stu.emergencyContact = document.getElementById('edit-stu-emergency').value;
+            stu.occupation = document.getElementById('edit-stu-occupation').value;
+            stu.address = document.getElementById('edit-stu-address').value;
+
+            stu.admission = (document.getElementById('edit-stu-admission').value === 'true');
+            stu.uniform = (document.getElementById('edit-stu-uniform').value === 'true');
+
+            closeAdminEditModal();
+            renderAllViews();
+            triggerToast(`✓ SQLite Room DB updated for ${stu.name} (${stu.id})`);
+        }
+
+        function deleteStudentRecord() {
+            const sid = document.getElementById('edit-stu-id').value;
+            if (!confirm(`Are you sure you want to delete trainee ${sid}?`)) return;
+
+            DB.students = DB.students.filter(s => s.id !== sid);
+            closeAdminEditModal();
+            renderAllViews();
+            triggerToast(`🗑️ Trainee ${sid} removed from database`);
+        }
+
+        // ---------------- STUDENT SELF EDIT & REQUEST MODALS ----------------
+        function openStudentEditSelfModal() {
+            const stu = DB.students.find(s => s.id === DB.activeStudentId) || DB.students[0];
+            document.getElementById('self-edit-phone').value = stu.phone;
+            document.getElementById('self-edit-email').value = stu.email;
+            document.getElementById('self-edit-address').value = stu.address;
+            document.getElementById('self-edit-emergency').value = stu.emergencyContact;
+            document.getElementById('student-edit-self-modal').style.display = 'flex';
+        }
+        function closeStudentEditSelfModal() {
+            document.getElementById('student-edit-self-modal').style.display = 'none';
+        }
+        function saveStudentSelfEdit() {
+            const stu = DB.students.find(s => s.id === DB.activeStudentId) || DB.students[0];
+            stu.phone = document.getElementById('self-edit-phone').value.trim();
+            stu.email = document.getElementById('self-edit-email').value.trim();
+            stu.address = document.getElementById('self-edit-address').value.trim();
+            stu.emergencyContact = document.getElementById('self-edit-emergency').value.trim();
+
+            closeStudentEditSelfModal();
+            renderAllViews();
+            triggerToast('✓ Your contact profile has been saved.');
+        }
+
+        function openStudentRequestModal() {
+            document.getElementById('student-request-modal').style.display = 'flex';
+        }
+        function closeStudentRequestModal() {
+            document.getElementById('student-request-modal').style.display = 'none';
+        }
+        function submitOfficialStudentRequest() {
+            const stu = DB.students.find(s => s.id === DB.activeStudentId) || DB.students[0];
+            const type = document.getElementById('req-type').value;
+            const val = document.getElementById('req-val').value.trim();
+            const reason = document.getElementById('req-reason').value.trim();
+
+            if (!val || !reason) {
+                alert('Please fill out the requested change value and reason');
+                return;
             }
 
-            renderAllViews();
-            triggerToast(`✓ Payment ${payId} Approved! ${student ? student.name : ''} status set to PAID.`);
-        }
-
-        function markPaidDirect(studentId) {
-            const student = DB.students.find(s => s.id === studentId);
-            if (student && !student.monthsPaid.includes(DB.selectedMonth)) {
-                student.monthsPaid.push(DB.selectedMonth);
-            }
-
-            // Also add record in payments
-            DB.payments.push({
-                id: 'PAY-' + Math.floor(1000 + Math.random() * 9000),
-                studentId: studentId,
-                studentName: student.name,
-                category: `Regular Karate Monthly Fee - ${DB.selectedMonth} 2026`,
-                month: DB.selectedMonth,
-                amount: 2000,
-                utr: 'CASH-REC-' + Date.now().toString().slice(-6),
-                date: '25 Aug 2026',
-                status: 'PAID'
+            const reqId = 'REQ-2026-' + Math.floor(100 + Math.random() * 900);
+            if (!stu.requests) stu.requests = [];
+            stu.requests.unshift({
+                id: reqId,
+                type: type,
+                from: type === 'Belt Update' ? stu.belt : (type === 'Batch Transfer' ? stu.batch : 'Current Profile'),
+                to: val,
+                reason: reason,
+                status: 'PENDING'
             });
 
+            closeStudentRequestModal();
             renderAllViews();
-            triggerToast(`✓ Fee marked as PAID for ${student.name} (${DB.selectedMonth} 2026)`);
+            triggerToast(`✓ Official Request ${reqId} Submitted to Shihan Brucelee Raj`);
+        }
+
+        // ---------------- DATABASE SCHEMA INSPECTOR & SQL SIMULATOR ----------------
+        function inspectTable(tbl) {
+            const container = document.getElementById('db-table-output-container');
+            if (!container) return;
+
+            let html = '';
+            if (tbl === 'users') {
+                html = `
+                    <div style="font-size:12px; font-weight:800; color:var(--text-navy); margin-bottom:6px;">TABLE: <code>users</code> (Entity: UserAccountEntity • Count: ${DB.students.length})</div>
+                    <table>
+                        <thead>
+                            <tr><th>userId</th><th>fullName</th><th>role</th><th>currentBelt</th><th>batchName</th><th>phone</th><th>bloodGroup</th><th>parentEmail</th><th>status</th></tr>
+                        </thead>
+                        <tbody>
+                            ${DB.students.map(s => `
+                                <tr>
+                                    <td><code>${s.id}</code></td>
+                                    <td><strong>${s.name}</strong></td>
+                                    <td>STUDENT</td>
+                                    <td>${s.belt}</td>
+                                    <td>${s.batch}</td>
+                                    <td>${s.phone}</td>
+                                    <td>${s.bloodGroup}</td>
+                                    <td>${s.parentEmail}</td>
+                                    <td><span class="status-chip success">${s.status}</span></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            } else if (tbl === 'batches') {
+                html = `
+                    <div style="font-size:12px; font-weight:800; color:var(--text-navy); margin-bottom:6px;">TABLE: <code>batches</code> (Entity: BatchEntity • Count: 6)</div>
+                    <table>
+                        <thead>
+                            <tr><th>batchId</th><th>batchName</th><th>timing</th><th>days</th><th>assignedCoach</th><th>capacity</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>BATCH-001</code></td><td>Morning General Karate</td><td>06:00 AM – 08:00 AM</td><td>Mon to Sat</td><td>Renshi V. Surya (5th Dan)</td><td>30</td></tr>
+                            <tr><td><code>BATCH-002</code></td><td>Evening Junior Cadets</td><td>05:00 PM – 06:00 PM</td><td>Mon to Sat</td><td>Sensei Rajesh Kumar (3rd Dan)</td><td>25</td></tr>
+                            <tr><td><code>BATCH-003</code></td><td>Evening Advanced & Dan</td><td>06:00 PM – 08:00 PM</td><td>Mon to Sat</td><td>Grandmaster Shihan Brucelee Raj</td><td>25</td></tr>
+                            <tr><td><code>BATCH-004</code></td><td>Weekend Weapons Kobudo</td><td>07:00 AM – 10:00 AM</td><td>Sat & Sun</td><td>Grandmaster Shihan Brucelee Raj</td><td>20</td></tr>
+                            <tr><td><code>BATCH-005</code></td><td>Women Practical Self Defence</td><td>04:00 PM – 05:00 PM</td><td>Tue, Thu, Sat</td><td>Renshi V. Surya</td><td>20</td></tr>
+                            <tr><td><code>BATCH-006</code></td><td>Elite Kumite Sparring Squad</td><td>08:00 PM – 09:30 PM</td><td>Mon, Wed, Fri</td><td>Grandmaster Shihan Brucelee Raj</td><td>15</td></tr>
+                        </tbody>
+                    </table>
+                `;
+            } else if (tbl === 'payment_records') {
+                html = `
+                    <div style="font-size:12px; font-weight:800; color:var(--text-navy); margin-bottom:6px;">TABLE: <code>payment_records</code> (Entity: PaymentRecordEntity • Count: ${DB.payments.length})</div>
+                    <table>
+                        <thead>
+                            <tr><th>paymentId</th><th>studentId</th><th>studentName</th><th>category</th><th>amount</th><th>utrReference</th><th>status</th></tr>
+                        </thead>
+                        <tbody>
+                            ${DB.payments.map(p => `
+                                <tr>
+                                    <td><code>${p.id}</code></td>
+                                    <td>${p.studentId}</td>
+                                    <td><strong>${p.studentName}</strong></td>
+                                    <td>${p.category}</td>
+                                    <td>₹${p.amount.toLocaleString('en-IN')}</td>
+                                    <td><code>${p.utr}</code></td>
+                                    <td><span class="status-chip ${p.status === 'PAID' ? 'success' : 'warning'}">${p.status}</span></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            } else if (tbl === 'student_requests') {
+                html = `
+                    <div style="font-size:12px; font-weight:800; color:var(--text-navy); margin-bottom:6px;">TABLE: <code>student_requests</code> (Entity: StudentRequestEntity)</div>
+                    <table>
+                        <thead>
+                            <tr><th>requestId</th><th>studentId</th><th>requestType</th><th>currentValue</th><th>requestedValue</th><th>status</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>REQ-2026-081</code></td><td>ST-2026-001</td><td>Belt Update</td><td>Brown Belt 3rd Kyu</td><td>Black Belt 1st Dan (Shodan)</td><td><span class="status-chip warning">PENDING</span></td></tr>
+                            <tr><td><code>REQ-2026-082</code></td><td>ST-2026-003</td><td>Batch Transfer</td><td>Batch 2 (Junior)</td><td>Batch 3 (Evening Advanced)</td><td><span class="status-chip success">APPROVED</span></td></tr>
+                        </tbody>
+                    </table>
+                `;
+            } else {
+                html = `
+                    <div style="font-size:12px; font-weight:800; color:var(--text-navy); margin-bottom:6px;">TABLE: <code>${tbl}</code></div>
+                    <p style="font-size:12.5px; color:var(--text-slate);">Loaded normalized Room entity schema with active SQLite indexes.</p>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function runSqlSimulator() {
+            triggerToast('✓ SQL Query executed successfully against Room Database in-memory cache.');
+            inspectTable('users');
         }
 
         // ---------------- MODAL MANAGEMENT ----------------
@@ -2008,6 +3018,7 @@
             const cat = document.getElementById('modal-fee-cat').value;
             const amt = parseFloat(document.getElementById('modal-amount').value);
             const utr = document.getElementById('modal-utr').value.trim();
+            const curStu = DB.students.find(s => s.id === DB.activeStudentId) || DB.students[0];
 
             if (!utr) {
                 alert('Please enter a valid Transaction UTR reference number');
@@ -2016,8 +3027,8 @@
 
             const newPay = {
                 id: 'PAY-' + Math.floor(1000 + Math.random() * 9000),
-                studentId: 'ST-2026-001',
-                studentName: 'Arun Kumar',
+                studentId: curStu.id,
+                studentName: curStu.name,
                 category: cat,
                 month: cat.includes('Aug') ? 'Aug' : (cat.includes('Sep') ? 'Sep' : 'Camp'),
                 amount: amt,
@@ -2054,13 +3065,36 @@
             DB.students.push({
                 id: newId,
                 name: name,
+                username: name.toLowerCase().replace(/\s+/g, '.'),
+                email: `${name.toLowerCase().replace(/\s+/g, '.')}@gmail.com`,
+                dob: '2010-01-01',
+                age: 16,
+                gender: 'Male',
+                bloodGroup: 'O+',
                 belt: belt,
+                beltLevel: 1,
                 beltColor: belt.includes('White') ? '#94A3B8' : (belt.includes('Yellow') ? '#EAB308' : '#16A34A'),
+                beltHistory: `${belt.split(' ')[0]} (Aug)`,
                 batch: batch,
+                batchId: 'BATCH-001',
+                coach: 'Renshi V. Surya',
                 phone: phone || '+91 98000 00000',
+                address: 'Visakhapatnam Dojo Zone',
+                emergencyContact: phone || '+91 98000 00000',
+                joiningDate: '25 August 2026',
+                trainingPrograms: 'Regular Karate-Do',
+                trainingDays: 'Monday to Saturday',
+                fatherName: father || 'Guardian',
+                motherName: 'Mother',
+                parentEmail: `${name.toLowerCase().replace(/\s+/g, '.')}@gmail.com`,
+                parentPhone: phone || '+91 98000 00000',
+                occupation: 'Parent',
+                status: 'ACTIVE',
                 admission: true,
                 uniform: true,
-                monthsPaid: ['Aug']
+                monthsPaid: ['Aug'],
+                medicalNotes: 'Fit.',
+                requests: []
             });
 
             closeStudentModal();
@@ -2090,12 +3124,13 @@
             const txt = input.value.trim();
             if (!txt) return;
 
+            const stu = DB.students.find(s => s.id === DB.activeStudentId) || DB.students[0];
             const box = document.getElementById('student-chat-messages');
-            box.innerHTML += `<div style="background:#EFF6FF; border:1px solid #BFDBFE; padding:12px; border-radius:10px; align-self:flex-end;"><strong>Arun Kumar:</strong> ${txt}</div>`;
+            box.innerHTML += `<div style="background:#EFF6FF; border:1px solid #BFDBFE; padding:12px; border-radius:10px; align-self:flex-end;"><strong>${stu.name}:</strong> ${txt}</div>`;
             
             // Mirror to admin chat
             const adminBox = document.getElementById('admin-chat-messages');
-            if (adminBox) adminBox.innerHTML += `<div style="background:var(--secondary-bg); padding:12px; border-radius:10px; align-self:flex-start;"><strong>Arun Kumar (ST-001):</strong> ${txt}</div>`;
+            if (adminBox) adminBox.innerHTML += `<div style="background:var(--secondary-bg); padding:12px; border-radius:10px; align-self:flex-start;"><strong>${stu.name} (${stu.id}):</strong> ${txt}</div>`;
             
             input.value = '';
             box.scrollTop = box.scrollHeight;
