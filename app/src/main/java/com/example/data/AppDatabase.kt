@@ -255,10 +255,9 @@ suspend fun seedInitialData(dao: BromaDao) {
         FeeItemEntity("FEE-ADM", "Admission Fee", 1000.0, "One-Time", "Initial academy enrollment & registration"),
         FeeItemEntity("FEE-DRESS", "Basic Karate Dress (Gi)", 1500.0, "One-Time", "Official BROMAA Shito-Ryu Karate Gi uniform with academy crest"),
         FeeItemEntity("FEE-REGULAR", "Regular Training (Karate, Fitness, Self Defence & Weapons)", 2000.0, "Monthly", "Complete regular martial arts curriculum comprising Karate, Physical Fitness & Conditioning, Practical Self Defence, and Traditional Weapon Training (Nunchaku & Bo)"),
-        FeeItemEntity("FEE-SPEC-1D", "Special Training Camp - 1 Day", 5000.0, "Per Course", "6 hours intensive martial arts camp"),
-        FeeItemEntity("FEE-SPEC-3D", "Special Training Camp - 3 Days", 10000.0, "Per Course", "4 hours/day 3-day boot camp"),
-        FeeItemEntity("FEE-SPEC-1W", "Special Training Camp - 1 Week", 15000.0, "Per Course", "4 hours/day 7-day masterclass"),
-        FeeItemEntity("FEE-SPEC-15D", "Special Training Camp - 15 Days", 25000.0, "Per Course", "Comprehensive 15-day intensive championship & belt preparation camp")
+        FeeItemEntity("FEE-SPEC-1D", "Special Training Camp - 1 Day (6 Hours)", 4999.0, "Per Course", "6 hours intensive martial arts camp split into 3 parts: Morning (6:00 AM – 8:00 AM), Afternoon (11:00 AM – 1:00 PM), Evening (6:00 PM – 8:00 PM)"),
+        FeeItemEntity("FEE-SPEC-3D", "Special Training Camp - 3 Days (4 Hours/Day)", 9999.0, "Per Course", "4 hours per day (12 hours total) split into 2 parts: Morning (6:00 AM – 8:00 AM) and Evening (6:00 PM – 8:00 PM)"),
+        FeeItemEntity("FEE-SPEC-1W", "Special Training Camp - 1 Week (4 Hours/Day)", 14999.0, "Per Course", "4 hours per day (28 hours total) split into 2 parts: Morning (6:00 AM – 8:00 AM) and Evening (6:00 PM – 8:00 PM)")
     )
     fees.forEach { dao.insertFeeItem(it) }
 
@@ -574,55 +573,83 @@ suspend fun seedInitialData(dao: BromaDao) {
     )
     initialTournaments.forEach { dao.insertTournament(it) }
 
-    // 14. Seed Training Programs
+    // 14. Seed Training Programs (Interconnected with all portals & editable by Admin)
     val initialPrograms = listOf(
         TrainingProgramEntity(
-            programId = "PROG-01",
-            programTitle = "Regular Karate-Do & Martial Arts",
-            feeAmount = 1000.0,
+            programId = "PROG-SPEC-1D",
+            programTitle = "1-Day Special Karate Training Camp",
+            feeAmount = 4999.0,
+            feeFrequency = "Per Course",
+            targetAudience = "All Belt Grades & Beginners (All Ages)",
+            durationText = "1 Day (6 Hours Total)",
+            syllabusOverview = "6 Hours Intensive • Split into 3 parts: Morning (6:00 AM – 8:00 AM: Kihon & Conditioning), Afternoon (11:00 AM – 1:00 PM: Kata Bunkai & Self Defence), Evening (6:00 PM – 8:00 PM: Kumite Sparring & Weapon Drills).",
+            scheduleSummary = "Morning 6:00 AM – 8:00 AM, Afternoon 11:00 AM – 1:00 PM, Evening 6:00 PM – 8:00 PM (3 Sessions)",
+            isActive = true,
+            displayOrder = 1,
+            programName = "1-Day Special Karate Training Camp (6 Hours)",
+            description = "6 Hours intensive training split into 3 parts: Morning 6:00 AM – 8:00 AM, Afternoon 11:00 AM – 1:00 PM, Evening 6:00 PM – 8:00 PM.",
+            ageGroup = "All Ages",
+            monthlyFee = 4999.0,
+            durationMonths = 1,
+            daysPerWeek = "3 Sessions (Morning 6-8 AM, Afternoon 11-1 PM, Evening 6-8 PM)",
+            coachName = "Shihan BRUCELEE RAJ (Master Sensei)"
+        ),
+        TrainingProgramEntity(
+            programId = "PROG-SPEC-3D",
+            programTitle = "3-Days Special Karate Training Camp",
+            feeAmount = 9999.0,
+            feeFrequency = "Per Course",
+            targetAudience = "All Belt Grades",
+            durationText = "3 Days (4 Hours/Day • 12 Hours Total)",
+            syllabusOverview = "4 Hours Per Day (12 Hours Total) • Split into 2 parts: Morning (6:00 AM – 8:00 AM: Stances, Agility & Strength) and Evening (6:00 PM – 8:00 PM: Tactical Kumite, Counter-Attacking & Kata Mastery).",
+            scheduleSummary = "Morning 6:00 AM – 8:00 AM & Evening 6:00 PM – 8:00 PM (4 Hours/Day)",
+            isActive = true,
+            displayOrder = 2,
+            programName = "3-Days Special Karate Training Camp (4 Hours/Day)",
+            description = "4 Hours per day (12 Hours total) split into 2 parts: Morning 6:00 AM – 8:00 AM and Evening 6:00 PM – 8:00 PM.",
+            ageGroup = "All Ages",
+            monthlyFee = 9999.0,
+            durationMonths = 1,
+            daysPerWeek = "2 Sessions/Day (Morning 6-8 AM & Evening 6-8 PM)",
+            coachName = "Shihan BRUCELEE RAJ & Renshi V. SURYA"
+        ),
+        TrainingProgramEntity(
+            programId = "PROG-SPEC-1W",
+            programTitle = "1-Week Special Karate Training Camp",
+            feeAmount = 14999.0,
+            feeFrequency = "Per Course",
+            targetAudience = "All Belt Grades & Advanced Contenders",
+            durationText = "1 Week / 7 Days (4 Hours/Day • 28 Hours Total)",
+            syllabusOverview = "4 Hours Per Day (28 Hours Total) • Split into 2 parts: Morning (6:00 AM – 8:00 AM: High-Intensity Conditioning & Traditional Weapons) and Evening (6:00 PM – 8:00 PM: Championship Combat Sparring, Dan Syllabus & Master Kata).",
+            scheduleSummary = "Morning 6:00 AM – 8:00 AM & Evening 6:00 PM – 8:00 PM (4 Hours/Day)",
+            isActive = true,
+            displayOrder = 3,
+            programName = "1-Week Special Karate Training Camp (4 Hours/Day)",
+            description = "4 Hours per day (28 Hours total) split into 2 parts: Morning 6:00 AM – 8:00 AM and Evening 6:00 PM – 8:00 PM.",
+            ageGroup = "All Ages",
+            monthlyFee = 14999.0,
+            durationMonths = 1,
+            daysPerWeek = "2 Sessions/Day (Morning 6-8 AM & Evening 6-8 PM)",
+            coachName = "Shihan BRUCELEE RAJ & Master Instructors"
+        ),
+        TrainingProgramEntity(
+            programId = "PROG-REGULAR",
+            programTitle = "Regular Training (Karate, Fitness, Self Defence & Weapons)",
+            feeAmount = 2000.0,
             feeFrequency = "Monthly",
-            targetAudience = "Boys & Girls (Age 3 Years & Above)",
+            targetAudience = "Boys & Girls (Age 3+), Teens & Adults",
             durationText = "Ongoing (Year-round training)",
-            syllabusOverview = "Foundational Stances (Dachi), Strikes (Tsuki), Kicks (Geri), Blocks (Uke), Heian Katas & Light Sparring.",
-            scheduleSummary = "Batch 1: 5:00 PM – 6:00 PM | Batch 2: 6:00 PM – 8:00 PM (Mon–Sat)",
+            syllabusOverview = "Complete martial arts curriculum comprising Karate-Do, Physical Fitness & Conditioning, Practical Self Defence, and Traditional Weapons (Nunchaku & Bo).",
+            scheduleSummary = "Morning 6:00 AM – 8:00 AM | Evening 6:00 PM – 8:00 PM (Mon–Sat)",
             isActive = true,
-            displayOrder = 1
-        ),
-        TrainingProgramEntity(
-            programId = "PROG-02",
-            programTitle = "Black Belt Master Program & Dan Grading",
-            feeAmount = 2500.0,
-            feeFrequency = "Quarterly",
-            targetAudience = "Advanced Belt Holders (Brown Belt 3rd Kyu & Above)",
-            durationText = "12 - 24 Months Intensive",
-            syllabusOverview = "Advanced Shito-Ryu Katas (Bassai Dai, Seienchin, Kanku Dai), Full Contact Kumite, Bunkai Application & Referee Training.",
-            scheduleSummary = "Tue, Thu, Sat (6:00 PM – 8:30 PM) + Sunday Special Masterclass",
-            isActive = true,
-            displayOrder = 2
-        ),
-        TrainingProgramEntity(
-            programId = "PROG-03",
-            programTitle = "Self Defence & High Intensity Fitness Bootcamp",
-            feeAmount = 1200.0,
-            feeFrequency = "Monthly",
-            targetAudience = "Teens, Women, Working Professionals",
-            durationText = "Flexible 3 / 6 / 12 Months",
-            syllabusOverview = "Practical Street Self-Defense, Anti-Grab Escapes, Joint Locks, Pressure Point Striking, Core Cardio & Flexibility.",
-            scheduleSummary = "Morning Batch: 6:00 AM – 7:00 AM | Evening: 7:00 PM – 8:00 PM",
-            isActive = true,
-            displayOrder = 3
-        ),
-        TrainingProgramEntity(
-            programId = "PROG-04",
-            programTitle = "Weapon & Combat Mastery (Kobudo - Nunchaku / Bo / Sai)",
-            feeAmount = 1500.0,
-            feeFrequency = "Monthly",
-            targetAudience = "Intermediate & Senior Karatekas",
-            durationText = "6 Months Specialization",
-            syllabusOverview = "Classical Okinawan Weapons: Dual Nunchaku Flow, Bo Staff Long Range Combat, Sai Daggers & Tonfa Blocks.",
-            scheduleSummary = "Mon, Wed, Fri (6:00 PM – 7:30 PM)",
-            isActive = true,
-            displayOrder = 4
+            displayOrder = 4,
+            programName = "Regular Training (Karate, Fitness, Self Defence & Weapons)",
+            description = "Daily martial arts training covering all core disciplines: Karate Kihon & Kata, Functional Fitness, Self Defence, and Weapon Training.",
+            ageGroup = "All Ages (3+)",
+            monthlyFee = 2000.0,
+            durationMonths = 12,
+            daysPerWeek = "Mon to Sat (Daily Sessions)",
+            coachName = "Shihan BRUCELEE RAJ (Master Sensei)"
         )
     )
     initialPrograms.forEach { dao.insertTrainingProgram(it) }

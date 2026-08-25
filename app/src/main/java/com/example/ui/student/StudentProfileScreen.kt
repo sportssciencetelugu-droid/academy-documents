@@ -639,7 +639,7 @@ fun StudentProfileScreen(
                         )
                         Column {
                             Text("Weapon Training (Bo, Nunchaku, Sai)", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold), color = TextNavy)
-                            Text("Special Intense Fee: ₹1,800 / month", style = MaterialTheme.typography.bodySmall, color = StatusSuccess)
+                            Text("Included in Regular Training (₹2,000/mo)", style = MaterialTheme.typography.bodySmall, color = StatusSuccess)
                         }
                     }
 
@@ -658,7 +658,7 @@ fun StudentProfileScreen(
                         )
                         Column {
                             Text("Fitness & Self Defence", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold), color = TextNavy)
-                            Text("Special Intense Fee: ₹1,500 / month", style = MaterialTheme.typography.bodySmall, color = StatusSuccess)
+                            Text("Included in Regular Training (₹2,000/mo)", style = MaterialTheme.typography.bodySmall, color = StatusSuccess)
                         }
                     }
 
@@ -676,8 +676,8 @@ fun StudentProfileScreen(
                             colors = CheckboxDefaults.colors(checkedColor = RoyalBlue)
                         )
                         Column {
-                            Text("Regular Karate Training", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold), color = TextNavy)
-                            Text("Standard Fee: ₹2,000 / month", style = MaterialTheme.typography.bodySmall, color = TextSlate)
+                            Text("Regular Training (Karate, Fitness, Self Defence & Weapons)", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold), color = TextNavy)
+                            Text("Standard Fee: ₹2,000 / month (All Disciplines Included)", style = MaterialTheme.typography.bodySmall, color = StatusSuccess)
                         }
                     }
 

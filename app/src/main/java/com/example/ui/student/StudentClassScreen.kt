@@ -555,29 +555,27 @@ fun StudentClassScreen(
                     // Sub-Tab 2: Special Camps & Intensive Programs
                     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                         Text(
-                            "SPECIAL KARATE CAMPS & INTENSIVE PROGRAMS (1-DAY, 3-DAYS, 1-WEEK & 15-DAYS)",
+                            "SPECIAL KARATE CAMPS & INTENSIVE WORKSHOPS (1-DAY, 3-DAYS & 1-WEEK)",
                             style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
                             color = TextNavy
                         )
 
                         val defaultCamps = listOf(
-                            Triple("1-Day Special Karate Training Camp", "₹800", "6 Hours Intensive • Kata Mastery, Kihon Fundamentals & Reaction Drills"),
-                            Triple("3-Days Special Karate Training Camp", "₹1,800", "12 Hours Total (3 Days) • Morning Conditioning, Bunkai & Continuous Kumite Sparring"),
-                            Triple("1-Week (7-Days) Special Masterclass Camp", "₹3,500", "28 Hours Total (7 Days) • Full Kata, Kumite, Kobudo Weapons & High-Performance Prep"),
-                            Triple("15-Days Special Intensive Championship Camp", "₹6,000", "60 Hours Total (15 Days) • Black Belt Pre-Grading & National Tournament Excellence")
+                            Triple("1-Day Special Karate Training Camp", "₹4,999", "6 Hours Intensive • 3 Sessions (Morning 6:00 AM – 8:00 AM, Afternoon 11:00 AM – 1:00 PM, Evening 6:00 PM – 8:00 PM) • Intensive Kata, Sparring & Weapons Drills"),
+                            Triple("3-Days Special Karate Training Camp", "₹9,999", "4 Hours/Day (12 Hours Total) • 2 Sessions/Day (Morning 6:00 AM – 8:00 AM & Evening 6:00 PM – 8:00 PM) • Bunkai Mastery, Kumite Drills & Conditioning"),
+                            Triple("1-Week (7-Days) Special Karate Camp", "₹14,999", "4 Hours/Day (28 Hours Total) • 2 Sessions/Day (Morning 6:00 AM – 8:00 AM & Evening 6:00 PM – 8:00 PM) • Masterclass, Weapon Flow & Black Belt Prep")
                         )
 
                         val availableCamps: List<Triple<String, String, String>> = if (trainingPrograms.isNotEmpty()) {
                             val customList = trainingPrograms.map { prog ->
-                                val fee = "₹${prog.feeAmount.toInt()}"
+                                val fee = "₹${prog.feeAmount.takeIf { it > 0 }?.toInt() ?: prog.monthlyFee.toInt()}"
                                 val desc = prog.syllabusOverview.ifBlank {
-                                    "${prog.durationText} • ${prog.scheduleSummary.ifBlank { prog.targetAudience }}"
+                                    "${prog.durationText} • ${prog.scheduleSummary.ifBlank { prog.description }}"
                                 }
-                                Triple(prog.programTitle, fee, desc)
+                                Triple(prog.programTitle.ifBlank { prog.programName }, fee, desc)
                             }
-                            // Ensure 1-Day, 3-Days, 1-Week, 15-Days are present
-                            val combined = defaultCamps.filter { def -> customList.none { it.first.contains(def.first.take(6), ignoreCase = true) } } + customList
-                            combined
+                            // Prioritize custom list from Admin Portal, or combined
+                            if (customList.isNotEmpty()) customList else defaultCamps
                         } else {
                             defaultCamps
                         }

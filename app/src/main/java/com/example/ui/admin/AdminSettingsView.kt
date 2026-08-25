@@ -629,12 +629,12 @@ fun AdminSettingsView(
                 )
 
                 val feeSchedule = listOf(
-                    Pair("Admission Fee (One-Time)", "₹2,000"),
-                    Pair("Basic Karate Dress / Gi (One-Time)", "₹1,500"),
-                    Pair("Regular Training (Self Defence, Fitness & Weapon Training Included)", "₹2,000 / mo"),
-                    Pair("Special Training Camp (1 Day - 6 Hours)", "₹5,000"),
-                    Pair("Special Training Camp (3 Days - 4 Hours/Day)", "₹10,000"),
-                    Pair("Special Training Masterclass (1 Week - 4 Hours/Day)", "₹15,000")
+                    Pair("Admission Fee (One-Time Registration)", "₹1,000"),
+                    Pair("Basic Karate Dress / Gi (One-Time Kit)", "₹1,500"),
+                    Pair("Regular Training (Karate, Fitness, Self Defence & Weapons)", "₹2,000 / mo"),
+                    Pair("Special Camp: 1 Day - 6 Hours (3 Sessions: 6-8 AM, 11-1 PM, 6-8 PM)", "₹4,999"),
+                    Pair("Special Camp: 3 Days - 4 Hours/Day (2 Sessions: 6-8 AM & 6-8 PM)", "₹9,999"),
+                    Pair("Special Camp: 1 Week - 4 Hours/Day (2 Sessions: 6-8 AM & 6-8 PM)", "₹14,999")
                 )
 
                 feeSchedule.forEach { (feeTitle, feeAmt) ->

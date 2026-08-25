@@ -191,7 +191,7 @@ fun AdminFeesAndProgramsManagementView(
                     FilterChip(
                         selected = selectedTab == "REGULAR_HISTORY",
                         onClick = { selectedTab = "REGULAR_HISTORY" },
-                        label = { Text("📅 Regular Trainees Monthly Fee History", fontWeight = FontWeight.SemiBold) },
+                        label = { Text("📋 Regular Training Monthly Fees Register", fontWeight = FontWeight.Bold) },
                         colors = FilterChipDefaults.filterChipColors(
                             selectedContainerColor = CrimsonPrimary,
                             selectedLabelColor = Color.White
@@ -496,7 +496,43 @@ fun RegularStudentMonthlyFeeHistorySection(
     }
 
     Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
-        // Summary KPI Strip
+        // Explanatory Guidance Banner
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp),
+            color = Color(0xFFEFF6FF),
+            border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFBFDBFE))
+        ) {
+            Row(
+                modifier = Modifier.padding(14.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(RoyalBlue),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(Icons.Default.MenuBook, contentDescription = null, tint = Color.White, modifier = Modifier.size(20.dp))
+                }
+                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                    Text(
+                        "REGULAR TRAINING MONTHLY FEES REGISTER (₹2,000 / Month)",
+                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+                        color = TextNavy
+                    )
+                    Text(
+                        "Track regular academy students across all 12 calendar months. Includes Karate training, Physical fitness, Practical self defence, and Weapon training. Tap any month or 'Record' button to mark fees.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = TextNavy.copy(alpha = 0.8f)
+                    )
+                }
+            }
+        }
+
+        // Summary KPI Strip with Progress Indicator
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -508,10 +544,10 @@ fun RegularStudentMonthlyFeeHistorySection(
                 border = androidx.compose.foundation.BorderStroke(1.dp, BorderLight),
                 shadowElevation = 1.dp
             ) {
-                Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                    Text("REGULAR TRAINEES", style = MaterialTheme.typography.labelSmall, color = TextSlate)
-                    Text("$totalStudents", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold), color = TextNavy)
-                    Text("Own Academy Students", fontSize = 10.sp, color = TextSlate)
+                Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text("TOTAL REGULAR STUDENTS", style = MaterialTheme.typography.labelSmall, color = TextSlate, fontWeight = FontWeight.SemiBold)
+                    Text("$totalStudents", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold), color = TextNavy)
+                    Text("Academy Enrolled", fontSize = 10.sp, color = TextSlate)
                 }
             }
 
@@ -522,10 +558,10 @@ fun RegularStudentMonthlyFeeHistorySection(
                 border = androidx.compose.foundation.BorderStroke(1.dp, StatusSuccessBorder),
                 shadowElevation = 1.dp
             ) {
-                Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                    Text("$selectedMonth FEES (PAID)", style = MaterialTheme.typography.labelSmall, color = StatusSuccessText)
-                    Text("$paidStudentsCount / $totalStudents", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold), color = StatusSuccess)
-                    Text("₹${paidStudentsCount * 2000} Collected", fontSize = 10.sp, color = StatusSuccessText)
+                Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text("$selectedMonth FEES COLLECTED", style = MaterialTheme.typography.labelSmall, color = StatusSuccessText, fontWeight = FontWeight.SemiBold)
+                    Text("₹${paidStudentsCount * 2000}", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold), color = StatusSuccess)
+                    Text("$paidStudentsCount of $totalStudents Paid (100%)", fontSize = 10.sp, color = StatusSuccessText)
                 }
             }
 
@@ -533,14 +569,51 @@ fun RegularStudentMonthlyFeeHistorySection(
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(12.dp),
                 color = CardWhite,
-                border = androidx.compose.foundation.BorderStroke(1.dp, StatusErrorBorder),
+                border = androidx.compose.foundation.BorderStroke(1.dp, if (dueStudentsCount > 0) StatusErrorBorder else BorderLight),
                 shadowElevation = 1.dp
             ) {
-                Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                    Text("$selectedMonth DUE", style = MaterialTheme.typography.labelSmall, color = StatusErrorText)
-                    Text("$dueStudentsCount Due", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold), color = StatusError)
-                    Text("₹${dueStudentsCount * 2000} Pending", fontSize = 10.sp, color = StatusErrorText)
+                Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text("$selectedMonth PENDING / DUE", style = MaterialTheme.typography.labelSmall, color = if (dueStudentsCount > 0) StatusErrorText else TextSlate, fontWeight = FontWeight.SemiBold)
+                    Text("₹${dueStudentsCount * 2000}", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold), color = if (dueStudentsCount > 0) StatusError else TextNavy)
+                    Text("$dueStudentsCount Students Pending", fontSize = 10.sp, color = if (dueStudentsCount > 0) StatusErrorText else TextSlate)
                 }
+            }
+        }
+
+        // Monthly Collection Progress Bar
+        val collectionPercentage = if (totalStudents > 0) (paidStudentsCount.toFloat() / totalStudents.toFloat()) else 1f
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(10.dp),
+            color = CardWhite,
+            border = androidx.compose.foundation.BorderStroke(1.dp, BorderLight)
+        ) {
+            Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        "Monthly Collection Progress ($selectedMonth 2026)",
+                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                        color = TextNavy
+                    )
+                    Text(
+                        "${(collectionPercentage * 100).toInt()}% Collected",
+                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                        color = if (collectionPercentage >= 0.8f) StatusSuccess else CrimsonPrimary
+                    )
+                }
+                LinearProgressIndicator(
+                    progress = { collectionPercentage },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(8.dp)
+                        .clip(RoundedCornerShape(4.dp)),
+                    color = if (collectionPercentage >= 0.8f) StatusSuccess else CrimsonPrimary,
+                    trackColor = Color(0xFFE2E8F0)
+                )
             }
         }
 
@@ -595,7 +668,7 @@ fun RegularStudentMonthlyFeeHistorySection(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text("SELECT TRAINING MONTH (YEAR 2026)", style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold), color = TextNavy)
-                    Text("Current Month: $selectedMonth", fontSize = 11.sp, color = RoyalBlue, fontWeight = FontWeight.Bold)
+                    Text("Selected: $selectedMonth 2026", fontSize = 11.sp, color = RoyalBlue, fontWeight = FontWeight.Bold)
                 }
 
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {

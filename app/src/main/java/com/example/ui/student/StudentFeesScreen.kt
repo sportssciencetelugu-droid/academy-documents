@@ -390,15 +390,30 @@ fun StudentFeesScreen(
                             color = TextNavy
                         )
 
-                        // Special Camps (1-Day, 3-Days, 1-Week, 15-Days)
-                        val specialCampsList = listOf(
-                            Triple("1-Day Special Karate Training Camp", 800.0, "6 Hours Masterclass • Kata Bunkai, Kihon Drills & Sparring Basics"),
-                            Triple("3-Days Special Karate Training Camp", 1800.0, "12 Hours Total (3 Days) • Morning Conditioning, Kumite & Advanced Techniques"),
-                            Triple("1-Week (7-Days) Special Karate Camp", 3500.0, "28 Hours Total (7 Days) • Full Kata, Kumite, Kobudo Weapons & High-Performance Prep"),
-                            Triple("15-Days Special Intensive Karate Camp", 6000.0, "60 Hours Total (15 Days) • Championship Sparring, Black Belt Pre-Grading & Mastery")
+                        // Special Camps (1-Day, 3-Days, 1-Week) - Interconnected with Admin Portal
+                        val defaultCampsList = listOf(
+                            Triple("1-Day Special Karate Training Camp", 4999.0, "6 Hours Intensive • 3 Sessions (Morning 6:00 AM – 8:00 AM, Afternoon 11:00 AM – 1:00 PM, Evening 6:00 PM – 8:00 PM) • Intensive Kata, Sparring & Weapons Drills"),
+                            Triple("3-Days Special Karate Training Camp", 9999.0, "4 Hours/Day (12 Hours Total) • 2 Sessions/Day (Morning 6:00 AM – 8:00 AM & Evening 6:00 PM – 8:00 PM) • Bunkai Mastery, Kumite Drills & Conditioning"),
+                            Triple("1-Week (7-Days) Special Karate Camp", 14999.0, "4 Hours/Day (28 Hours Total) • 2 Sessions/Day (Morning 6:00 AM – 8:00 AM & Evening 6:00 PM – 8:00 PM) • Masterclass, Weapon Flow & Black Belt Prep")
                         )
 
-                        specialCampsList.forEach { (campTitle, campFee, campDesc) ->
+                        val dynamicCampsList: List<Triple<String, Double, String>> = if (trainingPrograms.isNotEmpty()) {
+                            val campProgs = trainingPrograms.filter { it.programTitle.contains("Camp", ignoreCase = true) || it.programName.contains("Camp", ignoreCase = true) }
+                            if (campProgs.isNotEmpty()) {
+                                campProgs.map { prog ->
+                                    val desc = prog.syllabusOverview.ifBlank {
+                                        "${prog.durationText} • ${prog.scheduleSummary.ifBlank { prog.description }}"
+                                    }
+                                    Triple(prog.programTitle.ifBlank { prog.programName }, prog.feeAmount.takeIf { it > 0 } ?: prog.monthlyFee, desc)
+                                }
+                            } else {
+                                defaultCampsList
+                            }
+                        } else {
+                            defaultCampsList
+                        }
+
+                        dynamicCampsList.forEach { (campTitle, campFee, campDesc) ->
                             Surface(
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(14.dp),
@@ -416,7 +431,7 @@ fun StudentFeesScreen(
                                     Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                                         Text(campTitle, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold), color = TextNavy)
                                         Text(campDesc, style = MaterialTheme.typography.bodySmall, color = TextSlate)
-                                        Text("Batch: Open to all registered karate students", style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold), color = RoyalBlue)
+                                        Text("Schedule / Split: Editable in Admin Portal • Open to all batches", style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold), color = RoyalBlue)
                                     }
 
                                     Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -913,18 +928,18 @@ fun StudentFeesScreen(
 
         val isRegularTraining = chosenProgramCategory.contains("Regular", ignoreCase = true)
 
-        val feeOptions = listOf(
+        val baseFeeOptions = listOf(
             "Regular Karate Training Fees" to 2000.0,
-            "1-Day Special Karate Training Camp" to 800.0,
-            "3-Days Special Karate Training Camp" to 1800.0,
-            "1-Week (7-Days) Special Karate Camp" to 3500.0,
-            "15-Days Special Intensive Karate Camp" to 6000.0,
+            "1-Day Special Karate Training Camp" to 4999.0,
+            "3-Days Special Karate Training Camp" to 9999.0,
+            "1-Week (7-Days) Special Karate Camp" to 14999.0,
             "Academy Admission & Registration Fee" to 1000.0,
             "Karate Gi & Uniform Dress Fee" to 1500.0,
             "Kyu Belt Grading Exam Fees" to 1500.0,
-            "Bo Staff & Kobudo Weapons Fees" to 1500.0,
-            "Tournament Prep Intensive Fees" to 2500.0
+            "Bo Staff & Kobudo Weapons Fees" to 1500.0
         )
+
+        val feeOptions = (baseFeeOptions + trainingPrograms.map { (it.programTitle.ifBlank { it.programName }) to (it.feeAmount.takeIf { f -> f > 0 } ?: it.monthlyFee) } + feeItemsList.map { it.feeName to it.amount }).distinctBy { it.first }
 
         AlertDialog(
             onDismissRequest = { showPayDialog = false },
