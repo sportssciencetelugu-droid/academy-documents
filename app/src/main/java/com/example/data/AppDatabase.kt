@@ -250,14 +250,15 @@ suspend fun seedInitialData(dao: BromaDao) {
     dao.insertBatch(batch5)
     dao.insertBatch(batch6)
 
-    // 3. Seed Fee Items (Updated based on flyer: Regular Training includes Self Defence, Fitness, Weapons & Karate Training - ₹2000/mo)
+    // 3. Seed Fee Items (Regular Training includes Karate, Fitness, Self Defence & Weapons - ₹2000/mo; Admission - ₹1000; Dress - ₹1500; Special Camps)
     val fees = listOf(
-        FeeItemEntity("FEE-ADM", "Admission Fee", 2000.0, "One-Time", "Initial academy enrollment & registration"),
-        FeeItemEntity("FEE-DRESS", "Basic Karate Dress (Gi)", 1500.0, "One-Time", "Official BROMAA Shito-Ryu Karate Gi uniform"),
-        FeeItemEntity("FEE-REGULAR", "Regular Training (Self Defence, Fitness, Weapons & Karate Training)", 2000.0, "Monthly", "Complete regular martial arts curriculum comprising Karate, Self Defence, Physical Fitness & Conditioning, and Traditional Weapon Training (Nunchaku & Bo)"),
-        FeeItemEntity("FEE-SPEC-1D", "Special Training - 1 Day", 5000.0, "Per Course", "6 hours intensive martial arts camp"),
-        FeeItemEntity("FEE-SPEC-3D", "Special Training - 3 Days", 10000.0, "Per Course", "4 hours/day 3-day boot camp"),
-        FeeItemEntity("FEE-SPEC-1W", "Special Training - 1 Week", 15000.0, "Per Course", "4 hours/day 7-day masterclass")
+        FeeItemEntity("FEE-ADM", "Admission Fee", 1000.0, "One-Time", "Initial academy enrollment & registration"),
+        FeeItemEntity("FEE-DRESS", "Basic Karate Dress (Gi)", 1500.0, "One-Time", "Official BROMAA Shito-Ryu Karate Gi uniform with academy crest"),
+        FeeItemEntity("FEE-REGULAR", "Regular Training (Karate, Fitness, Self Defence & Weapons)", 2000.0, "Monthly", "Complete regular martial arts curriculum comprising Karate, Physical Fitness & Conditioning, Practical Self Defence, and Traditional Weapon Training (Nunchaku & Bo)"),
+        FeeItemEntity("FEE-SPEC-1D", "Special Training Camp - 1 Day", 5000.0, "Per Course", "6 hours intensive martial arts camp"),
+        FeeItemEntity("FEE-SPEC-3D", "Special Training Camp - 3 Days", 10000.0, "Per Course", "4 hours/day 3-day boot camp"),
+        FeeItemEntity("FEE-SPEC-1W", "Special Training Camp - 1 Week", 15000.0, "Per Course", "4 hours/day 7-day masterclass"),
+        FeeItemEntity("FEE-SPEC-15D", "Special Training Camp - 15 Days", 25000.0, "Per Course", "Comprehensive 15-day intensive championship & belt preparation camp")
     )
     fees.forEach { dao.insertFeeItem(it) }
 

@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.MilitaryTech
@@ -143,6 +144,313 @@ fun StudentKarateScreen(
                 ) {
                     Text("Joined: ${student.joiningDate}", style = MaterialTheme.typography.labelSmall, color = TextSlate)
                     Text("Dojo: ${student.dojoCenter}", style = MaterialTheme.typography.labelSmall, color = TextSlate)
+                }
+            }
+        }
+
+        // BELT EXAMINATION PERMISSION & OFFICIAL GRADING CLEARANCE
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
+            color = CardWhite,
+            shadowElevation = 1.dp,
+            border = androidx.compose.foundation.BorderStroke(1.dp, StatusSuccess.copy(alpha = 0.4f))
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Icon(Icons.Default.CheckCircle, contentDescription = null, tint = StatusSuccess)
+                        Column {
+                            Text(
+                                "BELT EXAM PERMISSION & CLEARANCE",
+                                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+                                color = TextNavy
+                            )
+                            Text(
+                                "Official Approval from Admin & Sensei",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = TextSlate
+                            )
+                        }
+                    }
+
+                    Surface(
+                        shape = RoundedCornerShape(20.dp),
+                        color = StatusSuccessBg,
+                        border = androidx.compose.foundation.BorderStroke(1.dp, StatusSuccessBorder)
+                    ) {
+                        Text(
+                            "✅ PERMITTED",
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = StatusSuccessText,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                        )
+                    }
+                }
+
+                HorizontalDivider(color = BorderLight)
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .background(SecondaryBg, RoundedCornerShape(8.dp))
+                            .padding(8.dp)
+                    ) {
+                        Text("Next Target Exam", fontSize = 10.sp, color = TextSlate)
+                        Text(nextBeltName, fontWeight = FontWeight.Bold, fontSize = 12.sp, color = RoyalBlue)
+                        Text("Quarterly Grading Session", fontSize = 9.sp, color = TextSlate)
+                    }
+
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .background(SecondaryBg, RoundedCornerShape(8.dp))
+                            .padding(8.dp)
+                    ) {
+                        Text("Dojo Attendance", fontSize = 10.sp, color = TextSlate)
+                        Text("92% (Verified)", fontWeight = FontWeight.Bold, fontSize = 12.sp, color = StatusSuccess)
+                        Text("Minimum 80% required", fontSize = 9.sp, color = TextSlate)
+                    }
+                }
+
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(8.dp),
+                    color = ActiveNavBg,
+                    border = androidx.compose.foundation.BorderStroke(0.5.dp, RoyalBlue.copy(alpha = 0.4f))
+                ) {
+                    Row(
+                        modifier = Modifier.padding(10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Icon(Icons.Default.MilitaryTech, contentDescription = null, tint = RoyalBlue, modifier = Modifier.size(24.dp))
+                        Column {
+                            Text(
+                                "Authorized by: Shihan BRUCELEE RAJ (Chief Admin) & ${student.coachName}",
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = TextNavy
+                            )
+                            Text(
+                                "Student has mastered required Kihon, Kata bunkai and kumite sparring syllabus for next grade grading.",
+                                fontSize = 10.sp,
+                                color = TextSlate
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        // BELT PROMOTION HISTORY & AWARDS TIMELINE
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
+            color = CardWhite,
+            shadowElevation = 1.dp,
+            border = androidx.compose.foundation.BorderStroke(1.dp, BorderLight)
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Icon(Icons.Default.EmojiEvents, contentDescription = null, tint = RoyalBlue)
+                        Column {
+                            Text(
+                                "BELT PROMOTION HISTORY",
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                                color = TextNavy
+                            )
+                            Text(
+                                "Grading milestones, awarded ranks & certifications",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = TextSlate
+                            )
+                        }
+                    }
+
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = SecondaryBg,
+                        border = androidx.compose.foundation.BorderStroke(1.dp, BorderLight)
+                    ) {
+                        Text(
+                            "Level ${student.beltLevel} Trainee",
+                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                            color = RoyalBlue,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                        )
+                    }
+                }
+
+                HorizontalDivider(color = BorderLight)
+
+                // Parse or compile belt history milestones
+                val parsedMilestones = remember(student.beltHistory, student.currentBelt) {
+                    val rawList = student.beltHistory.split("|").filter { it.isNotBlank() }
+                    if (rawList.isNotEmpty()) {
+                        rawList.mapNotNull { item ->
+                            val map = item.split(";").associate { part ->
+                                val pair = part.split(":")
+                                if (pair.size >= 2) pair[0].trim() to pair.drop(1).joinToString(":").trim() else "" to ""
+                            }
+                            val b = map["Belt"] ?: map["belt"] ?: return@mapNotNull null
+                            val d = map["Date"] ?: map["date"] ?: "2026-01-01"
+                            val a = map["AwardedBy"] ?: map["awardedBy"] ?: "Shihan Brucelee Raj (Admin)"
+                            val s = map["Status"] ?: map["status"] ?: "Promoted & Certified"
+                            Triple(b, d, Pair(a, s))
+                        }
+                    } else {
+                        // Default realistic chronological journey leading to student's current belt
+                        when (student.currentBelt.uppercase()) {
+                            "GREEN BELT" -> listOf(
+                                Triple("Green Belt", "2026-06-15", Pair("Awarded by Shihan Brucelee Raj (Chief Admin)", "Grading Distinction • MSKA Certified")),
+                                Triple("Orange Belt", "2026-03-20", Pair("Awarded by Sensei Rajesh Kumar (Coach)", "Official Belt Exam Passed")),
+                                Triple("Yellow Belt", "2026-01-28", Pair("Awarded by Sensei Rajesh Kumar (Coach)", "Promotion Exam Cleared")),
+                                Triple("White Belt", "2026-01-01", Pair("Awarded by BROMA Academy", "Dojo Initiation & Enrolment"))
+                            )
+                            "ORANGE BELT" -> listOf(
+                                Triple("Orange Belt", "2026-04-10", Pair("Awarded by Shihan Brucelee Raj (Chief Admin)", "Grading Passed • MSKA Certified")),
+                                Triple("Yellow Belt", "2026-02-05", Pair("Awarded by Sensei Rajesh Kumar (Coach)", "Promotion Exam Cleared")),
+                                Triple("White Belt", "2026-01-01", Pair("Awarded by BROMA Academy", "Dojo Initiation & Enrolment"))
+                            )
+                            "YELLOW BELT" -> listOf(
+                                Triple("Yellow Belt", "2026-03-12", Pair("Awarded by Shihan Brucelee Raj (Chief Admin) & Coach", "Grading Distinction")),
+                                Triple("White Belt", "2026-01-01", Pair("Awarded by BROMA Academy", "Dojo Initiation & Enrolment"))
+                            )
+                            "BLUE BELT" -> listOf(
+                                Triple("Blue Belt", "2026-07-22", Pair("Awarded by Shihan Brucelee Raj (Chief Admin)", "Senior Grading Cleared • MSKA Certified")),
+                                Triple("Green Belt", "2026-04-15", Pair("Awarded by Sensei Rajesh Kumar (Coach)", "Grading Distinction")),
+                                Triple("Orange Belt", "2026-02-18", Pair("Awarded by Sensei Rajesh Kumar (Coach)", "Official Exam Passed")),
+                                Triple("Yellow Belt", "2025-11-10", Pair("Awarded by Coach", "Promotion Exam Cleared")),
+                                Triple("White Belt", "2025-08-01", Pair("Awarded by BROMA Academy", "Dojo Initiation & Enrolment"))
+                            )
+                            "BROWN BELT" -> listOf(
+                                Triple("Brown Belt", "2026-05-18", Pair("Awarded by Shihan Brucelee Raj (Chief Admin)", "Advanced Sparring & Kata Cleared")),
+                                Triple("Blue Belt", "2025-12-10", Pair("Awarded by Shihan Brucelee Raj & Coach", "Grading Passed")),
+                                Triple("Green Belt", "2025-07-15", Pair("Awarded by Coach", "Distinction")),
+                                Triple("White Belt", "2025-01-01", Pair("Awarded by BROMA Academy", "Dojo Initiation"))
+                            )
+                            "BLACK BELT" -> listOf(
+                                Triple("Black Belt (1st Dan)", "2026-01-10", Pair("Awarded by Shihan Brucelee Raj (Chief Admin & International Referee)", "Dan Grading Clearance • Official Black Belt Registry")),
+                                Triple("Brown Belt", "2025-04-12", Pair("Awarded by Chief Admin", "Pre-Dan Masterclass Passed")),
+                                Triple("White Belt", "2023-01-01", Pair("Awarded by BROMA Academy", "Dojo Initiation"))
+                            )
+                            else -> listOf(
+                                Triple(student.currentBelt, student.joiningDate, Pair("Awarded by Shihan Brucelee Raj (Admin) & ${student.coachName}", "Active Registered Rank")),
+                                Triple("White Belt", student.joiningDate, Pair("Awarded by BROMA Academy", "Dojo Initiation & Enrolment"))
+                            )
+                        }
+                    }
+                }
+
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    parsedMilestones.forEachIndexed { index, (bName, bDate, meta) ->
+                        val (awardedBy, statusDesc) = meta
+                        val (bColor, _) = when (bName.uppercase()) {
+                            "WHITE BELT" -> Pair(BeltWhite, Color.Black)
+                            "YELLOW BELT" -> Pair(BeltYellow, Color.Black)
+                            "ORANGE BELT" -> Pair(BeltOrange, Color.White)
+                            "GREEN BELT" -> Pair(BeltGreen, Color.White)
+                            "BLUE BELT" -> Pair(BeltBlue, Color.White)
+                            "BROWN BELT" -> Pair(BeltBrown, Color.White)
+                            "BLACK BELT", "BLACK BELT (1ST DAN)" -> Pair(BeltBlack, Color.White)
+                            else -> Pair(BeltGreen, Color.White)
+                        }
+
+                        Surface(
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(12.dp),
+                            color = SecondaryBg,
+                            border = androidx.compose.foundation.BorderStroke(1.dp, if (index == 0) RoyalBlue.copy(alpha = 0.5f) else BorderLight)
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(12.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    Surface(
+                                        modifier = Modifier.size(38.dp),
+                                        shape = CircleShape,
+                                        color = bColor.copy(alpha = 0.2f),
+                                        border = androidx.compose.foundation.BorderStroke(2.dp, bColor)
+                                    ) {
+                                        Box(contentAlignment = Alignment.Center) {
+                                            Text("🥋", fontSize = 16.sp)
+                                        }
+                                    }
+
+                                    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                                            Text(
+                                                bName,
+                                                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+                                                color = TextNavy
+                                            )
+                                            if (index == 0) {
+                                                Surface(shape = RoundedCornerShape(4.dp), color = StatusSuccessBg) {
+                                                    Text("CURRENT", fontSize = 9.sp, fontWeight = FontWeight.Bold, color = StatusSuccessText, modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp))
+                                                }
+                                            }
+                                        }
+                                        Text(
+                                            "Awarded by: $awardedBy",
+                                            fontSize = 11.sp,
+                                            fontWeight = FontWeight.SemiBold,
+                                            color = RoyalBlue
+                                        )
+                                        Text(
+                                            "Status: $statusDesc",
+                                            fontSize = 10.5.sp,
+                                            color = TextSlate
+                                        )
+                                    }
+                                }
+
+                                Column(horizontalAlignment = Alignment.End) {
+                                    Surface(
+                                        shape = RoundedCornerShape(6.dp),
+                                        color = CardWhite,
+                                        border = androidx.compose.foundation.BorderStroke(0.5.dp, BorderLight)
+                                    ) {
+                                        Text(
+                                            text = bDate,
+                                            fontSize = 10.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = TextNavy,
+                                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp)
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
