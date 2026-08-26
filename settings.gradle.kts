@@ -22,6 +22,6 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "BROMA Academy"
+rootProject.name = "BROMA Academy Management"
 
 include(":app")

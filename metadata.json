@@ -1,6 +1,6 @@
 {
-  "name": "BROMA Academy",
-  "description": "Complete martial arts academy management app with role-based portals for Students, Parents, Coaches, and Admins.",
+  "name": "BROMA Academy Management",
+  "description": "A multi-role system streamlining attendance, fees, and communication for BROMA Academy students, parents, coaches, and administrators.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
